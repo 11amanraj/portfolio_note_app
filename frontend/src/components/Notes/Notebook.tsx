@@ -2,6 +2,7 @@ import EachNote from "./EachNote";
 
 interface note {
     id: number,
+    tags: string[],
     title: string,
     body: string
 }

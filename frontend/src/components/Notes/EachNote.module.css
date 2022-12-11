@@ -16,3 +16,12 @@
     margin-top: 8px;
     padding: 0px 8px;
 }
+
+.tag {
+    margin: 16px;
+    margin-right: 32px;
+    display: flex;
+    gap: 32px;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+}

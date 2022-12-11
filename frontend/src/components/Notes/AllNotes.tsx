@@ -4,6 +4,7 @@ import { useEffect, useState } from "react"
 
 interface note {
     id: number,
+    tags: string[],
     title: string,
     body: string
 }
@@ -22,7 +23,6 @@ const AllNotes = () => {
             })
             .catch(error => console.log(error))
     }, [])
-
 
     return (
         <>

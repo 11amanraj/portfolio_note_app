@@ -25,6 +25,7 @@
     padding: 16px 0px;
 }
 
+/* check if following two selectors are not working outside this component */
 [id = title-input] {
     width: 100%;
     font-size: 16px;
@@ -37,11 +38,26 @@
     font-size: 16px;
 }
 
-.container button {
+#create, .container button {
     padding: 8px 16px;
     width: 100px;
     align-self: center;
     border: 2px solid black;
     border-radius: 4px;
     font-weight: 600;
+    cursor: pointer;
+}
+
+#create {
+    width: 150px;
+    margin-top: 16px;
+    margin-left: 16px;
+}
+
+#submit {
+    background-color: rgb(44, 195, 44);
+}
+
+#cancel {
+    background-color: rgb(219, 72, 72);
 }

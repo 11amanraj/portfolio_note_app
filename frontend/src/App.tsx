@@ -1,9 +1,11 @@
 import React from 'react';
-import AllNotes from './components/AllNotes';
+import CreateNote from './components/CreateNote/CreateNote';
+import AllNotes from './components/Notes/AllNotes';
 
 function App() {
   return (
     <div>
+      <CreateNote />
       <AllNotes />
     </div> 
   );

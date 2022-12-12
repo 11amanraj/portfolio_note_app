@@ -21,6 +21,7 @@ const Search: React.FC<{allTags: string[]}> = ({allTags}) => {
     }
 
     //simplify logic later
+    //also update list of all tags incase of new tag
     const selectionHandler = (text: string) => {
         const selection = [...selectedTags]
         let selectedText = text.toLowerCase()
@@ -40,11 +41,16 @@ const Search: React.FC<{allTags: string[]}> = ({allTags}) => {
         }
     }
 
+    const deleteHandler = (id: string) => {
+        const tagsArr = [...selectedTags]
+        setSelectedTags(tagsArr.filter(tag => tag !== id))
+    }
+
     //create better key for both arra.map functions
     return ( 
         <>
             <span className={styles.tag}>
-                {selectedTags.map(tag => <Tags key={tag} tag={tag}/>)}
+                {selectedTags.map(tag => <Tags onDelete={() => deleteHandler(tag)} key={tag} tag={tag}/>)}
             </span>
             <div className={styles.container}>
                 <label htmlFor='tag'>Add Tag:</label>

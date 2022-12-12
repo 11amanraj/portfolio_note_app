@@ -10,6 +10,8 @@ const Search: React.FC<{allTags: string[]}> = ({allTags}) => {
     const inputHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
         setShowList(true)
         let newTags
+
+        //check if e.target.value is not empty
         if(e.target.value.length > 0) {
             newTags = [e.target.value, ...allTags]
         } else {
@@ -18,11 +20,24 @@ const Search: React.FC<{allTags: string[]}> = ({allTags}) => {
         setTags(newTags.filter(tag => tag.toLowerCase().includes(e.target.value.toLowerCase())))
     }
 
-    const selectionHandler = (id: string) => {
+    //simplify logic later
+    const selectionHandler = (text: string) => {
         const selection = [...selectedTags]
-        selection.push(id)
-        setSelectedTags(selection)
-        setShowList(false)
+        let selectedText = text.toLowerCase()
+
+        //ensures already existing tags are given priority in naming
+        if(allTags.filter(tag => tag.toLowerCase() === selectedText).length > 0) {
+            selectedText = allTags.filter(tag => tag.toLowerCase() === selectedText)[0]
+        }
+
+        //checks if no duplicate tags are selected
+        if(selection.filter(tag => tag.toLowerCase() === selectedText.toLowerCase()).length === 0) {
+            selection.push(selectedText)
+            setSelectedTags(selection)
+            setShowList(false)
+        } else {
+            setShowList(false)
+        }
     }
 
     //create better key for both arra.map functions

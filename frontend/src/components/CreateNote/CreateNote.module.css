@@ -25,12 +25,18 @@
     padding: 16px 0px;
 }
 
+.container input {
+    font-size: 16px;
+    padding: 8px;
+    width: 100%;
+}
+
 /* check if following two selectors are not working outside this component */
-[id = title-input] {
+/* [id = title-input] {
     width: 100%;
     font-size: 16px;
     padding: 8px;
-}
+} */
 
 [id = body-input] {
     padding: 8px;

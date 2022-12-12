@@ -1,0 +1,38 @@
+.container {
+    position: relative;
+}
+
+/* .container label {
+    color: green;
+} */
+
+.list {
+    width: 150px;
+    border: 1px solid black;
+    border-radius: 8px;
+    font-size: 16px;
+    background-color: black;
+    color: white;
+    position: absolute;
+    right: 16px;
+    top: 60px;
+    cursor: pointer;
+}
+
+.list div {
+    padding: 8px 16px;
+    border-bottom: 1px solid white;
+}
+
+.list div:last-child {
+    border-bottom: none;
+}
+
+.tag {
+    margin: 16px;
+    margin-right: 32px;
+    display: flex;
+    gap: 32px;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+}

@@ -1,35 +1,26 @@
-import {  useContext, useState } from "react"
-import NoteContext from "../../store/note-context"
+import { useState } from "react"
 import SideBar from "../Navigation/SideBar"
 import styles from './AllNotes.module.css'
 import { note } from '../../shared/interfaces/notes'
 import EachNote from "./EachNote"
 
 const AllNotes = () => {
-    const [selectedNote, setSelectedNote] = useState<note | null>()
-    // const noteCtx = useContext(NoteContext)
+    const [selectedNotebook, setSelectedNotebook] = useState<note[] | null>()
 
-    const noteSelectionHandler = (note: note) => {
-        setSelectedNote(note)
+    const noteSelectionHandler = (notebook: note[]) => {
+        setSelectedNotebook(notebook)
     }
     
-    // if ((noteCtx.loading === null) || noteCtx.loading ) {
-    //     return (
-    //         <div>Loading ...</div>
-    //     )
-    // } else if (!noteCtx.loading && (Object.keys(noteCtx.notebooks).length === 0)) {
-    //     return (
-    //         <div>No notebooks found ...</div>
-    //     )
-    // }
-        
     return (
             <div className={styles.container}>
                 <SideBar onSelect={noteSelectionHandler}/>
-                {selectedNote && 
-                    <div>
-                        <EachNote note={selectedNote} />
-                    </div>}
+                <div>
+                    {selectedNotebook ? selectedNotebook.map(note => (
+                            <EachNote key={Math.random()} note={note}/>
+                    ))
+                                    : 'No Notes Found'
+                    }
+                </div>
             </div>
         )
 }

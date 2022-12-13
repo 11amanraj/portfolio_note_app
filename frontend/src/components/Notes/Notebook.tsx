@@ -10,7 +10,7 @@ interface note {
 const Notebook: React.FC<{notebook: note[]}> = ({notebook}) => {
     return ( 
         <div>
-            {notebook.map(note => (
+            {notebook && notebook.map(note => (
                 <EachNote key={note.id} note={note}/>
             ))}
         </div>

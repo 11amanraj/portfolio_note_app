@@ -1,20 +1,14 @@
 import React from 'react'
-import { useState, useEffect, useRef } from 'react'
-import axios from 'axios'
+import { useState, useRef, useContext } from 'react'
 import styles from './CreateNote.module.css'
 import Search from './TagSearch'
-
-interface note {
-    id: number,
-    tags: string[],
-    title: string,
-    body: string
-}
+import NoteContext from '../../store/note-context'
 
 const CreateNote = () => {
+    const noteCtx = useContext(NoteContext);
+
     const [title, setTitle] = useState('')
     const [body, setBody] = useState('')
-    const [tags, setTags] = useState<string[]>([])
     const [showForm, setShowForm] = useState<boolean>(false)
     const titleInputRef = useRef<HTMLInputElement | null>(null)
     const bodyInputRef = useRef<HTMLTextAreaElement | null>(null)
@@ -28,20 +22,12 @@ const CreateNote = () => {
         titleInputRef.current && setTitle(titleInputRef.current?.value)
         bodyInputRef.current && setBody(bodyInputRef.current?.value)
         showFormHandler()
+        console.log({
+            title: titleInputRef.current?.value,
+            body: bodyInputRef.current?.value
+        })
         console.log('new note added')
     }
-
-    useEffect(() => {
-        axios.get('http://localhost:3001/notebooks')
-            .then(response => {
-                const arr = Object.keys(response.data).map(key => (
-                    response.data[key].map((item: note) => item.tags) 
-                )).flat(2)
-                const set: any = new Set(arr)
-                setTags([...set])
-            })
-            .catch(error => console.log(error))
-    }, [])
 
     if(showForm) {
         return (
@@ -56,7 +42,7 @@ const CreateNote = () => {
 
                     <label htmlFor='body'>Body:</label>
                     <textarea name='body' id='body-input' ref={bodyInputRef}/>
-                    <Search allTags={tags}/>
+                    <Search allTags={noteCtx.tags}/>
 
                     <div>
                         <button id={styles.submit} type="submit">Add Note</button>

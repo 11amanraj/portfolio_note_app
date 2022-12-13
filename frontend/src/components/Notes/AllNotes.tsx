@@ -1,35 +1,16 @@
 import Notebook from "./Notebook"
-import axios from 'axios'
-import { useEffect, useState } from "react"
-
-interface note {
-    id: number,
-    tags: string[],
-    title: string,
-    body: string
-}
-
-interface notebook {
-    [key: string]: note[]
-}
+import {  useContext } from "react"
+import NoteContext from "../../store/note-context"
 
 const AllNotes = () => {
-    const [notebooks, setNotebooks] = useState<null | notebook>(null)
-
-    useEffect(() => {
-        axios.get<notebook>('http://localhost:3001/notebooks')
-            .then(response => {
-                setNotebooks(response.data)
-            })
-            .catch(error => console.log(error))
-    }, [])
+    const noteCtx = useContext(NoteContext)
 
     return (
         <>
-            {notebooks && Object.keys(notebooks).map(key => (
+            {noteCtx.notebooks && Object.keys(noteCtx.notebooks).map(key => (
                 <div key={key}>
                     <h2>{key}</h2>
-                    <Notebook notebook={notebooks[key]}/>
+                    <Notebook notebook={noteCtx.notebooks && noteCtx.notebooks[key]}/>
                 </div>
             ))}
         </>

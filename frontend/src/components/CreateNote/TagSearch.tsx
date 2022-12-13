@@ -56,7 +56,7 @@ const Search: React.FC<{allTags: string[]}> = ({allTags}) => {
                 <label htmlFor='tag'>Add Tag:</label>
                 <input name='tag' type='text' onChange={inputHandler}/>
                 
-                {showList && <div className={styles.list}>
+                {(tags.length > 0) && showList && <div className={styles.list}>
                   {tags.map(item => <div onClick={() => selectionHandler(item)} key={item}>{item}</div>)}
                 </div>}
             </div>

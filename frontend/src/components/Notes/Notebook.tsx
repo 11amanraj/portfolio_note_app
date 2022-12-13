@@ -1,11 +1,5 @@
 import EachNote from "./EachNote";
-
-interface note {
-    id: number,
-    tags: string[],
-    title: string,
-    body: string
-}
+import { note } from "../../shared/interfaces/notes";
 
 const Notebook: React.FC<{notebook: note[]}> = ({notebook}) => {
     return ( 

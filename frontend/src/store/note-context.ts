@@ -1,15 +1,5 @@
 import React from 'react'
-
-interface note {
-    id: number,
-    tags: string[],
-    title: string,
-    body: string
-}
-
-interface notebook {
-    [key: string]: note[]
-}
+import { notebook } from '../shared/interfaces/notes'
 
 const defaultValue:{
     notebooks: notebook,

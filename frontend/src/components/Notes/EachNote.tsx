@@ -1,12 +1,6 @@
 import Tags from '../UI/Tags';
 import styles from './EachNote.module.css'
-
-interface note {
-    id: number,
-    tags: string[],
-    title: string,
-    body: string
-}
+import { note } from '../../shared/interfaces/notes';
 
 const EachNote: React.FC<{note: note}> = ({note}) => {
     return (

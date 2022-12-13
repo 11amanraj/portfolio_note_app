@@ -3,17 +3,7 @@ import CreateNote from './components/CreateNote/CreateNote';
 import AllNotes from './components/Notes/AllNotes';
 import NoteContext from './store/note-context';
 import axios from 'axios';
-
-interface note {
-  id: number,
-  tags: string[],
-  title: string,
-  body: string
-}
-
-interface notebook {
-  [key: string]: note[]
-}
+import { note, notebook } from './shared/interfaces/notes'
 
 function App() {
   const [notebooks, setNotebooks] = useState<notebook>({})

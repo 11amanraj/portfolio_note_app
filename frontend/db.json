@@ -1,6 +1,6 @@
 {
     "notebooks": {
-        "Ungrouped": [
+        "Untitled": [
             {
                 "id": 1,
                 "tags": ["Homework", "Urgent"],
@@ -29,5 +29,6 @@
                 "title": "Deltas",
                 "body": "Deltas form as rivers empty their water and sediment into another body of water, such as an ocean, lake, or another river."
             }
-        ]}
+        ]
+    }
   }

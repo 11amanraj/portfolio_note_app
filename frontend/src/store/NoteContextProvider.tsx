@@ -1,31 +1,39 @@
 import React, { useState, useEffect } from 'react'
 import NoteContext from './note-context';
 import axios from 'axios';
-import { notebook, note } from '../shared/interfaces/notes';
+import { notebook, note, allNotes } from '../shared/interfaces/notes';
 
 const NoteContextProvider = ({children}: {children: React.ReactNode}) => {
-    const [notebooks, setNotebooks] = useState<notebook>({})
-    const [tags, setTags] = useState<string[]>([])
+    const [notes, setNotes] = useState<allNotes>({
+        notebooks: {},
+        tags: [],
+        headers: []
+    })
     const [loading, setLoading] = useState<boolean | null>(null)
 
     useEffect(() => {
         setLoading(true)
         axios.get<notebook>('http://localhost:3001/notebooks')
             .then(response => {
-              const arr = Object.keys(response.data).map(key => (
+              const notebookHeaders = Object.keys(response.data)
+
+              const arr = notebookHeaders.map(key => (
                 response.data[key].map((item: note) => item.tags) 
                   )).flat(2)
               const set = new Set<string>(arr)
-              
-              setTags(Array.from(set))
-              setNotebooks(response.data)
+
+              setNotes({
+                notebooks: response.data,
+                tags: Array.from(set),
+                headers: notebookHeaders
+              })
               setLoading(false)
             })
             .catch(error => console.log(error))
     }, [])
     
     return (
-        <NoteContext.Provider value={{notebooks, tags, loading}}>
+        <NoteContext.Provider value={{...notes, loading}}>
             {children}
         </NoteContext.Provider>
     )

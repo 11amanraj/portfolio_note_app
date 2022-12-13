@@ -1,14 +1,15 @@
 import React from 'react'
-import { notebook } from '../shared/interfaces/notes'
+import { allNotes } from '../shared/interfaces/notes'
 
-const defaultValue:{
-    notebooks: notebook,
-    tags: string[],
-    loading: boolean | null
-} = {
+interface noteContext extends allNotes {
+    loading: null | boolean
+}
+
+const defaultValue: noteContext = {
     notebooks: {},
     tags: [],
-    loading: null
+    loading: null,
+    headers: []
 }
 
 const NoteContext = React.createContext(defaultValue)

@@ -8,3 +8,9 @@ export interface note {
 export interface notebook {
     [key: string]: note[]
 }
+
+export interface allNotes {
+    notebooks: notebook,
+    tags: string[],
+    headers: string[]
+}

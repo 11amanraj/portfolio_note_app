@@ -1,11 +1,11 @@
-import CreateNote from './components/CreateNote/CreateNote';
+// import CreateNote from './components/CreateNote/CreateNote';
 import AllNotes from './components/Notes/AllNotes';
 import NoteContextProvider from './store/NoteContextProvider';
 
 function App() {
   return (
       <NoteContextProvider>
-          <CreateNote />
+          {/* <CreateNote /> */}
           <AllNotes />
       </NoteContextProvider>
   )

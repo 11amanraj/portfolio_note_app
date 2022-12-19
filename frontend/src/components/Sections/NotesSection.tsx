@@ -1,13 +1,16 @@
-import { useState } from "react"
+import { useContext } from "react"
 import styles from './NotesSection.module.css'
 import { note } from '../../shared/interfaces/notes'
 import EachNote from "../Notes/EachNote"
+import SelectionContext from "../../store/selection-context"
 
 const NotesSection: React.FC<{selectedNotebook: note[] | null}> = ({selectedNotebook}) => {
+    const selectCtx = useContext(SelectionContext)
+
     return (
             <div className={styles.container}>
                 <div className={styles.bgd}>
-                    {selectedNotebook ? selectedNotebook.map(note => (
+                    {selectCtx.selected ? selectCtx.selected.map(note => (
                             <EachNote key={Math.random()} note={note}/>
                     ))
                                     : 'No Notes Found'

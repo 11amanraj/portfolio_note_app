@@ -9,19 +9,13 @@ const NotebookElement: React.FC<{title: String, onSelect: (notebook: note[]) => 
     const noteCtx = useContext(NoteContext)
     const selectCtx = useContext(SelectionContext)
 
-    // const titleSelectionHandler = () => {
-    //     onSelect(noteCtx.notebooks[`${title}`])
-    // }
-    console.log(selectCtx)
-
     const showListHandler = () => {
-        selectCtx.onSelect('notebook',noteCtx.notebooks[`${title}`],noteCtx.notebooks[`${title}`])
-        // onSelect(noteCtx.notebooks[`${title}`])
+        selectCtx.onSelect('notebook',noteCtx.notebooks[`${title}`])
         setShowList(prev => !prev)
     }
 
     const selectListHandler = (note: note) => {
-        selectCtx.onSelect('note', note , noteCtx.notebooks[`${title}`])
+        selectCtx.onSelect('note', [note])
     }
 
     console.count('render: ')

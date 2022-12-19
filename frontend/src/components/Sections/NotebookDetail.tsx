@@ -1,4 +1,4 @@
-import styles from './NotebookElement.module.css'
+import styles from './NotebookDetail.module.css'
 import NoteContext from '../../store/note-context';
 import { useContext, useState } from 'react';
 import { note } from '../../shared/interfaces/notes';

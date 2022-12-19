@@ -1,7 +1,7 @@
 import styles from './SideBar.module.css'
 import NoteContext from '../../store/note-context';
 import { useContext, useState } from 'react';
-import NotebookElement from './NotebookElement';
+import NotebookElement from './NotebookDetail';
 
 const SideBar = () => {
     const [showBar, setShowBar] = useState(true)

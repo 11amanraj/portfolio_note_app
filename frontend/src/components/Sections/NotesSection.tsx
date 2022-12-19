@@ -1,10 +1,10 @@
 import { useContext } from "react"
 import styles from './NotesSection.module.css'
-import { note } from '../../shared/interfaces/notes'
+// import { note } from '../../shared/interfaces/notes'
 import EachNote from "../Notes/EachNote"
 import SelectionContext from "../../store/selection-context"
 
-const NotesSection: React.FC<{selectedNotebook: note[] | null}> = ({selectedNotebook}) => {
+const NotesSection = () => {
     const selectCtx = useContext(SelectionContext)
 
     return (

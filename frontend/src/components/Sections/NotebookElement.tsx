@@ -4,7 +4,7 @@ import { useContext, useState } from 'react';
 import { note } from '../../shared/interfaces/notes';
 import SelectionContext from '../../store/selection-context';
 
-const NotebookElement: React.FC<{title: String, onSelect: (notebook: note[]) => void, maxSize: boolean}> = ({title, maxSize, onSelect}) => {
+const NotebookElement: React.FC<{title: String, maxSize: boolean}> = ({title, maxSize}) => {
     const [showList, setShowList] = useState(false);
     const noteCtx = useContext(NoteContext)
     const selectCtx = useContext(SelectionContext)
@@ -18,12 +18,9 @@ const NotebookElement: React.FC<{title: String, onSelect: (notebook: note[]) => 
         selectCtx.onSelect('note', [note])
     }
 
-    console.count('render: ')
-
     return ( 
         <div className={maxSize ? styles.container : styles.hidden}>
             <div onClick={showListHandler} className={styles.title}>
-            {/* <div onClick={titleSelectionHandler} className={styles.title}> */}
                 <h2>{title}</h2>
             </div>
             {showList && <ul>

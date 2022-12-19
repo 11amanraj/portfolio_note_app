@@ -1,12 +1,10 @@
-// import CreateNote from './components/CreateNote/CreateNote';
-import AllNotes from './components/Notes/AllNotes';
+import Notes from './components/Sections/Notes';
 import NoteContextProvider from './store/NoteContextProvider';
 
 function App() {
   return (
       <NoteContextProvider>
-          {/* <CreateNote /> */}
-          <AllNotes />
+          <Notes />
       </NoteContextProvider>
   )
 }

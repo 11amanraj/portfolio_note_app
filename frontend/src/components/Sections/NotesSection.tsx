@@ -1,19 +1,11 @@
 import { useState } from "react"
-import SideBar from "../Sections/SideBar"
-import styles from './AllNotes.module.css'
+import styles from './NotesSection.module.css'
 import { note } from '../../shared/interfaces/notes'
-import EachNote from "./EachNote"
+import EachNote from "../Notes/EachNote"
 
-const AllNotes = () => {
-    const [selectedNotebook, setSelectedNotebook] = useState<note[] | null>()
-
-    const noteSelectionHandler = (notebook: note[]) => {
-        setSelectedNotebook(notebook)
-    }
-    
+const NotesSection: React.FC<{selectedNotebook: note[] | null}> = ({selectedNotebook}) => {
     return (
             <div className={styles.container}>
-                {/* <SideBar onSelect={noteSelectionHandler}/> */}
                 <div className={styles.bgd}>
                     {selectedNotebook ? selectedNotebook.map(note => (
                             <EachNote key={Math.random()} note={note}/>
@@ -24,5 +16,5 @@ const AllNotes = () => {
             </div>
         )
 }
-
-export default AllNotes;
+ 
+export default NotesSection;

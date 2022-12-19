@@ -13,7 +13,7 @@ const SideBar: React.FC<{onSelect: (notebook: note[]) => void}> = ({onSelect}) =
             <button className={styles.btn}>X</button>
             <h1>Your Notebooks</h1>
             <div className={styles.title}>
-                {noteCtx.headers.map(title => <NotebookElement key={Math.random()} maxSize={showBar} onSelect={onSelect} title={title} />)}
+                {noteCtx.headers.map(title => <NotebookElement onSelect={onSelect} key={Math.random()} maxSize={showBar} title={title} />)}
             </div>
             <button onClick={() => setShowBar(prev => !prev)}>hide</button>
         </section>

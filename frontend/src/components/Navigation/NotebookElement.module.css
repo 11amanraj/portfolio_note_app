@@ -41,3 +41,30 @@
     border-bottom-left-radius: 0;
     background-color: rgb(111, 52, 166);
 }
+
+.hidden ul {
+    visibility: hidden;
+    display: none;
+}
+
+.hidden h2 {
+    font-weight: 300;
+    padding: 16px;
+    margin: 16px;
+    margin-left: 0;
+    margin-right: 0;
+    background-color: black;
+    color: white;
+    cursor: pointer;
+    width: 25px;
+    overflow: hidden;
+    position: relative;
+    transition: width 0.2s;
+}
+
+.hidden h2:hover {
+    width: 100px;
+    position: relative;
+    z-index: 1000;
+    background-color: green;
+}

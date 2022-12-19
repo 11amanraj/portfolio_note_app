@@ -3,17 +3,23 @@ import NoteContext from '../../store/note-context';
 import { useContext } from 'react';
 import { note } from '../../shared/interfaces/notes';
 
-const NotebookElement: React.FC<{title: String, onSelect: (notebook: note[]) => void}> = ({title, onSelect}) => {
+const NotebookElement: React.FC<{title: String, onSelect: (notebook: note[]) => void, maxSize: boolean}> = ({title, onSelect, maxSize}) => {
     const noteCtx = useContext(NoteContext)
 
+    const titleSelectionHandler = () => {
+        onSelect(noteCtx.notebooks[`${title}`])
+    }
+
     return ( 
-        <div className={styles.container}>
-            <h2 onClick={() => onSelect(noteCtx.notebooks[`${title}`])}>{title}</h2>
+        <div className={maxSize ? styles.container : styles.hidden}>
+            <div onClick={titleSelectionHandler} className={styles.title}>
+                <h2>{title}</h2>
+            </div>
             <ul>
                 {noteCtx.notebooks[`${title}`].map(note => (
                     <li key={Math.random()} onClick={() => onSelect([note])}>{note.title}</li>
                 ))}
-            </ul>
+            </ul> 
         </div>
      );
 }

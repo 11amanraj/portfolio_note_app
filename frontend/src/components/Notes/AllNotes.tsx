@@ -14,7 +14,7 @@ const AllNotes = () => {
     return (
             <div className={styles.container}>
                 <SideBar onSelect={noteSelectionHandler}/>
-                <div>
+                <div className={styles.bgd}>
                     {selectedNotebook ? selectedNotebook.map(note => (
                             <EachNote key={Math.random()} note={note}/>
                     ))

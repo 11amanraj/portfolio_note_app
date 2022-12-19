@@ -3,10 +3,14 @@ import NoteContext from '../../store/note-context';
 import { useContext, useState } from 'react';
 import NotebookElement from './NotebookElement';
 import { note } from '../../shared/interfaces/notes';
+// import SelectionContext from '../../store/selection-context';
 
 const SideBar: React.FC<{onSelect: (notebook: note[]) => void}> = ({onSelect}) => {
     const [showBar, setShowBar] = useState(true)
     const noteCtx = useContext(NoteContext)
+    // const selectCtx = useContext(SelectionContext)
+
+    // console.log(selectCtx)
 
     return ( 
         <section className={showBar ? styles.container : styles.hidden}>

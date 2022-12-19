@@ -2,18 +2,26 @@ import styles from './NotebookElement.module.css'
 import NoteContext from '../../store/note-context';
 import { useContext, useState } from 'react';
 import { note } from '../../shared/interfaces/notes';
+import SelectionContext from '../../store/selection-context';
 
 const NotebookElement: React.FC<{title: String, onSelect: (notebook: note[]) => void, maxSize: boolean}> = ({title, maxSize, onSelect}) => {
     const [showList, setShowList] = useState(false);
     const noteCtx = useContext(NoteContext)
+    const selectCtx = useContext(SelectionContext)
 
     // const titleSelectionHandler = () => {
     //     onSelect(noteCtx.notebooks[`${title}`])
     // }
+    console.log(selectCtx)
 
     const showListHandler = () => {
-        onSelect(noteCtx.notebooks[`${title}`])
+        selectCtx.onSelect('notebook',noteCtx.notebooks[`${title}`],noteCtx.notebooks[`${title}`])
+        // onSelect(noteCtx.notebooks[`${title}`])
         setShowList(prev => !prev)
+    }
+
+    const selectListHandler = (note: note) => {
+        selectCtx.onSelect('note', note , noteCtx.notebooks[`${title}`])
     }
 
     console.count('render: ')
@@ -26,7 +34,7 @@ const NotebookElement: React.FC<{title: String, onSelect: (notebook: note[]) => 
             </div>
             {showList && <ul>
                 {noteCtx.notebooks[`${title}`].map(note => (
-                    <li key={Math.random()}>{note.title}</li>
+                    <li onClick={() => selectListHandler(note)} key={Math.random()}>{note.title}</li>
                 ))}
             </ul> }
         </div>

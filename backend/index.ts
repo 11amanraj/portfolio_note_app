@@ -1,7 +1,6 @@
 import express, { Express, Request, response, Response } from 'express';
-import dotenv from 'dotenv'
-dotenv.config();
 import { Schema, model, connect } from 'mongoose';
+const config = require('./utils/config')
 const cors = require('cors')
 const app: Express = express();
 
@@ -19,21 +18,11 @@ const noteSchema = new Schema<notes>({
 
 const Note = model<notes>('Note', noteSchema)
 
-//look into this later//
-declare const process : {
-    env: {
-      MONGO_URL: string,
-      PORT: number
-    }
-  }
-
-const mongoUrl = process.env.MONGO_URL
-connect(mongoUrl)
+//connecting to mongodb
+connect(config.MONGO_URL)
 
 app.use(cors())
 app.use(express.json())
-
-const PORT = process.env.PORT;
 
 app.get('/', (req: Request, res: Response) => {
     res.send('Server Running');
@@ -57,6 +46,6 @@ app.post('/api/notes', (request,response) => {
         })
 })
   
-app.listen(PORT, () => {
-    console.log(`[server]: Server is running at http://localhost:${PORT}`);
+app.listen(config.PORT, () => {
+    console.log(`[server]: Server is running at http://localhost:${config.PORT}`);
 });

@@ -4,9 +4,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
-const dotenv_1 = __importDefault(require("dotenv"));
-dotenv_1.default.config();
 const mongoose_1 = require("mongoose");
+const config = require('./utils/config');
 const cors = require('cors');
 const app = (0, express_1.default)();
 const noteSchema = new mongoose_1.Schema({
@@ -15,11 +14,10 @@ const noteSchema = new mongoose_1.Schema({
     author: String
 });
 const Note = (0, mongoose_1.model)('Note', noteSchema);
-const mongoUrl = process.env.MONGO_URL;
-(0, mongoose_1.connect)(mongoUrl);
+//connecting to mongodb
+(0, mongoose_1.connect)(config.MONGO_URL);
 app.use(cors());
 app.use(express_1.default.json());
-const PORT = process.env.PORT;
 app.get('/', (req, res) => {
     res.send('Server Running');
 });
@@ -38,6 +36,6 @@ app.post('/api/notes', (request, response) => {
         response.status(201).json(result);
     });
 });
-app.listen(PORT, () => {
-    console.log(`[server]: Server is running at http://localhost:${PORT}`);
+app.listen(config.PORT, () => {
+    console.log(`[server]: Server is running at http://localhost:${config.PORT}`);
 });

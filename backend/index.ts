@@ -1,51 +1,61 @@
-import express, { Express, Request, response, Response } from 'express';
-import { Schema, model, connect } from 'mongoose';
-const config = require('./utils/config')
-const cors = require('cors')
-const app: Express = express();
+const app_module = require('./app')
+const configs_module = require('./utils/config')
+const http = require('http')
 
-interface notes {
-    title: string;
-    content: string;
-    author: string
-}
+const server = http.createServer(app_module)
 
-const noteSchema = new Schema<notes>({
-    title: String,
-    content: String,
-    author: String
+app_module.listen(configs_module.PORT, () => {
+    console.log(`Server running on port ${configs_module.PORT}`)
 })
 
-const Note = model<notes>('Note', noteSchema)
+// import express, { Express, Request, response, Response } from 'express';
+// import { Schema, model, connect } from 'mongoose';
+// const config = require('./utils/config')
+// const cors = require('cors')
+// const app: Express = express();
 
-//connecting to mongodb
-connect(config.MONGO_URL)
+// interface notes {
+//     title: string;
+//     content: string;
+//     author: string
+// }
 
-app.use(cors())
-app.use(express.json())
+// const noteSchema = new Schema<notes>({
+//     title: String,
+//     content: String,
+//     author: String
+// })
 
-app.get('/', (req: Request, res: Response) => {
-    res.send('Server Running');
-});
+// const Note = model<notes>('Note', noteSchema)
 
-app.get('/api/notes', (request: Request, response: Response) => {
-    Note
-        .find({})
-        .then(notes => {
-            response.json(notes)
-        })
-})
+// //connecting to mongodb
+// connect(config.MONGO_URL)
 
-app.post('/api/notes', (request,response) => {
-    const blog = new Note(request.body)
+// app.use(cors())
+// app.use(express.json())
 
-    blog
-        .save()
-        .then(result => {
-            response.status(201).json(result)
-        })
-})
+// app.get('/', (req: Request, res: Response) => {
+//     res.send('Server Running');
+// });
+
+// app.get('/api/notes', (request: Request, response: Response) => {
+//     Note
+//         .find({})
+//         .then(notes => {
+//             response.json(notes)
+//         })
+// })
+
+// app.post('/api/notes', (request,response) => {
+//     const blog = new Note(request.body)
+
+//     blog
+//         .save()
+//         .then(result => {
+//             response.status(201).json(result)
+//         })
+// })
   
-app.listen(config.PORT, () => {
-    console.log(`[server]: Server is running at http://localhost:${config.PORT}`);
-});
+// app.listen(config.PORT, () => {
+//     console.log(`[server]: Server is running at http://localhost:${config.PORT}`);
+// });

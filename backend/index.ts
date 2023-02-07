@@ -1,11 +1,13 @@
-const app_module = require('./app')
-const configs_module = require('./utils/config')
-const http = require('http')
+// const app_module = require('./app')
+import app from './app'
+import config from './utils/config'
+// const configs_module = require('./utils/config')
+import http = require('http')
 
-const server = http.createServer(app_module)
+const server = http.createServer(app)
 
-app_module.listen(configs_module.PORT, () => {
-    console.log(`Server running on port ${configs_module.PORT}`)
+app.listen(config.PORT, () => {
+    console.log(`Server running on port ${config.PORT}`)
 })
 
 // import express, { Express, Request, response, Response } from 'express';

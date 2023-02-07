@@ -6,6 +6,11 @@ const error = (...params: string[]) => {
     console.error(...params)
 }
 
-module.exports = {
+const logger = {
     info, error
 }
+
+export default logger
+// module.exports = {
+//     info, error
+// }

@@ -1,7 +1,8 @@
-import { Request, Response, NextFunction, Router } from "express"
+import { Request, Response, NextFunction, Router } from 'express'
 
 const notesRouter = Router()
-const Note = require('../models/note')
+import Note from '../models/note'
+// const Note = require('../models/note')
 
 notesRouter.get('/', (request: Request, response: Response, next: NextFunction) => {
     Note
@@ -23,4 +24,4 @@ notesRouter.post('/', (request: Request, response: Response, next: NextFunction)
         .catch((error: any) => next(error))
 })
 
-module.exports = notesRouter
+export default notesRouter

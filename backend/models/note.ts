@@ -1,4 +1,4 @@
-import { Schema, model } from 'mongoose';
+import { Schema, model } from 'mongoose'
 
 interface notes {
     title: string;
@@ -14,10 +14,10 @@ const noteSchema = new Schema<notes>({
 
 noteSchema.set('toJSON', {
     transform: (document, returnedObject) => {
-      returnedObject.id = returnedObject._id.toString()
-      delete returnedObject._id
-      delete returnedObject.__v
+        returnedObject.id = returnedObject._id.toString()
+        delete returnedObject._id
+        delete returnedObject.__v
     }
-  })
+})
 
-module.exports = model<notes>('Note', noteSchema)
+export default model<notes>('Note', noteSchema)

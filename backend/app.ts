@@ -1,11 +1,18 @@
-const config = require('./utils/config')
-const express = require('express')
+// const config = require('./utils/config')
+import config from './utils/config'
+import express from 'express'
+// const express = require('express')
 const app = express()
-const cors = require('cors')
-const notesRouter = require('./controllers/notes')
-const mongoose = require('mongoose')
-const logger = require('./utils/logger')
-const middleware = require('./utils/middleware')
+// const cors = require('cors')
+import cors = require('cors');
+import notesRouter from './controllers/notes'
+// const notesRouter = require('./controllers/notes')
+import mongoose from 'mongoose'
+// const mongoose = require('mongoose')
+import logger from './utils/logger'
+// const logger = require('./utils/logger')
+import middleware from './utils/middleware'
+// const middleware = require('./utils/middleware')
 
 logger.info('connecting to', config.MONGO_URL)
 
@@ -26,4 +33,5 @@ app.use('/api/notes', notesRouter)
 app.use(middleware.unknownEndpoint)
 app.use(middleware.errorHandler)
 
-module.exports = app
+export default app
+// module.exports = app

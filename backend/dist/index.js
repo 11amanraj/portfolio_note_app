@@ -1,10 +1,16 @@
 "use strict";
-const app_module = require('./app');
-const configs_module = require('./utils/config');
-const http = require('http');
-const server = http.createServer(app_module);
-app_module.listen(configs_module.PORT, () => {
-    console.log(`Server running on port ${configs_module.PORT}`);
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+// const app_module = require('./app')
+const app_1 = __importDefault(require("./app"));
+const config_1 = __importDefault(require("./utils/config"));
+// const configs_module = require('./utils/config')
+const http = require("http");
+const server = http.createServer(app_1.default);
+app_1.default.listen(config_1.default.PORT, () => {
+    console.log(`Server running on port ${config_1.default.PORT}`);
 });
 // import express, { Express, Request, response, Response } from 'express';
 // import { Schema, model, connect } from 'mongoose';

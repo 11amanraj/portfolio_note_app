@@ -3,6 +3,7 @@ import { useState, useRef, useContext } from 'react'
 import styles from './CreateNote.module.css'
 import Search from './TagSearch'
 import NoteContext from '../../store/note-context'
+import axios from 'axios'
 
 const CreateNote = () => {
     const noteCtx = useContext(NoteContext);
@@ -27,6 +28,12 @@ const CreateNote = () => {
             body: bodyInputRef.current?.value
         })
         console.log('new note added')
+        
+        axios.post('http://localhost:8000/api/notes', {
+            title: titleInputRef.current?.value,
+            content: bodyInputRef.current?.value,
+            author: "Dames Doe"
+        }).then(response => console.log(response))
     }
 
     if(showForm) {

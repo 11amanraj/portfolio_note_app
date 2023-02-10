@@ -2,7 +2,6 @@ import { Request, Response, NextFunction, Router } from 'express'
 
 const notesRouter = Router()
 import Note from '../models/note'
-// const Note = require('../models/note')
 
 notesRouter.get('/', (request: Request, response: Response, next: NextFunction) => {
     Note
@@ -23,5 +22,9 @@ notesRouter.post('/', (request: Request, response: Response, next: NextFunction)
         })
         .catch((error: any) => next(error))
 })
+
+// notesRouter.delete('/', (request: Request, response: Response, next: NextFunction) => {
+
+// })
 
 export default notesRouter

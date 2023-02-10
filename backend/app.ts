@@ -1,18 +1,12 @@
-// const config = require('./utils/config')
 import config from './utils/config'
 import express from 'express'
-// const express = require('express')
 const app = express()
-// const cors = require('cors')
 import cors = require('cors');
 import notesRouter from './controllers/notes'
-// const notesRouter = require('./controllers/notes')
+import notebooksRouter from './controllers/notebooks'
 import mongoose from 'mongoose'
-// const mongoose = require('mongoose')
 import logger from './utils/logger'
-// const logger = require('./utils/logger')
 import middleware from './utils/middleware'
-// const middleware = require('./utils/middleware')
 
 logger.info('connecting to', config.MONGO_URL)
 
@@ -29,6 +23,7 @@ app.use(express.json())
 app.use(middleware.requestLogger)
 
 app.use('/api/notes', notesRouter)
+app.use('/api/notebooks', notebooksRouter)
 
 app.use(middleware.unknownEndpoint)
 app.use(middleware.errorHandler)

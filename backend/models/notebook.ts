@@ -1,13 +1,11 @@
 import { Schema, model } from 'mongoose'
-import { notes } from '../types/types'
+import { notebook } from '../types/types'
 
-const noteSchema = new Schema<notes>({
+const notebookSchema = new Schema<notebook>({
     title: String,
-    content: String,
-    author: String
 })
 
-noteSchema.set('toJSON', {
+notebookSchema.set('toJSON', {
     transform: (document, returnedObject) => {
         returnedObject.id = returnedObject._id.toString()
         delete returnedObject._id
@@ -15,4 +13,4 @@ noteSchema.set('toJSON', {
     }
 })
 
-export default model<notes>('Note', noteSchema)
+export default model<notebook>('Notebook', notebookSchema)

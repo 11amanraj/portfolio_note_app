@@ -2,7 +2,7 @@ POST http://localhost:8000/api/notebooks
 content-type: application/json
 
 {
-    "title": "Important Notebook"
+    "title": "Untitled Notebook"
 }
 
 ####

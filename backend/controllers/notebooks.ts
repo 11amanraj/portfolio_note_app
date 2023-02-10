@@ -2,14 +2,13 @@ import { Request, Response, NextFunction, Router } from 'express'
 
 const notebooksRouter = Router()
 import Notebook from '../models/notebook'
+import { notes } from '../types/types'
 
-notebooksRouter.get('/', (request: Request, response: Response, next: NextFunction) => {
-    Notebook
-        .find({})
-        .then((notes: any) => {
-            response.json(notes)
-        })
-        .catch((error: any) => next(error))
+notebooksRouter.get('/', async (request: Request, response: Response, next: NextFunction) => {
+    const notebook = await Notebook
+        .find({}).populate<{notes: notes}>('notes')
+
+    response.json(notebook)
 })
 
 notebooksRouter.post('/', (request: Request, response: Response, next: NextFunction) => {

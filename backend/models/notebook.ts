@@ -3,6 +3,12 @@ import { notebook } from '../types/types'
 
 const notebookSchema = new Schema<notebook>({
     title: String,
+    notes: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'Note'
+        }
+    ]
 })
 
 notebookSchema.set('toJSON', {

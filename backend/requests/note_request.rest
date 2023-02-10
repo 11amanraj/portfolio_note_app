@@ -2,10 +2,10 @@ POST http://localhost:8000/api/notes
 content-type: application/json
 
 {
-    "title": "A Very Important Note",
-    "content": "Alpah asjbjknagh asbfjnag ajhgjkadg adjgklajdg adnkgdalg",
-    "author": "Dames Doe",
-    "notebookID": "63e609c5233ef431c7c88c99"
+    "title": "4th Note",
+    "content": "ahdfjg nadskjgn gnajngk akfmglka",
+    "author": "John Doe",
+    "notebookID": "63e64e21b0485ba71afd83e4"
 }
 
 ####

@@ -4,7 +4,13 @@ import { notes } from '../types/types'
 const noteSchema = new Schema<notes>({
     title: String,
     content: String,
-    author: String
+    author: String,
+    notebook: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'Notebook'
+        }
+    ]
 })
 
 noteSchema.set('toJSON', {

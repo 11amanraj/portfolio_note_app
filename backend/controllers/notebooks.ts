@@ -13,9 +13,9 @@ notebooksRouter.get('/', (request: Request, response: Response, next: NextFuncti
 })
 
 notebooksRouter.post('/', (request: Request, response: Response, next: NextFunction) => {
-    const note = new Notebook(request.body)
+    const notebook = new Notebook(request.body)
 
-    note
+    notebook
         .save()
         .then((result: any) => {
             response.status(201).json(result)

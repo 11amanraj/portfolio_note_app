@@ -1,12 +1,14 @@
 export interface note {
-    id: number,
-    tags: string[],
-    title: string,
-    body: string
-  }
-  
+    title: string;
+    content: string;
+    author: string;
+    id: string;
+}
+
 export interface notebook {
-    [key: string]: note[]
+    title: string;
+    notes: note[];
+    id: string;
 }
 
 export interface allNotes {

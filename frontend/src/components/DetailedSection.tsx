@@ -1,20 +1,15 @@
 import { notebook } from '../shared/interfaces/notes';
 import styles from './DetailedSection.module.css'
+import NotesGallery from './DisplaySection/NotesGallery';
 
 const DetailedSection: React.FC<{notebook: notebook | null}> = ({notebook}) => {
+    const openNoteHandler = (id: string) => {
+        console.log(id)
+    }
+
     if(notebook !== null) {
         return (
-            <div className={styles.container}>
-                {notebook.notes.map(book => (
-                    <div key={book.title} className={styles.note}>
-                        <div>
-                            <h2>{book.title}</h2>
-                            <p>{`by ${book.author}`}</p>
-                        </div>
-                        <p>{book.content}</p>
-                    </div>
-                ))}
-            </div>
+            <NotesGallery onSelect={openNoteHandler} notebook={notebook}/>
         )
     } else {
         return (

@@ -1,0 +1,21 @@
+.container {
+    margin: 0;
+    padding-top: 1rem;
+    background-color: black;
+    height: 1080px;
+    width: 200px;
+    box-sizing: border-box;
+}
+
+.container p {
+    background-color: grey;
+    color: black;
+    font-weight: 700;
+    padding: 1rem;
+    margin-left: 1rem;
+}
+
+.container p:hover {
+    background-color: rgb(237, 237, 11);
+    cursor: pointer;
+}

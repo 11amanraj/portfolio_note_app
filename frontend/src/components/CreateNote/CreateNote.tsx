@@ -1,13 +1,10 @@
 import React from 'react'
-import { useState, useRef, useContext } from 'react'
+import { useState, useRef } from 'react'
 import styles from './CreateNote.module.css'
 import Search from './TagSearch'
-import NoteContext from '../../store/note-context'
 import axios from 'axios'
 
 const CreateNote = () => {
-    const noteCtx = useContext(NoteContext);
-
     const [title, setTitle] = useState('')
     const [body, setBody] = useState('')
     const [showForm, setShowForm] = useState<boolean>(false)
@@ -49,7 +46,7 @@ const CreateNote = () => {
 
                     <label htmlFor='body'>Body:</label>
                     <textarea name='body' id='body-input' ref={bodyInputRef}/>
-                    <Search allTags={noteCtx.tags}/>
+                    {/* <Search allTags={noteCtx.tags}/> */}
 
                     <div>
                         <button id={styles.submit} type="submit">Add Note</button>

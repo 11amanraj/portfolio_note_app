@@ -1,18 +1,11 @@
-import React from "react";
-import { note } from "../shared/interfaces/notes";
-
-interface selection {
-    type: string,
-    selected: note[] | null,
-    lastNotebook: note[] | null,
-    onSelect: (type: string, selected: note[]) => void
-}
+import React from "react"
+import { selection, TypeofSelection } from "../shared/interfaces/notes"
 
 const defaultValue: selection = {
-    type: '',
-    selected: [],
-    lastNotebook: [],
-    onSelect: () => {}
+    type: TypeofSelection.WELCOME,
+    selected: null,
+    lastNotebook: null,
+    onSelect: (type: TypeofSelection, id: string) => {}
 }
 
 const SelectionContext = React.createContext(defaultValue)

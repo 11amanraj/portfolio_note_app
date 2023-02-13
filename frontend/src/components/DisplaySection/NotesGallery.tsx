@@ -4,35 +4,47 @@ import axios from 'axios';
 import { note, TypeofSelection } from '../../shared/interfaces/notes'
 import SelectionContext from '../../store/selection-context';
 
-const NotesGallery: React.FC<{id: string | null}> = ({id}) => {
+const NotesGallery: React.FC<{id: string | undefined}> = ({id}) => {
     const [notes, setNotes] = useState<note[]>([])
+    const [loading, setLoading] = useState(false)
     
-    const selectCtx = useContext(SelectionContext)
+    // const selectCtx = useContext(SelectionContext)
 
-    const noteSelectionHandler = (id: string) => {
-        selectCtx.onSelect(TypeofSelection.NOTE,id)
-    }
+    // const noteSelectionHandler = (id: string) => {
+    //     selectCtx.onSelect(TypeofSelection.NOTE,id)
+    // }
 
     useEffect(() => {
+        setLoading(true)
         axios
             .get(`http://localhost:8000/api/notebooks/${id}`)
             .then(response => {
                 setNotes(response.data.notes)
+                setLoading(false)
             })
     }, [id])
 
-    return (
-        <div className={styles.container}>
-            {notes.map(note => (
-                <div key={note.id} className={styles.note} onClick={() => noteSelectionHandler(note.id)}>
-                    <div>
-                        <h2>{note.title}</h2>
-                        <p>{`by ${note.author}`}</p>
+    if (loading) {
+        return (
+            <div>
+                Loading....
+            </div>
+        )
+    } else {
+        return (
+            <div className={styles.container}>
+                {notes.map(note => (
+                    <div key={note.id} className={styles.note}>
+                        <div>
+                            <h2>{note.title}</h2>
+                            <p>{`by ${note.author}`}</p>
+                        </div>
                     </div>
-                </div>
-            ))}
-        </div>
-    )
+                ))}
+            </div>
+        )
+    }
+
 }
  
 export default NotesGallery;

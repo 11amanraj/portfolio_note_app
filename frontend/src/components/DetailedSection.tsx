@@ -23,7 +23,7 @@ const DetailedSection: React.FC<{notebook: notebook | null}> = ({notebook}) => {
     } else if (selectCtx.type === TypeofSelection.NOTEBOOK) {
         return (
             <div>
-                <NotesGallery id={selectCtx.selected}/>
+                {/* <NotesGallery id={selectCtx.selected}/> */}
             </div>
         )
     } else if (selectCtx.type === TypeofSelection.NOTE) {

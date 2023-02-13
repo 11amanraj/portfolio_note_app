@@ -11,6 +11,12 @@ export interface notebook {
     id: string;
 }
 
+export interface notesCollection {
+    title: string,
+    id: string,
+    author: string
+}
+
 export interface allNotes {
     notebooks: notebook,
     tags: string[],

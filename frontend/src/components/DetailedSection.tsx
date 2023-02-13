@@ -3,6 +3,7 @@ import { notebook, TypeofSelection } from '../shared/interfaces/notes';
 import SelectionContext from '../store/selection-context';
 import styles from './DetailedSection.module.css'
 import NotesGallery from './DisplaySection/NotesGallery';
+import SingleNote from './DisplaySection/SingleNote';
 
 const DetailedSection: React.FC<{notebook: notebook | null}> = ({notebook}) => {
     const [selectedNote, setSelectedNote] = useState<string | null>(null)
@@ -25,6 +26,10 @@ const DetailedSection: React.FC<{notebook: notebook | null}> = ({notebook}) => {
                 <NotesGallery id={selectCtx.selected}/>
             </div>
         )
+    } else if (selectCtx.type === TypeofSelection.NOTE) {
+        return (
+            <SingleNote id={selectCtx.selected}/>
+        )
     } else {
         return (
             <div>
@@ -32,7 +37,6 @@ const DetailedSection: React.FC<{notebook: notebook | null}> = ({notebook}) => {
             </div>
         )
     }
-
     // if(selectedNote !== null) {
     //     return (
     //         <div>

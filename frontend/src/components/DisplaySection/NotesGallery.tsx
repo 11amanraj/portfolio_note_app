@@ -1,25 +1,10 @@
 import styles from './NotesGallery.module.css'
 import { useState, useEffect } from 'react'
 import axios from 'axios';
-
-// const NotesGallery: React.FC<{notebook: notebook, onSelect: (id: string) => void}> = ({notebook, onSelect}) => {
-//     return ( 
-//         <div className={styles.container}>
-//             {notebook.notes.map(book => (
-//                 <div onClick={() => onSelect(book.id)} key={book.id} className={styles.note}>
-//                     <div>
-//                         <h2>{book.title}</h2>
-//                         <p>{`by ${book.author}`}</p>
-//                     </div>
-//                     <p>{book.content}</p>
-//                 </div>
-//             ))}
-//         </div>
-//      );
-// }
+import { note } from '../../shared/interfaces/notes'
 
 const NotesGallery: React.FC<{id: string | null}> = ({id}) => {
-    const [notes, setNotes] = useState<string[]>()
+    const [notes, setNotes] = useState<note[]>([])
 
     useEffect(() => {
         axios
@@ -30,8 +15,15 @@ const NotesGallery: React.FC<{id: string | null}> = ({id}) => {
     }, [id])
 
     return (
-        <div>
-            {notes && notes.map(note => <p key={note}>{note}</p>)}
+        <div className={styles.container}>
+            {notes.map(note => (
+                <div key={note.id} className={styles.note}>
+                    <div>
+                        <h2>{note.title}</h2>
+                        <p>{`by ${note.author}`}</p>
+                    </div>
+                </div>
+            ))}
         </div>
     )
 }

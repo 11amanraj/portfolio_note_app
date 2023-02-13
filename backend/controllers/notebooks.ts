@@ -11,6 +11,13 @@ notebooksRouter.get('/', async (request: Request, response: Response, next: Next
     response.json(notebook)
 })
 
+notebooksRouter.get('/:id', async (request: Request, response: Response, next: NextFunction) => {
+    const notebook = await Notebook
+        .findById(request.params.id)
+
+    response.json(notebook)
+})
+
 notebooksRouter.post('/', (request: Request, response: Response, next: NextFunction) => {
     const notebook = new Notebook(request.body)
 

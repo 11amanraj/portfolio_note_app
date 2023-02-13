@@ -14,6 +14,15 @@ notesRouter.get('/', (request: Request, response: Response, next: NextFunction) 
         .catch((error: any) => next(error))
 })
 
+notesRouter.get('/:id', (request: Request, response: Response, next: NextFunction) => {
+    Note
+        .findById(request.params.id)
+        .then((notes: any) => {
+            response.json(notes)
+        })
+        .catch((error: any) => next(error))
+})
+
 notesRouter.post('/', async (request: Request, response: Response, next: NextFunction) => {
     const notebook = await Notebook.findById(request.body.notebookID) 
 
@@ -28,6 +37,7 @@ notesRouter.post('/', async (request: Request, response: Response, next: NextFun
             notebook: notebook._id
         })
 
+        //look at this error later
         const savedNote = await note.save()
         response.status(201).json(savedNote)
         notebook.notes = notebook.notes?.concat(savedNote._id)

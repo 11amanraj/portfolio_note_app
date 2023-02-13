@@ -13,7 +13,7 @@ notebooksRouter.get('/', async (request: Request, response: Response, next: Next
 
 notebooksRouter.get('/:id', async (request: Request, response: Response, next: NextFunction) => {
     const notebook = await Notebook
-        .findById(request.params.id)
+        .findById(request.params.id).populate<{notes: notes}>('notes', {title: 1, author: 1, id: 1})
 
     response.json(notebook)
 })

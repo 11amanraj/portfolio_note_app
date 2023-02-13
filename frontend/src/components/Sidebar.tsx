@@ -1,10 +1,12 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import axios from 'axios';
 import styles from './Sidebar.module.css'
-import { notebook } from '../shared/interfaces/notes';
+import { notebook, TypeofSelection } from '../shared/interfaces/notes';
+import SelectionContext from '../store/selection-context';
 
 const SideBar: React.FC<{onSelect: (selectedBook: notebook) => void}> = ({onSelect}) => {
     const [notebooks, setNotebooks] = useState<notebook[] | null>(null)
+    const selectCtx = useContext(SelectionContext)
 
     useEffect(() => {
         axios
@@ -17,6 +19,8 @@ const SideBar: React.FC<{onSelect: (selectedBook: notebook) => void}> = ({onSele
     const titleSelectionHandler = (id: string) => {
         const selectedNotebook = notebooks?.filter(notebook => notebook.id === id)
         selectedNotebook && onSelect(selectedNotebook[0])
+        
+        selectCtx.onSelect(TypeofSelection.NOTEBOOK, id)
     }
 
     return ( 

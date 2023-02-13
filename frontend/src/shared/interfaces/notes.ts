@@ -16,3 +16,17 @@ export interface allNotes {
     tags: string[],
     headers: string[]
 }
+
+export enum TypeofSelection {
+    NOTE = 'note',
+    NOTEBOOK = 'notebook',
+    WELCOME = 'welcome',
+    CREATENOTE = 'create'
+}
+
+export interface selection {
+    type: TypeofSelection,
+    selected: string | null,
+    lastNotebook: string | null,
+    onSelect: (type: TypeofSelection ,id: string) => void
+}

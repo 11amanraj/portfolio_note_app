@@ -3,7 +3,7 @@ import axios from 'axios';
 import styles from './Sidebar.module.css'
 import { notebook, TypeofSelection } from '../shared/interfaces/notes';
 import SelectionContext from '../store/selection-context';
-import { Link } from 'react-router-dom'
+import { NavLink } from 'react-router-dom'
 
 const SideBar: React.FC<{onSelect: (selectedBook: notebook) => void}> = ({onSelect}) => {
     const [notebooks, setNotebooks] = useState<notebook[] | null>(null)
@@ -26,7 +26,15 @@ const SideBar: React.FC<{onSelect: (selectedBook: notebook) => void}> = ({onSele
 
     return ( 
         <div className={styles.container}>
-            {notebooks && notebooks.map(notebook => <Link key={notebook.id} to='/notes'><p onClick={() => titleSelectionHandler(notebook.id)}>{notebook.title}</p></Link>)}
+            {notebooks && notebooks.map(notebook => (
+                <NavLink 
+                    className={({isActive}) => isActive ? styles.active : undefined} 
+                    key={notebook.id} 
+                    to='/notes'>
+                        <p onClick={() => titleSelectionHandler(notebook.id)}>
+                            {notebook.title}
+                        </p>
+                </NavLink>))}
         </div>
      );
 }

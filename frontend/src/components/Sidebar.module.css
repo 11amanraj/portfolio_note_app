@@ -19,3 +19,7 @@
     background-color: rgb(237, 237, 11);
     cursor: pointer;
 }
+
+.active p {
+    background-color: green;
+}

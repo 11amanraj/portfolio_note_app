@@ -8,12 +8,18 @@ const NotebookTitles: React.FC<{notebook: notebook}> = ({notebook}) => {
         <NavLink 
             className={({isActive}) => isActive ? styles.active : undefined} 
             to={`/notebook/${notebook.id}`}>
-                <p className={styles.title}>{notebook.title}</p>
-                <div className={styles.notes}>
-                    {notebook.notes.map(note => (
-                        <NotesTitle key={note.id} note={note}/>
-                    ))}
-                </div>
+                {({isActive}) => {
+                    return (
+                        <>
+                            <p className={styles.title}>{notebook.title}</p>
+                            {isActive && <div className={styles.notes}>
+                                {notebook.notes.map(note => (
+                                    <NotesTitle key={note.id} note={note}/>
+                                ))}
+                            </div>}
+                        </>
+                    )
+                }}
         </NavLink>
      );
 }

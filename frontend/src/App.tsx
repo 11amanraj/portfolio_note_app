@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import DetailedSection from './components/DetailedSection';
-import SideBar from './components/Sidebar';
+import SideBar from './components/Navigation/Sidebar';
 import { notebook } from './shared/interfaces/notes';
 import SelectionContextProvider from './store/SelectionContextProvider';
 

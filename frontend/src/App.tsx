@@ -6,8 +6,8 @@ import SelectionContextProvider from './store/SelectionContextProvider';
 
 import { Route, Routes } from 'react-router-dom';
 import HomePage from './pages/HomePage';
-import Notes from './pages/Notes';
-import NoteDetail from './pages/NoteDetail';
+import Notebook from './pages/Notebook';
+import NoteDetail from './pages/Note';
 
 function App() {
   const [notebook, setNotebook] = useState<notebook | null>(null)
@@ -23,8 +23,8 @@ function App() {
         
         <Routes>
           <Route path='/' element={<HomePage />}/>
-          <Route path='/notes/:id' element={<Notes />}/>
-          <Route path='/detail' element={<NoteDetail />}/>
+          <Route path='/notebook/:id' element={<Notebook />}/>
+          <Route path='/note/:id' element={<NoteDetail />}/>
         </Routes>
         
         {/* <DetailedSection notebook={notebook}/> */}

@@ -4,16 +4,11 @@ import axios from 'axios';
 import { note, TypeofSelection } from '../../shared/interfaces/notes'
 import SelectionContext from '../../store/selection-context';
 import Loading from '../UI/Loading';
+import { Link } from 'react-router-dom'
 
 const NotesGallery: React.FC<{id: string | undefined}> = ({id}) => {
     const [notes, setNotes] = useState<note[]>([])
     const [loading, setLoading] = useState(false)
-    
-    // const selectCtx = useContext(SelectionContext)
-
-    // const noteSelectionHandler = (id: string) => {
-    //     selectCtx.onSelect(TypeofSelection.NOTE,id)
-    // }
 
     useEffect(() => {
         setLoading(true)
@@ -30,12 +25,14 @@ const NotesGallery: React.FC<{id: string | undefined}> = ({id}) => {
     return (
         <div className={styles.container}>
             {notes.map(note => (
-                <div key={note.id} className={styles.note}>
-                    <div>
-                        <h2>{note.title}</h2>
-                        <p>{`by ${note.author}`}</p>
+                <Link key={note.id} to={`/note/${note.id}`}>
+                    <div className={styles.note}>
+                        <div>
+                            <h2>{note.title}</h2>
+                            <p>{`by ${note.author}`}</p>
+                        </div>
                     </div>
-                </div>
+                </Link>
             ))}
         </div>
     )

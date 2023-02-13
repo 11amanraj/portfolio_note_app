@@ -19,3 +19,7 @@
     justify-content: space-between;
     cursor: pointer;
 }
+
+.container a {
+    text-decoration: none;
+}

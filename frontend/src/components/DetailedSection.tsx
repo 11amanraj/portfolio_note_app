@@ -28,7 +28,10 @@ const DetailedSection: React.FC<{notebook: notebook | null}> = ({notebook}) => {
         )
     } else if (selectCtx.type === TypeofSelection.NOTE) {
         return (
-            <SingleNote id={selectCtx.selected}/>
+            <div>
+                
+            </div>
+            // <SingleNote id={selectCtx.selected}/>
         )
     } else {
         return (

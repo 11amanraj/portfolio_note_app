@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom'
 // import { notesCollection } from '../shared/interfaces/notes'
 import NotesGallery from '../components/DisplaySection/NotesGallery'
 
-const Notes = () => {
+const Notebook = () => {
     // const [notes, setNotes] = useState<notesCollection[]>([
     //     {
     //         title: '',
@@ -45,4 +45,4 @@ const Notes = () => {
 
 }
  
-export default Notes;
+export default Notebook;

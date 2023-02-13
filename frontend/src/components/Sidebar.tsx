@@ -30,7 +30,7 @@ const SideBar: React.FC<{onSelect: (selectedBook: notebook) => void}> = ({onSele
                 <NavLink 
                     className={({isActive}) => isActive ? styles.active : undefined} 
                     key={notebook.id} 
-                    to={`/notes/${notebook.id}`}>
+                    to={`/notebook/${notebook.id}`}>
                         <p onClick={() => titleSelectionHandler(notebook.id)}>
                             {notebook.title}
                         </p>

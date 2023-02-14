@@ -4,7 +4,7 @@ import styles from './Sidebar.module.css'
 import { notebook } from '../../shared/interfaces/notes';
 import NotebookTitles from './NotebookTitles';
 
-const SideBar: React.FC<{onSelect: (selectedBook: notebook) => void}> = ({onSelect}) => {
+const SideBar = () => {
     const [notebooks, setNotebooks] = useState<notebook[] | null>(null)
 
     useEffect(() => {

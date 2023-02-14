@@ -4,12 +4,10 @@ import HomePage from './pages/HomePage';
 import Notebook from './pages/Notebook';
 import NoteDetail from './pages/Note';
 import CreateNote from './components/CreateNote/CreateNote';
-import DropDown from './components/UI/DropDown';
 
 function App() {
   return (
       <div style={{display: "flex"}}>
-        <DropDown />
         <SideBar />
         <Routes>
           <Route path='/' element={<HomePage />}/>

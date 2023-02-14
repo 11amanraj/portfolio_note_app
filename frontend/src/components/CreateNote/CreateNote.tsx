@@ -3,6 +3,7 @@ import { useState, useRef } from 'react'
 import styles from './CreateNote.module.css'
 import Search from './TagSearch'
 import axios from 'axios'
+import DropDown from '../UI/DropDown'
 
 const CreateNote = () => {
     const [title, setTitle] = useState('')
@@ -38,21 +39,21 @@ const CreateNote = () => {
             <fieldset>
                 <legend><h2>Create New Note</h2></legend>
                 
-                <div>
+                <div className={styles.title}>
                     <label htmlFor='title'>Title:</label>
                     <input type='text' name='title' id='title-input' ref={titleInputRef}/>
                 </div>
 
-                <div>
+                <div className={styles.dropdown}>
                     <label htmlFor='notebook'>Notebook:</label>
-                    <input type='text' name='notebook' id='notebook-input' ref={titleInputRef}/>
+                    <DropDown />
                 </div>
 
                 <label htmlFor='body'>Body:</label>
                 <textarea name='body' id='body-input' ref={bodyInputRef}/>
                 {/* <Search allTags={noteCtx.tags}/> */}
 
-                <div>
+                <div className={styles.buttons}>
                     <button id={styles.submit} type="submit">Add Note</button>
                     <button id={styles.cancel} onClick={showFormHandler}>Cancel</button>
                 </div>

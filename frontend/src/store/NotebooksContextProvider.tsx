@@ -6,13 +6,15 @@ import { notebook } from "../shared/interfaces/notes";
 interface notebookContext {
     notebooks: null | notebook[],
     loading: boolean,
-    addNotebook: (title: string) => void
+    addNotebook: (title: string) => void,
+    lastId: string
 }
 
 const defaultValue : notebookContext = {
     notebooks: null,
     loading: false,
-    addNotebook: (title: string) => {}
+    addNotebook: (title: string) => {},
+    lastId: ''
 }
 
 export const NotebooksContext = React.createContext(defaultValue)
@@ -40,13 +42,13 @@ const NotebooksContextProvider = ({children}: {children: React.ReactNode}) => {
             .post('http://localhost:8000/api/notebooks', {title: title})
             .then(response => setLastID(response.data.id))
             // .catch(error => console.log('context provider error'))
-
+        
         console.log(title)
         //later add route to new notebook url
     }
 
     return ( 
-        <NotebooksContext.Provider value={{notebooks: notebooks, loading: loading, addNotebook: addNotebookHandler}}>
+        <NotebooksContext.Provider value={{notebooks: notebooks, loading: loading, addNotebook: addNotebookHandler, lastId: lastID}}>
             {children}
         </NotebooksContext.Provider>
      );

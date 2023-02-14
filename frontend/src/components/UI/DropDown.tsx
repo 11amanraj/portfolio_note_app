@@ -6,7 +6,12 @@ interface DropDownElement {
     id: string
 }
 
-const DropDown: React.FC<{array: DropDownElement[], addEntry: (title: string) => void}> = ({array, addEntry}) => {
+const DropDown: React.FC<{ 
+        array: DropDownElement[], 
+        addEntry: (title: string) => void, 
+        onSelect: (id: string) => void 
+    }> = ({ array, addEntry, onSelect }) => {
+    
     const [input, setInput] = useState<string>('')
     const [showOptions, setShowOptions] = useState(false)
 
@@ -14,35 +19,44 @@ const DropDown: React.FC<{array: DropDownElement[], addEntry: (title: string) =>
         setInput(e.target.value)
     }
 
-    const clickHandler = () => {
+    const newEntryHandler = () => {
         console.log('working')
-        addEntry(input)
+        const id = addEntry(input)
+        console.log(id)
+        
+        // setShowOptions(false)
+    }
+
+    const selectionHandler = (id: string, title: string) => {
+        onSelect(id)
         setShowOptions(false)
+        setInput(title)
     }
 
     // add a close options button
 
-    return ( 
+    return (
         <div className={styles.container}>
-            <input 
-                onFocus={() => setShowOptions(true)} 
-                onChange={inputHandler} 
+            <input
+                onFocus={() => setShowOptions(true)}
+                onChange={inputHandler}
                 className={styles.input} type='text' name='input-box' id='input-box'
+                value={input}
             />
-            {showOptions && 
+            {showOptions &&
                 <div className={styles.dynamic}>
                     {input.length > 0 && <p className={styles.new}>
-                                                <span>{input}</span>
-                                                <span onClick={clickHandler} className={styles.add}>+</span>
-                                        </p>}
+                        <span>{input}</span>
+                        <span onClick={newEntryHandler} className={styles.add}>+</span>
+                    </p>}
                     {array
                         .filter(item => item.title.includes(input))
-                        .map(item => 
-                            <p key={item.id}>{item.title}</p>
-                    )}
+                        .map(item =>
+                            <p onClick={() => selectionHandler(item.id, item.title)} key={item.id}>{item.title}</p>
+                        )}
                 </div>}
         </div>
-     );
+    );
 }
- 
+
 export default DropDown;

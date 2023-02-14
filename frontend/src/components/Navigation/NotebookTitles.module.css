@@ -8,6 +8,8 @@
     font-weight: 700;
     padding: 1rem;
     margin-left: 1rem;
+    display: flex;
+    justify-content: space-between;
 }
 
 .title p:hover {

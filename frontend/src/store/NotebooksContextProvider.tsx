@@ -7,6 +7,7 @@ interface notebookContext {
     notebooks: null | notebook[],
     loading: boolean,
     addNotebook: (title: string) => void,
+    deleteNotebook: (id: string) => void,
     lastId: string
 }
 
@@ -14,6 +15,7 @@ const defaultValue : notebookContext = {
     notebooks: null,
     loading: false,
     addNotebook: (title: string) => {},
+    deleteNotebook: (id: string) => {},
     lastId: ''
 }
 
@@ -47,8 +49,23 @@ const NotebooksContextProvider = ({children}: {children: React.ReactNode}) => {
         //later add route to new notebook url
     }
 
+    const deleteNotebookHandler = (id: string) => {
+        axios
+            .delete(`http://localhost:8000/api/notebooks/${id}`)
+            .then(response => console.log(response))
+            .catch(error => console.log(error))
+
+        setLastID(id)
+    }
+
     return ( 
-        <NotebooksContext.Provider value={{notebooks: notebooks, loading: loading, addNotebook: addNotebookHandler, lastId: lastID}}>
+        <NotebooksContext.Provider value={{
+            notebooks: notebooks, 
+            loading: loading, 
+            addNotebook: addNotebookHandler, 
+            lastId: lastID, 
+            deleteNotebook: deleteNotebookHandler
+        }}>
             {children}
         </NotebooksContext.Provider>
      );

@@ -33,33 +33,33 @@ const CreateNote = () => {
         }).then(response => console.log(response))
     }
 
-    if(showForm) {
-        return (
-            <form className={styles.container} onSubmit={submitHandler}>
-                <fieldset>
-                    <legend><h2>Create New Note</h2></legend>
-                    
-                    <div>
-                        <label htmlFor='title'>Title:</label>
-                        <input type='text' name='title' id='title-input' ref={titleInputRef}/>
-                    </div>
+    return (
+        <form className={styles.container} onSubmit={submitHandler}>
+            <fieldset>
+                <legend><h2>Create New Note</h2></legend>
+                
+                <div>
+                    <label htmlFor='title'>Title:</label>
+                    <input type='text' name='title' id='title-input' ref={titleInputRef}/>
+                </div>
 
-                    <label htmlFor='body'>Body:</label>
-                    <textarea name='body' id='body-input' ref={bodyInputRef}/>
-                    {/* <Search allTags={noteCtx.tags}/> */}
+                <div>
+                    <label htmlFor='notebook'>Notebook:</label>
+                    <input type='text' name='notebook' id='notebook-input' ref={titleInputRef}/>
+                </div>
 
-                    <div>
-                        <button id={styles.submit} type="submit">Add Note</button>
-                        <button id={styles.cancel} onClick={showFormHandler}>Cancel</button>
-                    </div>
-                </fieldset>
-            </form>
-        )
-    } else {
-        return (
-            <button id={styles.create} onClick={showFormHandler}>Create Note</button>
-        )
-    }
+                <label htmlFor='body'>Body:</label>
+                <textarea name='body' id='body-input' ref={bodyInputRef}/>
+                {/* <Search allTags={noteCtx.tags}/> */}
+
+                <div>
+                    <button id={styles.submit} type="submit">Add Note</button>
+                    <button id={styles.cancel} onClick={showFormHandler}>Cancel</button>
+                </div>
+            </fieldset>
+        </form>
+    )
+
 }
  
 export default CreateNote;

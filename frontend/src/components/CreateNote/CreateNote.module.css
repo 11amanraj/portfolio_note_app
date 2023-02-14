@@ -1,6 +1,6 @@
 .container {
     margin: 8px;
-    max-width: 500px;
+    width: 100%;
 }
 
 .container fieldset {

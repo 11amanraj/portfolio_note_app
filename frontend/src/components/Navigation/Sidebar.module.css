@@ -3,6 +3,23 @@
     padding-top: 1rem;
     background-color: black;
     height: 1080px;
-    width: 200px;
+    min-width: 200px;
     box-sizing: border-box;
+}
+
+.create {
+    box-sizing: border-box;
+    border: 2px solid red;
+    height: 48px;
+    margin: 16px;
+    border-radius: 24px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: blueviolet;
+    cursor: pointer;
+}
+
+.create:hover {
+    background-color: rgb(78, 24, 129);
 }

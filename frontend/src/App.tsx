@@ -4,9 +4,11 @@ import HomePage from './pages/HomePage';
 import Notebook from './pages/Notebook';
 import NoteDetail from './pages/Note';
 import CreateNote from './components/CreateNote/CreateNote';
+import NotebooksContextProvider from './store/NotebooksContextProvider';
 
 function App() {
   return (
+    <NotebooksContextProvider>
       <div style={{display: "flex"}}>
         <SideBar />
         <Routes>
@@ -16,6 +18,7 @@ function App() {
           <Route path='/notebook/:id/note/:noteid' element={<NoteDetail />}/>
         </Routes>
       </div>
+    </NotebooksContextProvider>
   )
 }
 

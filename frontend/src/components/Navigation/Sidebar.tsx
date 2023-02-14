@@ -1,20 +1,13 @@
-import { useEffect, useState } from 'react';
-import axios from 'axios';
+import { useContext } from 'react';
 import styles from './Sidebar.module.css'
-import { notebook } from '../../shared/interfaces/notes';
 import NotebookTitles from './NotebookTitles';
 import { Link } from 'react-router-dom';
+import { NotebooksContext } from '../../store/NotebooksContextProvider';
 
 const SideBar = () => {
-    const [notebooks, setNotebooks] = useState<notebook[] | null>(null)
+    const { notebooks, loading } = useContext(NotebooksContext)
 
-    useEffect(() => {
-        axios
-            .get('http://localhost:8000/api/notebooks')
-            .then(response => 
-                setNotebooks(response.data)
-            )
-    }, [])
+    // Add loading component here
 
     return ( 
         <div className={styles.container}>

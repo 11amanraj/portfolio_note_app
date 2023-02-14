@@ -13,7 +13,7 @@ const CreateNote = () => {
     const titleInputRef = useRef<HTMLInputElement | null>(null)
     const bodyInputRef = useRef<HTMLTextAreaElement | null>(null)
 
-    const { notebooks, loading } = useContext(NotebooksContext)
+    const { notebooks, addNotebook } = useContext(NotebooksContext)
 
     const showFormHandler = () => {
         setShowForm(prev => !prev)
@@ -49,7 +49,7 @@ const CreateNote = () => {
 
                 <div className={styles.dropdown}>
                     <label htmlFor='notebook'>Notebook:</label>
-                    {notebooks && <DropDown array={notebooks}/>} 
+                    {notebooks && <DropDown addEntry={addNotebook} array={notebooks}/>} 
                 </div>
 
                 <label htmlFor='body'>Body:</label>

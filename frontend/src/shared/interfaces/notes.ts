@@ -37,8 +37,3 @@ export interface selection {
     lastNotebook: string | null,
     onSelect: (type: TypeofSelection ,id: string) => void
 }
-
-export interface notebookContext {
-    notebooks: null | notebook[],
-    loading: boolean
-}

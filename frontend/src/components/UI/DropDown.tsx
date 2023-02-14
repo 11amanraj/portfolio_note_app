@@ -6,7 +6,7 @@ interface DropDownElement {
     id: string
 }
 
-const DropDown: React.FC<{array: DropDownElement[]}> = ({array}) => {
+const DropDown: React.FC<{array: DropDownElement[], addEntry: (title: string) => void}> = ({array, addEntry}) => {
     const [input, setInput] = useState<string>('')
     const [showOptions, setShowOptions] = useState(false)
 
@@ -14,11 +14,18 @@ const DropDown: React.FC<{array: DropDownElement[]}> = ({array}) => {
         setInput(e.target.value)
     }
 
+    const clickHandler = () => {
+        console.log('working')
+        addEntry(input)
+        setShowOptions(false)
+    }
+
+    // add a close options button
+
     return ( 
         <div className={styles.container}>
             <input 
                 onFocus={() => setShowOptions(true)} 
-                onBlur={() => setShowOptions(false)} 
                 onChange={inputHandler} 
                 className={styles.input} type='text' name='input-box' id='input-box'
             />
@@ -26,9 +33,13 @@ const DropDown: React.FC<{array: DropDownElement[]}> = ({array}) => {
                 <div className={styles.dynamic}>
                     {input.length > 0 && <p className={styles.new}>
                                                 <span>{input}</span>
-                                                <span className={styles.add}>+</span>
+                                                <span onClick={clickHandler} className={styles.add}>+</span>
                                         </p>}
-                    {array.map(item => <p key={item.id}>{item.title}</p>)}
+                    {array
+                        .filter(item => item.title.includes(input))
+                        .map(item => 
+                            <p key={item.id}>{item.title}</p>
+                    )}
                 </div>}
         </div>
      );

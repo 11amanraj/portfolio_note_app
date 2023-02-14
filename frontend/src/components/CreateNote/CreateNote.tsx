@@ -1,9 +1,10 @@
 import React from 'react'
-import { useState, useRef } from 'react'
+import { useState, useRef, useContext } from 'react'
 import styles from './CreateNote.module.css'
 import Search from './TagSearch'
 import axios from 'axios'
 import DropDown from '../UI/DropDown'
+import { NotebooksContext } from '../../store/NotebooksContextProvider'
 
 const CreateNote = () => {
     const [title, setTitle] = useState('')
@@ -11,6 +12,8 @@ const CreateNote = () => {
     const [showForm, setShowForm] = useState<boolean>(false)
     const titleInputRef = useRef<HTMLInputElement | null>(null)
     const bodyInputRef = useRef<HTMLTextAreaElement | null>(null)
+
+    const { notebooks, loading } = useContext(NotebooksContext)
 
     const showFormHandler = () => {
         setShowForm(prev => !prev)
@@ -46,7 +49,7 @@ const CreateNote = () => {
 
                 <div className={styles.dropdown}>
                     <label htmlFor='notebook'>Notebook:</label>
-                    <DropDown />
+                    {notebooks && <DropDown array={notebooks}/>} 
                 </div>
 
                 <label htmlFor='body'>Body:</label>

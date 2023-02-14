@@ -1,18 +1,12 @@
 import styles from './DropDown.module.css'
 import { useState } from 'react'
 
-const DropDown = () => {
-    const notebooks = [
-        {
-            title: 'Untitled Notebook',
-            id: 'abfg56g4d65fh'
-        },
-        {
-            title: '2nd Notebook',
-            id: 'ahgusdhg8564gs'
-        }
-    ]
+interface DropDownElement {
+    title: string,
+    id: string
+}
 
+const DropDown: React.FC<{array: DropDownElement[]}> = ({array}) => {
     const [input, setInput] = useState<string>('')
     const [showOptions, setShowOptions] = useState(false)
 
@@ -34,8 +28,7 @@ const DropDown = () => {
                                                 <span>{input}</span>
                                                 <span className={styles.add}>+</span>
                                         </p>}
-                    <p>{notebooks[0].title}</p>
-                    <p>{notebooks[1].title}</p>
+                    {array.map(item => <p key={item.id}>{item.title}</p>)}
                 </div>}
         </div>
      );

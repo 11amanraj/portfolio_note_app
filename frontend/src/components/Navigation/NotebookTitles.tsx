@@ -19,7 +19,7 @@ const NotebookTitles: React.FC<{notebook: notebook}> = ({notebook}) => {
     }, [location, notebook])
     
     return (
-        <div>
+        <div className={styles.container}>
             <Link className={isActive ? styles.active : ''} to={`/notebook/${notebook.id}`}>
                 <p className={styles.title}>{notebook.title}</p>
             </Link>

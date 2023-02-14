@@ -1,3 +1,7 @@
+.container a {
+    text-decoration: none;
+}
+
 .title {
     background-color: grey;
     color: black;

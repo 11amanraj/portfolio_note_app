@@ -1,8 +1,7 @@
 import styles from './NotesGallery.module.css'
-import { useState, useEffect, useContext } from 'react'
+import { useState, useEffect } from 'react'
 import axios from 'axios';
-import { note, TypeofSelection } from '../../shared/interfaces/notes'
-import SelectionContext from '../../store/selection-context';
+import { note } from '../../shared/interfaces/notes'
 import Loading from '../UI/Loading';
 import { Link } from 'react-router-dom'
 
@@ -25,7 +24,7 @@ const NotesGallery: React.FC<{id: string | undefined}> = ({id}) => {
     return (
         <div className={styles.container}>
             {notes.map(note => (
-                <Link key={note.id} to={`/note/${note.id}`}>
+                <Link key={note.id} to={`/notebook/${id}/note/${note.id}`}>
                     <div className={styles.note}>
                         <div>
                             <h2>{note.title}</h2>

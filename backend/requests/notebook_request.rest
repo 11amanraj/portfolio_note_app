@@ -7,3 +7,6 @@ content-type: application/json
 
 ####
 GET http://localhost:8000/api/notebooks
+
+####
+DELETE http://localhost:8000/api/notebooks/63ebba1931195ae67bb0e845

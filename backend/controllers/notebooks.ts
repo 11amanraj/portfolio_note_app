@@ -29,4 +29,10 @@ notebooksRouter.post('/', (request: Request, response: Response, next: NextFunct
         .catch((error: any) => next(error))
 })
 
+notebooksRouter.delete('/:id', async (request: Request, response: Response, next: NextFunction) => {
+    Notebook
+        .findByIdAndDelete(request.params.id)
+        .then((result: any) => response.status(204).end())
+})
+
 export default notebooksRouter

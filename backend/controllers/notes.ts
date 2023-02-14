@@ -45,4 +45,10 @@ notesRouter.post('/', async (request: Request, response: Response, next: NextFun
     }
 })
 
+notesRouter.delete('/:id', async (request: Request, response: Response, next: NextFunction) => {
+    Note
+        .findByIdAndDelete(request.params.id)
+        .then((result: any) => response.status(204).end())
+})
+
 export default notesRouter

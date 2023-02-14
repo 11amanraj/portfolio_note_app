@@ -10,3 +10,6 @@ content-type: application/json
 
 ####
 GET http://localhost:8000/api/notes
+
+####
+DELETE http://localhost:8000/api/notes/63ebbd2631195ae67bb0e85a

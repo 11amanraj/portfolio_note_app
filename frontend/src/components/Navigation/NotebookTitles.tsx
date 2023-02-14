@@ -1,26 +1,34 @@
 import styles from './NotebookTitles.module.css'
-import { NavLink } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { notebook } from '../../shared/interfaces/notes'
 import NotesTitle from './NotesTitle'
+import { useEffect, useState } from 'react'
 
 const NotebookTitles: React.FC<{notebook: notebook}> = ({notebook}) => {
-    return ( 
-        <NavLink 
-            className={({isActive}) => isActive ? styles.active : undefined} 
-            to={`/notebook/${notebook.id}`}>
-                {({isActive}) => {
-                    return (
-                        <>
-                            <p className={styles.title}>{notebook.title}</p>
-                            {isActive && <div className={styles.notes}>
-                                {notebook.notes.map(note => (
-                                    <NotesTitle key={note.id} note={note}/>
-                                ))}
-                            </div>}
-                        </>
-                    )
-                }}
-        </NavLink>
+    const [isActive, setIsActive] = useState(false)
+    const location = useLocation()
+
+    useEffect(() => {
+        const urlArray = location.pathname.split('/')
+
+        if((urlArray[1] === 'notebook') && (urlArray[2] === notebook.id)) {
+            setIsActive(true)
+        } else {
+            setIsActive(false)
+        }
+    }, [location, notebook])
+    
+    return (
+        <div>
+            <Link className={isActive ? styles.active : ''} to={`/notebook/${notebook.id}`}>
+                <p className={styles.title}>{notebook.title}</p>
+            </Link>
+            {isActive && <div className={styles.notes}>
+                    {notebook.notes.map(note => (
+                    <NotesTitle key={note.id} note={note}/>
+                ))}
+            </div>}
+        </div>
      );
 }
  

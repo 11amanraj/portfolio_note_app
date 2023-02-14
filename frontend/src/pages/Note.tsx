@@ -4,8 +4,8 @@ import SingleNote from '../components/DisplaySection/SingleNote';
 const Note = () => {
     const params = useParams()
 
-    return ( 
-        <SingleNote id={params.id}/>
+    return (
+        <SingleNote id={params.noteid}/>
      );
 }
  

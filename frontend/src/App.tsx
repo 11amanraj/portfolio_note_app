@@ -24,7 +24,7 @@ function App() {
         <Routes>
           <Route path='/' element={<HomePage />}/>
           <Route path='/notebook/:id' element={<Notebook />}/>
-          <Route path='/note/:id' element={<NoteDetail />}/>
+          <Route path='/notebook/:id/note/:noteid' element={<NoteDetail />}/>
         </Routes>
         
         {/* <DetailedSection notebook={notebook}/> */}

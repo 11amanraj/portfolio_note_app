@@ -6,7 +6,7 @@ const NotesTitle: React.FC<{note: note}> = ({note}) => {
     return ( 
         <NavLink 
             className={({isActive}) => isActive ? styles.active : undefined}
-            to={`/note/${note.id}`}>
+            to={`/notebook/${note.notebook}/note/${note.id}`}>
                 <p>{note.title}</p>
         </NavLink> 
      );

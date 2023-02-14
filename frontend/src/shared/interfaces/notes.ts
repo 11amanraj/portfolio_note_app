@@ -3,6 +3,7 @@ export interface note {
     content: string;
     author: string;
     id: string;
+    notebook?: string
 }
 
 export interface notebook {

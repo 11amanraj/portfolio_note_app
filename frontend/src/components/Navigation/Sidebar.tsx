@@ -4,6 +4,7 @@ import NotebookTitles from './NotebookTitles';
 import { Link } from 'react-router-dom';
 import { NotebooksContext } from '../../store/NotebooksContextProvider';
 import AddNotebook from '../CreateNote/AddNotebook';
+import DeleteEntry from '../Operations/DeleteEntry';
 
 const SideBar = () => {
     const { notebooks, loading } = useContext(NotebooksContext)

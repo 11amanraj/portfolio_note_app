@@ -1,0 +1,29 @@
+.container a {
+    text-decoration: none;
+}
+
+.title {
+    background-color: grey;
+    color: black;
+    font-weight: 700;
+    padding: 1rem;
+    margin-left: 1rem;
+}
+
+.title p:hover {
+    background-color: rgb(237, 237, 11);
+    cursor: pointer;
+}
+
+.notes p {
+    background-color: grey;
+    color: black;
+    padding: 0.5rem;
+    margin-left: 3rem;
+    text-align: right;
+    font-size: 1rem;
+}
+
+.active > p {
+    background-color: green;
+}

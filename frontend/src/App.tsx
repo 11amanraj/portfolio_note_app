@@ -1,23 +1,21 @@
-import { useState } from 'react';
-import DetailedSection from './components/DetailedSection';
-import SideBar from './components/Sidebar';
-import { notebook } from './shared/interfaces/notes';
-import SelectionContextProvider from './store/SelectionContextProvider';
+import SideBar from './components/Navigation/Sidebar';
+import { Route, Routes } from 'react-router-dom';
+import HomePage from './pages/HomePage';
+import Notebook from './pages/Notebook';
+import NoteDetail from './pages/Note';
+import CreateNote from './components/CreateNote/CreateNote';
 
 function App() {
-  const [notebook, setNotebook] = useState<notebook | null>(null)
-
-  const notebookSelectionHandler = (selectedNotebook: notebook) => {
-    setNotebook(selectedNotebook)
-  }
-
   return (
-    <SelectionContextProvider>
       <div style={{display: "flex"}}>
-        <SideBar onSelect={notebookSelectionHandler}/>
-        <DetailedSection notebook={notebook}/>
+        <SideBar />
+        <Routes>
+          <Route path='/' element={<HomePage />}/>
+          <Route path='/newnote' element={<CreateNote />}/>
+          <Route path='/notebook/:id' element={<Notebook />}/>
+          <Route path='/notebook/:id/note/:noteid' element={<NoteDetail />}/>
+        </Routes>
       </div>
-    </SelectionContextProvider>
   )
 }
 

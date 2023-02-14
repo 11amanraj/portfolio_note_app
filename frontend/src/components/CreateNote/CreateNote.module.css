@@ -1,6 +1,6 @@
 .container {
     margin: 8px;
-    max-width: 500px;
+    width: 100%;
 }
 
 .container fieldset {
@@ -17,7 +17,7 @@
     margin: 0;
 }
 
-.container fieldset > div {
+.title,.buttons {
     display: flex;
     gap: 16px;
     justify-content: space-between;
@@ -29,6 +29,20 @@
     font-size: 16px;
     padding: 8px;
     width: 100%;
+}
+
+.container input {
+    font-size: 1rem;
+    justify-content: flex-start;
+    margin-right: 16px;
+}
+
+.dropdown {
+    display: flex;
+    gap: 16px;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 16px 0px;
 }
 
 /* check if following two selectors are not working outside this component */

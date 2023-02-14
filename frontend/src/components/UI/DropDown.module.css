@@ -1,0 +1,63 @@
+.container {
+    min-width: 300px;
+    position: relative;
+    /* display: flex;
+    flex-direction: column;
+    gap: 8px; */
+}
+
+.container * {
+    margin: 0;
+}
+
+/* .input {
+    margin: 0;
+    width: 100%;
+    padding: 8px;
+    font-size: 1.5rem;
+    border: 2px solid black;
+    border-radius: 8px;
+    margin-bottom: 16px;
+}
+
+.input:focus {
+    border: 2px solid blue;
+} */
+
+.dynamic {
+    margin-top: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    position: absolute;
+    background-color: #ffffff80;
+}
+
+.dynamic > p {
+    font-size: 1rem;
+    padding: 8px;
+    border: 2px solid rgb(97, 95, 95);
+    border-radius: 8px;
+    color: rgb(69, 69, 69);
+    box-sizing: border-box;
+}
+
+.dynamic > p:hover {
+    color: black;
+    border-color: black;
+}
+
+.new {
+    display: flex;
+    gap: 16px;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.add {
+    cursor: pointer;
+}
+
+.add:hover {
+    color: green;
+}

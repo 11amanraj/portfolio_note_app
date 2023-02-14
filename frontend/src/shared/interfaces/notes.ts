@@ -3,12 +3,19 @@ export interface note {
     content: string;
     author: string;
     id: string;
+    notebook?: string
 }
 
 export interface notebook {
     title: string;
     notes: note[];
     id: string;
+}
+
+export interface notesCollection {
+    title: string,
+    id: string,
+    author: string
 }
 
 export interface allNotes {

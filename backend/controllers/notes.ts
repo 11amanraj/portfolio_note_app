@@ -34,6 +34,8 @@ notesRouter.post('/', async (request: Request, response: Response, next: NextFun
             title: request.body.title,
             content: request.body.content,
             author: request.body.author,
+            pinned: false,
+            dateCreated: new Date(),
             notebook: notebook._id
         })
 

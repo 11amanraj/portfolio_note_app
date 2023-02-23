@@ -5,6 +5,8 @@ const noteSchema = new Schema<notes>({
     title: String,
     content: String,
     author: String,
+    pinned: Boolean,
+    dateCreated: Date,
     notebook: {
         type: Schema.Types.ObjectId,
         ref: 'Notebook'

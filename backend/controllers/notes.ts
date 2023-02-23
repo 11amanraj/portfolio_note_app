@@ -16,6 +16,18 @@ notesRouter.get('/', (request: Request, response: Response, next: NextFunction) 
         .catch((error) => next(error))
 })
 
+// notesRouter.get('/important', (request: Request, response: Response, next: NextFunction) => {
+//     Note
+//         .find({})
+//         // .sort({ dateCreated: -1 }) 
+//         .populate('notebook', { title: 1, id: 1 })
+//         .then((notes) => {
+//             console.log(notes)
+//             response.json(notes)
+//         })
+//         .catch((error) => next(error))
+// })
+
 notesRouter.get('/:id', (request: Request, response: Response, next: NextFunction) => {
     Note
         .findById(request.params.id)

@@ -9,7 +9,7 @@ notebooksRouter.get('/', async (request: Request, response: Response, next: Next
         .find({})
         .populate<{notes: notes}>({
             path: 'notes',
-            options: { sort: { title: -1}}
+            options: { sort: { title: 1} }
         })
 
     response.json(notebook)
@@ -27,16 +27,16 @@ notebooksRouter.post('/', (request: Request, response: Response, next: NextFunct
 
     notebook
         .save()
-        .then((result: any) => {
+        .then((result) => {
             response.status(201).json(result)
         })
-        .catch((error: any) => next(error))
+        .catch((error) => next(error))
 })
 
 notebooksRouter.delete('/:id', async (request: Request, response: Response, next: NextFunction) => {
     Notebook
         .findByIdAndDelete(request.params.id)
-        .then((result: any) => response.status(204).end())
+        .then(() => response.status(204).end())
 })
 
 export default notebooksRouter

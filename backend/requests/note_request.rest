@@ -2,7 +2,7 @@ POST http://localhost:8000/api/notes
 content-type: application/json
 
 {
-    "title": "Checking Changes",
+    "title": "Final Check",
     "content": "Added Pinning and Date",
     "author": "John Doe",
     "notebookID": "63e65a149c1fc9b290d2ce58"

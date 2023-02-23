@@ -1,4 +1,4 @@
-import { Date, Types } from 'mongoose'
+import { Date, PopulatedDoc, Types } from 'mongoose'
 
 export interface notes {
     title: string;
@@ -15,11 +15,5 @@ export interface notes {
 
 export interface notebook {
     title: string;
-    // color: string;
-    notes?: [
-        {
-            type: Types.ObjectId,
-            ref: string
-        }
-    ]
+    notes: PopulatedDoc<Document & Types.ObjectId[]>
 }

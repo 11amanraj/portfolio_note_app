@@ -1,26 +1,27 @@
 import { Request, Response, NextFunction, Router } from 'express'
-
 const notesRouter = Router()
 import Note from '../models/note'
 import Notebook from '../models/notebook'
+
 
 notesRouter.get('/', (request: Request, response: Response, next: NextFunction) => {
     Note
         .find({})
         .populate('notebook', { title: 1, id: 1 })
-        .then((notes: any) => {
+        .then((notes) => {
+            console.log(notes)
             response.json(notes)
         })
-        .catch((error: any) => next(error))
+        .catch((error) => next(error))
 })
 
 notesRouter.get('/:id', (request: Request, response: Response, next: NextFunction) => {
     Note
         .findById(request.params.id)
-        .then((notes: any) => {
+        .then((notes) => {
             response.json(notes)
         })
-        .catch((error: any) => next(error))
+        .catch((error) => next(error))
 })
 
 notesRouter.post('/', async (request: Request, response: Response, next: NextFunction) => {
@@ -39,18 +40,20 @@ notesRouter.post('/', async (request: Request, response: Response, next: NextFun
             notebook: notebook._id
         })
 
-        //look at this error later
         const savedNote = await note.save()
         response.status(201).json(savedNote)
-        notebook.notes = notebook.notes?.concat(savedNote._id)
-        await notebook.save()
+
+        if(Array.isArray(notebook.notes)) {
+            notebook.notes.push(savedNote._id)
+            await notebook.save()
+        }
     }
 })
 
 notesRouter.delete('/:id', async (request: Request, response: Response, next: NextFunction) => {
     Note
         .findByIdAndDelete(request.params.id)
-        .then((result: any) => response.status(204).end())
+        .then(() => response.status(204).end())
 })
 
 export default notesRouter

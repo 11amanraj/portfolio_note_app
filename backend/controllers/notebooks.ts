@@ -6,7 +6,11 @@ import { notes } from '../types/types'
 
 notebooksRouter.get('/', async (request: Request, response: Response, next: NextFunction) => {
     const notebook = await Notebook
-        .find({}).populate<{notes: notes}>('notes')
+        .find({})
+        .populate<{notes: notes}>({
+            path: 'notes',
+            options: { sort: { title: -1}}
+        })
 
     response.json(notebook)
 })

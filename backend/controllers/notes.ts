@@ -7,6 +7,7 @@ import Notebook from '../models/notebook'
 notesRouter.get('/', (request: Request, response: Response, next: NextFunction) => {
     Note
         .find({})
+        // .sort({ dateCreated: -1 }) 
         .populate('notebook', { title: 1, id: 1 })
         .then((notes) => {
             console.log(notes)

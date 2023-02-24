@@ -3,6 +3,8 @@ export interface note {
     content: string;
     author: string;
     id: string;
+    pinned: boolean;
+    dateCreated: Date;
     notebook?: string
 }
 

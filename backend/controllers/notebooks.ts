@@ -17,7 +17,8 @@ notebooksRouter.get('/', async (request: Request, response: Response, next: Next
 
 notebooksRouter.get('/:id', async (request: Request, response: Response, next: NextFunction) => {
     const notebook = await Notebook
-        .findById(request.params.id).populate<{notes: notes}>('notes', {title: 1, author: 1, id: 1})
+        .findById(request.params.id)
+        .populate<{notes: notes}>('notes', {title: 1, author: 1, id: 1, dateCreated: 1})
 
     response.json(notebook)
 })
@@ -34,6 +35,8 @@ notebooksRouter.post('/', (request: Request, response: Response, next: NextFunct
 })
 
 notebooksRouter.delete('/:id', async (request: Request, response: Response, next: NextFunction) => {
+    // add code to delete associated notes in a notebook
+    
     Notebook
         .findByIdAndDelete(request.params.id)
         .then(() => response.status(204).end())

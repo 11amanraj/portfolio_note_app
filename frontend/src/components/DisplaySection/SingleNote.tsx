@@ -7,7 +7,9 @@ const SingleNote: React.FC<{id: string | undefined}> = ({id}) => {
         title: '',
         content: '',
         author: '',
-        id: ''
+        id: '',
+        dateCreated: new Date(0),
+        pinned: false
     })
 
     useEffect(() => {

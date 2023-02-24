@@ -29,6 +29,14 @@ const NotesGallery: React.FC<{id: string | undefined}> = ({id}) => {
                         <div>
                             <h2>{note.title}</h2>
                             <p>{`by ${note.author}`}</p>
+                            <p>{note
+                                .dateCreated
+                                .toString()
+                                .split('T')[0]
+                                .split('-')
+                                .reverse()
+                                .join('-')}
+                            </p>
                         </div>
                     </div>
                 </Link>

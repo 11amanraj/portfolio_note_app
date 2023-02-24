@@ -64,6 +64,8 @@ notesRouter.post('/', async (request: Request, response: Response, next: NextFun
 })
 
 notesRouter.delete('/:id', async (request: Request, response: Response, next: NextFunction) => {
+    // deleting note also removes the note id from associated notebook
+
     Note
         .findByIdAndDelete(request.params.id)
         .then(() => response.status(204).end())

@@ -9,4 +9,4 @@ content-type: application/json
 GET http://localhost:8000/api/notebooks
 
 ####
-DELETE http://localhost:8000/api/notebooks/63ebba1931195ae67bb0e845
+DELETE http://localhost:8000/api/notebooks/63f86b23809c60418c453602

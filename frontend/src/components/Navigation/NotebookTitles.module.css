@@ -3,18 +3,39 @@
 }
 
 .title {
-    background-color: grey;
-    color: black;
-    font-weight: 700;
+    box-sizing: border-box;
+    border-radius: 28px 0 0 28px;
+    background-color: var(--hover-color);
+    color: var(--text-color);
+    font-weight: 500;
     padding: 1rem;
+    padding-left: 28px;
     margin-left: 1rem;
     display: flex;
     justify-content: space-between;
+    margin-right: -0.5rem;
 }
 
 .title p:hover {
     background-color: rgb(237, 237, 11);
     cursor: pointer;
+}
+
+.container {
+    border: 1px solid red;
+    margin: 0 0.5rem;
+    position: relative;
+    border-radius: 0.5rem;
+}
+
+/* .container:hover {
+    background-color: var(--hover-color);
+} */
+
+.notes {
+    height: 320px;
+    overflow-y: scroll;
+    scrollbar-width: none;
 }
 
 .notes p {
@@ -27,5 +48,5 @@
 }
 
 .active > p {
-    background-color: green;
+    background-color: var(--active-color);
 }

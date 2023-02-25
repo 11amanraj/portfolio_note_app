@@ -12,7 +12,10 @@ const SideBar = () => {
 
     return ( 
         <div className={styles.container}>
-            <Link to={'/newnote'} className={styles.create}>Create Note</Link>
+            <h2>TheNotesApp</h2>
+            <input type='text' defaultValue='Search' name='search' id='search-input'/>
+            <input type='text' defaultValue='Add Notebook' name='add-notebook' id='add-notebook-input'/>
+            {/* <Link to={'/newnote'} className={styles.create}>Create Note</Link> */}
             {notebooks && notebooks.map(notebook => (
                 <NotebookTitles key={notebook.id} notebook={notebook}/>
             ))}

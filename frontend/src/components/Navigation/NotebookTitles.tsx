@@ -10,7 +10,7 @@ const NotebookTitles: React.FC<{notebook: notebook}> = ({notebook}) => {
     const [isActive, setIsActive] = useState(false)
     const location = useLocation()
 
-    const { deleteNotebook, rerenderComponent } = useContext(NotebooksContext)
+    const { deleteNotebook } = useContext(NotebooksContext)
 
     useEffect(() => {
         const urlArray = location.pathname.split('/')

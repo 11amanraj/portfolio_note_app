@@ -48,7 +48,7 @@ const NotebooksContextProvider = ({children}: {children: React.ReactNode}) => {
         axios
             .post('http://localhost:8000/api/notebooks', {title: title})
             .then(response => setLastID(response.data.id))
-            .catch(error => console.log('erro'))
+            .catch(error => console.log('error'))
         
         console.log(title)
         //later add route to new notebook url

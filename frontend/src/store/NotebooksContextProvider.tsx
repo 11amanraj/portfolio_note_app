@@ -8,7 +8,8 @@ interface notebookContext {
     loading: boolean,
     addNotebook: (title: string) => void,
     deleteNotebook: (id: string) => void,
-    lastId: string
+    lastId: string,
+    rerenderComponent: (rerender: boolean) => void
 }
 
 const defaultValue : notebookContext = {
@@ -16,7 +17,8 @@ const defaultValue : notebookContext = {
     loading: false,
     addNotebook: (title: string) => {},
     deleteNotebook: (id: string) => {},
-    lastId: ''
+    lastId: '',
+    rerenderComponent: (rerender: boolean) => {}
 }
 
 export const NotebooksContext = React.createContext(defaultValue)
@@ -58,13 +60,20 @@ const NotebooksContextProvider = ({children}: {children: React.ReactNode}) => {
         setLastID(id)
     }
 
+    const rerenderHandler = (rerender: boolean) => {
+        if(rerender === true) {
+            setLastID(Math.random().toString())
+        }
+    }
+
     return ( 
         <NotebooksContext.Provider value={{
             notebooks: notebooks, 
             loading: loading, 
             addNotebook: addNotebookHandler, 
             lastId: lastID, 
-            deleteNotebook: deleteNotebookHandler
+            deleteNotebook: deleteNotebookHandler,
+            rerenderComponent: rerenderHandler
         }}>
             {children}
         </NotebooksContext.Provider>

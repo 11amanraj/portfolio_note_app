@@ -16,7 +16,7 @@ const CreateNote = () => {
     const titleInputRef = useRef<HTMLInputElement | null>(null)
     const bodyInputRef = useRef<HTMLTextAreaElement | null>(null)
 
-    const { notebooks, addNotebook } = useContext(NotebooksContext)
+    const { notebooks, addNotebook, rerenderComponent } = useContext(NotebooksContext)
 
     const submitHandler = (e: React.FormEvent<HTMLFormElement>) => {
         if(selectedNotebook.length > 0) {
@@ -31,10 +31,10 @@ const CreateNote = () => {
             
             axios
                 .post('http://localhost:8000/api/notes', newNote)
-                .then(response => navigate(`/notebook/${selectedNotebook}/note/${response.data.id}`))
-
-            // add code to rerender sidebar when new note is created
-
+                .then(response => {
+                    rerenderComponent(true)
+                    navigate(`/notebook/${selectedNotebook}/note/${response.data.id}`)
+                })
         }
     }
 

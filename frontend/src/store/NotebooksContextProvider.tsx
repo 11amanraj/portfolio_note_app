@@ -2,6 +2,7 @@ import React from "react";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { notebook } from "../shared/interfaces/notes";
+import { useNavigate } from "react-router-dom";
 
 interface notebookContext {
     notebooks: null | notebook[],
@@ -27,6 +28,8 @@ const NotebooksContextProvider = ({children}: {children: React.ReactNode}) => {
     const [notebooks, setNotebooks] = useState<notebook[] | null>(null)
     const [loading, setLoading] = useState(false)
 
+    const navigate = useNavigate()
+
     // added to force rerender when a new notebook is added
     const [lastID,setLastID] = useState('')
 
@@ -45,7 +48,7 @@ const NotebooksContextProvider = ({children}: {children: React.ReactNode}) => {
         axios
             .post('http://localhost:8000/api/notebooks', {title: title})
             .then(response => setLastID(response.data.id))
-            // .catch(error => console.log('context provider error'))
+            .catch(error => console.log('erro'))
         
         console.log(title)
         //later add route to new notebook url
@@ -54,10 +57,11 @@ const NotebooksContextProvider = ({children}: {children: React.ReactNode}) => {
     const deleteNotebookHandler = (id: string) => {
         axios
             .delete(`http://localhost:8000/api/notebooks/${id}`)
-            .then(response => console.log(response))
+            .then(response => {
+                setLastID(Math.random().toString())
+                navigate('/')
+            })
             .catch(error => console.log(error))
-
-        setLastID(id)
     }
 
     const rerenderHandler = (rerender: boolean) => {

@@ -10,7 +10,7 @@ const NotebookTitles: React.FC<{notebook: notebook}> = ({notebook}) => {
     const [isActive, setIsActive] = useState(false)
     const location = useLocation()
 
-    const { deleteNotebook } = useContext(NotebooksContext)
+    const { deleteNotebook, rerenderComponent } = useContext(NotebooksContext)
 
     useEffect(() => {
         const urlArray = location.pathname.split('/')
@@ -21,11 +21,16 @@ const NotebookTitles: React.FC<{notebook: notebook}> = ({notebook}) => {
             setIsActive(false)
         }
     }, [location, notebook])
+
+    const deleteHandler = (id: string) => {
+        deleteNotebook(id)
+        // rerenderComponent(true)
+    }
     
     return (
         <div className={styles.container}>
             <Link className={isActive ? styles.active : ''} to={`/notebook/${notebook.id}`}>
-                <p className={styles.title}>{notebook.title}<DeleteEntry onDelete={deleteNotebook} id={notebook.id}/></p>
+                <p className={styles.title}>{notebook.title}<DeleteEntry onDelete={deleteHandler} id={notebook.id}/></p>
             </Link>
             {isActive && <div className={styles.notes}>
                     {notebook.notes.map(note => (

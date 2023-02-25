@@ -5,10 +5,12 @@ import styles from './CreateNote.module.css'
 import axios from 'axios'
 import DropDown from '../UI/DropDown'
 import { NotebooksContext } from '../../store/NotebooksContextProvider'
+import { useNavigate } from 'react-router-dom'
 
 const CreateNote = () => {
     // const [title, setTitle] = useState('')
     // const [body, setBody] = useState('')
+    const navigate = useNavigate()
     const [selectedNotebook, setSelectedNotebook] = useState('')
 
     const titleInputRef = useRef<HTMLInputElement | null>(null)
@@ -19,14 +21,6 @@ const CreateNote = () => {
     const submitHandler = (e: React.FormEvent<HTMLFormElement>) => {
         if(selectedNotebook.length > 0) {
             e.preventDefault()
-            // titleInputRef.current && setTitle(titleInputRef.current?.value)
-            // bodyInputRef.current && setBody(bodyInputRef.current?.value)
-    
-            // console.log({
-            //     title: titleInputRef.current?.value,
-            //     body: bodyInputRef.current?.value
-            // })
-            // console.log('new note added')
     
             const newNote = {
                 title: titleInputRef.current?.value,
@@ -37,7 +31,10 @@ const CreateNote = () => {
             
             axios
                 .post('http://localhost:8000/api/notes', newNote)
-                .then(response => console.log(response))
+                .then(response => navigate(`/notebook/${selectedNotebook}/note/${response.data.id}`))
+
+            // add code to rerender sidebar when new note is created
+
         }
     }
 

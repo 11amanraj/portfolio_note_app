@@ -26,13 +26,15 @@ const NotebookTitles: React.FC<{notebook: notebook}> = ({notebook}) => {
         deleteNotebook(id)
         // rerenderComponent(true)
     }
+
     
     return (
-        <div className={styles.container}>
+        <div className={`${styles.container} ${isActive ? styles.active : ''}`}>
             <Link className={isActive ? styles.active : ''} to={`/notebook/${notebook.id}`}>
                 <p className={styles.title}>{notebook.title}<DeleteEntry onDelete={deleteHandler} id={notebook.id}/></p>
             </Link>
             {isActive && <div className={styles.notes}>
+                    <input type='text' placeholder='Add New Note' name='add-note' id='add-note-input'/>
                     {notebook.notes.map(note => (
                     <NotesTitle key={note.id} note={note}/>
                 ))}

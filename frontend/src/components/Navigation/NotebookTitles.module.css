@@ -1,52 +1,79 @@
+.container {
+    margin: 0px 0.5rem;
+}
+
 .container a {
     text-decoration: none;
 }
 
-.title {
+.container .title {
     box-sizing: border-box;
+    height: 56px;
     border-radius: 28px 0 0 28px;
     background-color: var(--hover-color);
     color: var(--text-color);
     font-weight: 500;
-    padding: 1rem;
-    padding-left: 28px;
-    margin-left: 1rem;
     display: flex;
     justify-content: space-between;
+    align-items: center;
+    padding-left: 28px;
+    margin-left: 1rem;
     margin-right: -0.5rem;
+    padding-right: 2rem;
 }
 
-.title p:hover {
-    background-color: rgb(237, 237, 11);
+.container.active:hover {
+    background-color: rgb(60, 60, 60);
+}
+
+.container .title:hover {
     cursor: pointer;
+    background-color: grey;
 }
 
-.container {
-    border: 1px solid red;
-    margin: 0 0.5rem;
-    position: relative;
-    border-radius: 0.5rem;
+.container.active .title {
+    background-color: var(--active-color);
 }
 
-/* .container:hover {
+.container.active .title:hover {
+    background-color: rgb(47, 47, 47);
+}
+
+.container.active {
     background-color: var(--hover-color);
-} */
+    border-radius: 8px;
+}
 
 .notes {
-    height: 320px;
+    max-height: 320px;
     overflow-y: scroll;
     scrollbar-width: none;
+    margin: 1rem 2rem 1rem 0.5rem;
+}
+
+.notes input {
+    box-sizing: border-box;
+    height: 36px;
+    width: 100%;
+    border-radius: 0 18px 18px 0;
+    border: none;
+    background-color: rgb(116, 116, 116);
+    font-size: 1rem;
+    color: white;
+}
+
+.notes input:focus {
+    outline: none;
 }
 
 .notes p {
-    background-color: grey;
-    color: black;
-    padding: 0.5rem;
-    margin-left: 3rem;
-    text-align: right;
-    font-size: 1rem;
-}
-
-.active > p {
-    background-color: var(--active-color);
+    box-sizing: border-box;
+    height: 36px;
+    background-color: rgb(116, 116, 116);
+    color: rgb(0, 0, 0);
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    border-radius: 0 18px 18px 0;
+    margin-left: rem;
 }

@@ -13,13 +13,13 @@ const SideBar = () => {
     return ( 
         <div className={styles.container}>
             <h2>TheNotesApp</h2>
-            <input type='text' defaultValue='Search' name='search' id='search-input'/>
-            <input type='text' defaultValue='Add Notebook' name='add-notebook' id='add-notebook-input'/>
+            <input type='text' placeholder='Search' name='search' id='search-input'/>
+            <input type='text' placeholder='Add Notebook' name='add-notebook' id='add-notebook-input'/>
             {/* <Link to={'/newnote'} className={styles.create}>Create Note</Link> */}
             {notebooks && notebooks.map(notebook => (
                 <NotebookTitles key={notebook.id} notebook={notebook}/>
             ))}
-            <AddNotebook title='Another Notebook'/>
+            {/* <AddNotebook title='Another Notebook'/> */}
         </div>
      );
 }

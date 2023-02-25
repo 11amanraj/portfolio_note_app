@@ -1,4 +1,116 @@
 .container {
+    background-color: green;
+    min-height: 56px;
+    border-radius: 28px 0 0 28px;
+    margin-left: 1.5rem;
+    padding-left: 28px;
+}
+
+.container a {
+    text-decoration: none;
+    color: var(--text-color);
+}
+
+.container .title {
+    display: flex;
+    justify-content: space-between;
+    padding-right: 2rem;
+}
+
+.container.active {
+    background-color: var(--hover-color);
+    margin: 0 0.5rem;
+    padding-left: 0;
+    border-radius: 8px;
+    padding-bottom: 1rem; 
+}
+
+.container.active .title {
+    background-color: var(--active-color);
+
+    box-sizing: border-box;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    margin-right: -0.5rem;
+    margin-left: 1rem;
+    padding-left: 28px;
+    border-radius: 28px 0 0 28px;
+}
+
+.container.active .notes {
+    max-height: 0px;
+    overflow-y: scroll;
+    scrollbar-width: none;
+    animation: notes 0.2s ease-in forwards;
+    margin-right: 1.5rem;
+}
+
+.container.active .notes a:last-child p {
+    margin-bottom: 0;
+}
+
+@keyframes notes {
+    from {
+        max-height: 0px;
+    } to {
+        max-height: 320px;
+    }
+}
+
+.notes input {
+    box-sizing: border-box;
+    height: 36px;
+    width: 100%;
+    border-radius: 0 18px 18px 0;
+    border: none;
+    background-color: rgb(116, 116, 116);
+    font-size: 1rem;
+    color: white;
+}
+
+.notes input:focus {
+    outline: none;
+}
+
+.notes p {
+    box-sizing: border-box;
+    height: 36px;
+    background-color: rgb(116, 116, 116);
+    color: rgb(0, 0, 0);
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    border-radius: 0 18px 18px 0;
+    margin-left: rem;
+}
+
+
+
+/* .container .notes {
+    max-height: 0px;
+}
+
+.container.active .notes {
+    max-height: 320px;
+    overflow-y: scroll;
+    scrollbar-width: none;
+}
+
+.container a {
+    text-decoration: none;
+} */
+
+/* .title {
+    padding: 0;
+    outline: 1px solid red;
+    box-sizing: border-box;
+    height: 100%;
+} */
+
+
+
+/* .container {
     margin: 0px 0.5rem;
 }
 
@@ -7,6 +119,7 @@
 }
 
 .container .title {
+    border: 1px solid red;
     box-sizing: border-box;
     height: 56px;
     border-radius: 28px 0 0 28px;
@@ -47,9 +160,9 @@
 .notes {
     max-height: 320px;
     overflow-y: scroll;
-    scrollbar-width: none;
-    margin: 1rem 2rem 1rem 0.5rem;
-}
+    scrollbar-width: none; */
+    /* margin: 1rem 2rem 1rem 0.5rem; */
+/* }
 
 .notes input {
     box-sizing: border-box;
@@ -76,4 +189,4 @@
     align-items: center;
     border-radius: 0 18px 18px 0;
     margin-left: rem;
-}
+} */

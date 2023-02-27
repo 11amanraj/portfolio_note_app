@@ -5,16 +5,17 @@
     margin: 0 0.5rem;
     padding: 0 1rem;
     border-radius: 0.5rem;
-    height: 1px;
+    min-height: 10px;
     animation: appears 0.2s ease forwards;
 }
 
+/* check animation later */
 @keyframes appears {
     from {
-        height: 1px;
+        min-height: 1px;
         padding: 0 1rem;
     } to {
-        height: 100px;
+        min-height: 100px;
         padding: 1 1rem;
     }
 }

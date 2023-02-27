@@ -17,6 +17,20 @@ notesRouter.get('/', async (request: Request, response: Response, next: NextFunc
     }
 })
 
+notesRouter.get('/search/:keyword', async (request: Request, response: Response, next: NextFunction) => {
+    try {
+
+        const notes = await Note
+            .find({title: new RegExp(request.params.keyword, 'i')})
+            // .sort({ dateCreated: -1 }) 
+            // .populate('notebook', { title: 1, id: 1 })
+
+        response.json(notes)
+    } catch(error) {
+        next(error)
+    }
+})
+
 notesRouter.get('/important', async (request: Request, response: Response, next: NextFunction) => {
     try {
         const notes = await Note

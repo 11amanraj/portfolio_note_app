@@ -26,16 +26,21 @@ export interface allNotes {
     headers: string[]
 }
 
-export enum TypeofSelection {
-    NOTE = 'note',
+export enum CollectionType {
     NOTEBOOK = 'notebook',
-    WELCOME = 'welcome',
-    CREATENOTE = 'create'
+    IMPORTANT = 'important'
 }
 
-export interface selection {
-    type: TypeofSelection,
-    selected: string | null,
-    lastNotebook: string | null,
-    onSelect: (type: TypeofSelection ,id: string) => void
-}
+// export enum TypeofSelection {
+//     NOTE = 'note',
+//     NOTEBOOK = 'notebook',
+//     WELCOME = 'welcome',
+//     CREATENOTE = 'create'
+// }
+
+// export interface selection {
+//     type: TypeofSelection,
+//     selected: string | null,
+//     lastNotebook: string | null,
+//     onSelect: (type: TypeofSelection ,id: string) => void
+// }

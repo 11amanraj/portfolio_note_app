@@ -1,11 +1,11 @@
 import styles from './NotesGallery.module.css'
 import { useState, useEffect } from 'react'
 import axios from 'axios';
-import { note } from '../../shared/interfaces/notes'
+import { CollectionType, note } from '../../shared/interfaces/notes'
 import Loading from '../UI/Loading';
 import { Link } from 'react-router-dom'
 
-const NotesGallery: React.FC<{id: string | undefined}> = ({id}) => {
+const NotesGallery: React.FC<{id: string | undefined, url: string, type: string}> = ({id, url, type}) => {
     const [notes, setNotes] = useState<note[]>([])
     const [loading, setLoading] = useState(false)
     const [rerender, setRerender] = useState<number>(0)
@@ -13,12 +13,16 @@ const NotesGallery: React.FC<{id: string | undefined}> = ({id}) => {
     useEffect(() => {
         setLoading(true)
         axios
-            .get(`http://localhost:8000/api/notebooks/${id}`)
+            .get(url)
             .then(response => {
-                setNotes(response.data.notes)
+                if(type === CollectionType.NOTEBOOK) {
+                    setNotes(response.data.notes)
+                } else if (CollectionType.IMPORTANT) {
+                    setNotes(response.data)
+                }
                 setLoading(false)
             })
-    }, [id, rerender])
+    }, [id, rerender, type, url])
 
     const pinNoteHandler = (pinStatus: boolean, e: React.MouseEvent<HTMLButtonElement>, id: string) => {
         e.preventDefault()
@@ -38,7 +42,7 @@ const NotesGallery: React.FC<{id: string | undefined}> = ({id}) => {
     return (
         <div className={styles.container}>
             {notes.map(note => (
-                <Link key={note.id} to={`/notebook/${id}/note/${note.id}`}>
+                <Link key={note.id} to={`/notebook/${note.notebook}/note/${note.id}`}>
                     <div className={styles.note}>
                         <div>
                             <h2>{note.title}</h2>
@@ -52,7 +56,7 @@ const NotesGallery: React.FC<{id: string | undefined}> = ({id}) => {
                                 .join('-')}
                             </p>
                             <button onClick={(e) => pinNoteHandler(note.pinned, e, note.id)}>
-                                {note.pinned ? 'Pin Note' : 'Unpin Note'}
+                                {note.pinned ? 'Unpin Note' : 'Pin Note'}
                             </button>
                         </div>
                     </div>

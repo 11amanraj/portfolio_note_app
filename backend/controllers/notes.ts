@@ -25,17 +25,23 @@ notesRouter.get('/', async (request: Request, response: Response, next: NextFunc
     //     .catch((error) => next(error))
 })
 
-// notesRouter.get('/important', (request: Request, response: Response, next: NextFunction) => {
-//     Note
-//         .find({})
-//         // .sort({ dateCreated: -1 }) 
-//         .populate('notebook', { title: 1, id: 1 })
-//         .then((notes) => {
-//             console.log(notes)
-//             response.json(notes)
-//         })
-//         .catch((error) => next(error))
-// })
+notesRouter.get('/important', (request: Request, response: Response, next: NextFunction) => {
+    Note
+        .find({ pinned: true })
+        .sort({ dateCreated: -1 })
+        .then(notes => {
+            response.json(notes)
+        }).catch(error => next(error))
+    // Note
+    //     .find({})
+    //     .sort({ dateCreated: -1 }) 
+    //     .populate('notebook', { title: 1, id: 1 })
+    //     .then((notes) => {
+    //         console.log(notes)
+    //         response.json(notes)
+    //     })
+    //     .catch((error) => next(error))
+})
 
 notesRouter.get('/:id', async (request: Request, response: Response, next: NextFunction) => {
     try {

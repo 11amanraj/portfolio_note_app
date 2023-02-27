@@ -37,6 +37,19 @@ notebooksRouter.get('/:id', async (request: Request, response: Response, next: N
     }
 })
 
+notebooksRouter.get('/search/:keyword', async (request: Request, response: Response, next: NextFunction) => {
+    try {
+        const notebooks = await Notebook
+            .find({title: new RegExp(request.params.keyword, 'i')})
+            // .sort({ dateCreated: -1 }) 
+            .populate<{notes: notes}>('notes', {title: 1, author: 1, id: 1, dateCreated: 1, pinned: 1, dateModified: 1})
+
+        response.json(notebooks)
+    } catch(error) {
+        next(error)
+    }
+})
+
 notebooksRouter.post('/', async (request: Request, response: Response, next: NextFunction) => {
     try {
         const notebook = new Notebook(request.body)

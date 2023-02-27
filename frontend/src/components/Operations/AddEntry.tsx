@@ -20,7 +20,7 @@ const AddEntry: React.FC<{addEntry: (title: string) => void}> = ({addEntry}) => 
 
     return (
         <div className={styles.container}>
-            <input ref={inputRef} type='text' placeholder='Add New Notebook' name='add-notebook' id='add-notebook-input'/>
+            <input ref={inputRef} type='text' placeholder='Add New Notebook' name='add-entry' id='add-entry-input'/>
             <div className={styles.btns}>
                 <button onClick={submitHandler}>
                     Add Note

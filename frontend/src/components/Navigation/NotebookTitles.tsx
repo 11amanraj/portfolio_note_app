@@ -1,16 +1,19 @@
 import styles from './NotebookTitles.module.css'
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { notebook } from '../../shared/interfaces/notes'
 import NotesTitle from './NotesTitle'
 import { useEffect, useState, useContext } from 'react'
 import DeleteEntry from '../Operations/DeleteEntry'
 import { NotebooksContext } from '../../store/NotebooksContextProvider'
+import AddEntry from '../Operations/AddEntry'
+import axios from 'axios'
 
 const NotebookTitles: React.FC<{notebook: notebook}> = ({notebook}) => {
     const [isActive, setIsActive] = useState(false)
     const location = useLocation()
+    const navigate = useNavigate()
 
-    const { deleteNotebook } = useContext(NotebooksContext)
+    const { deleteNotebook, rerenderComponent } = useContext(NotebooksContext)
 
     useEffect(() => {
         const urlArray = location.pathname.split('/')
@@ -27,6 +30,25 @@ const NotebookTitles: React.FC<{notebook: notebook}> = ({notebook}) => {
         // rerenderComponent(true)
     }
 
+    const newNoteHandler = (title: string) => {
+        console.log(title)
+
+        const newNote = {
+            title: title,
+            content: '',
+            author: "John Doe",
+            notebookID: notebook.id
+        }
+        
+        axios
+            .post('http://localhost:8000/api/notes', newNote)
+            .then(response => {
+                rerenderComponent(true)
+                navigate(`/notebook/${notebook.id}/note/${response.data.id}`)
+            })
+
+    }
+
     
     return (
         <div className={`${styles.container} ${isActive ? styles.active : ''}`}>
@@ -34,7 +56,13 @@ const NotebookTitles: React.FC<{notebook: notebook}> = ({notebook}) => {
                 <p className={styles.title}>{notebook.title}<DeleteEntry onDelete={deleteHandler} id={notebook.id}/></p>
             </Link>
             {isActive && <div className={styles.notes}>
-                    <input type='text' placeholder='Add New Note' name='add-note' id='add-note-input'/>
+                    <AddEntry addEntry={newNoteHandler}/>
+                    {/* <input 
+                        type='text' 
+                        placeholder='Add New Note' name='
+                        add-note' 
+                        id='add-note-input'
+                    /> */}
                     {notebook.notes.map(note => (
                     <NotesTitle key={note.id} note={note}/>
                 ))}

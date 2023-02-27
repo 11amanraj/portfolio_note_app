@@ -8,6 +8,7 @@ import { Link } from 'react-router-dom'
 const NotesGallery: React.FC<{id: string | undefined}> = ({id}) => {
     const [notes, setNotes] = useState<note[]>([])
     const [loading, setLoading] = useState(false)
+    const [rerender, setRerender] = useState<number>(0)
 
     useEffect(() => {
         setLoading(true)
@@ -17,12 +18,20 @@ const NotesGallery: React.FC<{id: string | undefined}> = ({id}) => {
                 setNotes(response.data.notes)
                 setLoading(false)
             })
-    }, [id])
+    }, [id, rerender])
 
-    const pinNoteHandler = (pinStatus: boolean, e: React.MouseEvent<HTMLButtonElement>) => {
+    // extract single note from this component later
+    const pinNoteHandler = (pinStatus: boolean, e: React.MouseEvent<HTMLButtonElement>, id: string) => {
         e.preventDefault()
         e.stopPropagation()
-        console.log(pinStatus)
+
+        axios
+            .put(`http://localhost:8000/api/notes/${id}`, {
+                pinned: !pinStatus
+            })
+            .then(response => {
+                setRerender(Math.random())
+            })
     }
 
     if (loading) return <Loading />
@@ -43,7 +52,9 @@ const NotesGallery: React.FC<{id: string | undefined}> = ({id}) => {
                                 .reverse()
                                 .join('-')}
                             </p>
-                            <button onClick={(e) => pinNoteHandler(note.pinned, e)}>Pin Note</button>
+                            <button onClick={(e) => pinNoteHandler(note.pinned, e, note.id)}>
+                                {note.pinned ? 'Pin Note' : 'Unpin Note'}
+                            </button>
                         </div>
                     </div>
                 </Link>

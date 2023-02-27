@@ -92,4 +92,20 @@ notesRouter.delete('/:id', async (request: Request, response: Response, next: Ne
     }
 })
 
+notesRouter.put('/:id', async (request: Request, response: Response, next: NextFunction) => {
+    try {
+        const note = Note.findById(request.params.id)
+
+        if(!note) {
+            response.status(400).json({ error: 'note does not exist'})
+        } else {
+            const updatedNote = await Note.findByIdAndUpdate(request.params.id, request.body)
+            response.json(updatedNote)
+            response.status(204).end()
+        }
+    } catch(error) {
+        next(error)
+    }
+})
+
 export default notesRouter

@@ -29,14 +29,14 @@ notesRouter.get('/important', async (request: Request, response: Response, next:
     try {
         const notes = await Note
             .find({pinned : true})
-            .sort({dateCreated: -1})
+            .sort({dateModified: -1})
     
         // later add code for infinite scrolling
 
         if(notes.length < 11) {
             const newNotes = await Note
                 .find({pinned : false})
-                .sort({dateCreated: -1})
+                .sort({dateModified: -1})
 
             notes.push(...(newNotes.slice(0, 10-notes.length)))
         }    
@@ -67,12 +67,15 @@ notesRouter.post('/', async (request: Request, response: Response, next: NextFun
             console.log('error')
             throw new Error('should be populated')  
         } else {
+            const date = new Date()
+
             const note = new Note({
                 title: request.body.title,
                 content: request.body.content,
                 author: request.body.author,
                 pinned: false,
-                dateCreated: new Date(),
+                dateCreated: date,
+                dateModified: date,
                 notebook: notebook._id
             })
     

@@ -30,7 +30,8 @@ const NotesGallery: React.FC<{id: string | undefined, url: string, type: string}
 
         axios
             .put(`http://localhost:8000/api/notes/${id}`, {
-                pinned: !pinStatus
+                pinned: !pinStatus,
+                dateModified: new Date()
             })
             .then(response => {
                 setRerender(Math.random())

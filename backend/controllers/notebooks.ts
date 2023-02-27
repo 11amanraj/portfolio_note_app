@@ -25,7 +25,7 @@ notebooksRouter.get('/:id', async (request: Request, response: Response, next: N
     try {
         const notebook = await Notebook
             .findById(request.params.id)
-            .populate<{notes: notes}>('notes', {title: 1, author: 1, id: 1, dateCreated: 1, pinned: 1})
+            .populate<{notes: notes}>('notes', {title: 1, author: 1, id: 1, dateCreated: 1, pinned: 1, dateModified: 1})
     
         response.json(notebook)
     } catch(error: any) {

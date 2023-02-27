@@ -5,6 +5,7 @@ export interface note {
     id: string;
     pinned: boolean;
     dateCreated: Date;
+    dateModified: Date;
     notebook?: string
 }
 

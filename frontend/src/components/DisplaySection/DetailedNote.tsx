@@ -9,6 +9,7 @@ const DetailedNote: React.FC<{id: string | undefined}> = ({id}) => {
         author: '',
         id: '',
         dateCreated: new Date(0),
+        dateModified: new Date(0),
         pinned: false
     })
 

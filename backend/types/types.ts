@@ -5,7 +5,8 @@ export interface notes {
     content: string;
     author: string;
     pinned: boolean;
-    dateCreated: Date
+    dateCreated: Date;
+    dateModified: Date;
     notebook: 
         {
             type: Types.ObjectId,

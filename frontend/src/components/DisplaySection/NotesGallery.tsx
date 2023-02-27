@@ -19,6 +19,12 @@ const NotesGallery: React.FC<{id: string | undefined}> = ({id}) => {
             })
     }, [id])
 
+    const pinNoteHandler = (pinStatus: boolean, e: React.MouseEvent<HTMLButtonElement>) => {
+        e.preventDefault()
+        e.stopPropagation()
+        console.log(pinStatus)
+    }
+
     if (loading) return <Loading />
 
     return (
@@ -37,6 +43,7 @@ const NotesGallery: React.FC<{id: string | undefined}> = ({id}) => {
                                 .reverse()
                                 .join('-')}
                             </p>
+                            <button onClick={(e) => pinNoteHandler(note.pinned, e)}>Pin Note</button>
                         </div>
                     </div>
                 </Link>

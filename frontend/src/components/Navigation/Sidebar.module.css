@@ -22,7 +22,7 @@
     /* margin-bottom: 1rem; */
 }
 
-.container > input{
+.container > input, .container > div > input {
     box-sizing: border-box;
     height: 56px;
     border-radius: 28px 0 0 28px;
@@ -44,7 +44,7 @@
     margin-bottom: 1.5rem;
 } */
 
-.container > input:focus {
+.container > input:focus, .container > div > input:focus  {
     outline: none;
 }
 

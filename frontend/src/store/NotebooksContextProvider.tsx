@@ -47,11 +47,13 @@ const NotebooksContextProvider = ({children}: {children: React.ReactNode}) => {
     const addNotebookHandler = (title: string) => {
         axios
             .post('http://localhost:8000/api/notebooks', {title: title})
-            .then(response => setLastID(response.data.id))
+            .then(response => {
+                setLastID(response.data.id)
+                navigate(`/notebook/${response.data.id}`)
+            })
             .catch(error => console.log('error'))
         
         console.log(title)
-        //later add route to new notebook url
     }
 
     const deleteNotebookHandler = (id: string) => {

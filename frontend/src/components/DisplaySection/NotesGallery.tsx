@@ -20,7 +20,6 @@ const NotesGallery: React.FC<{id: string | undefined}> = ({id}) => {
             })
     }, [id, rerender])
 
-    // extract single note from this component later
     const pinNoteHandler = (pinStatus: boolean, e: React.MouseEvent<HTMLButtonElement>, id: string) => {
         e.preventDefault()
         e.stopPropagation()

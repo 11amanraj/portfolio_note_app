@@ -1,11 +1,11 @@
 import { useParams } from 'react-router-dom'
-import SingleNote from '../components/DisplaySection/SingleNote';
+import DetailedNote from '../components/DisplaySection/DetailedNote';
 
 const Note = () => {
     const params = useParams()
 
     return (
-        <SingleNote id={params.noteid}/>
+        <DetailedNote id={params.noteid}/>
      );
 }
  

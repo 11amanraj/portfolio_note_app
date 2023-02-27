@@ -2,7 +2,7 @@ import axios from "axios";
 import { useState, useEffect } from 'react'
 import { note } from "../../shared/interfaces/notes";
 
-const SingleNote: React.FC<{id: string | undefined}> = ({id}) => {
+const DetailedNote: React.FC<{id: string | undefined}> = ({id}) => {
     const [note, setNote] = useState<note>({
         title: '',
         content: '',
@@ -29,4 +29,4 @@ const SingleNote: React.FC<{id: string | undefined}> = ({id}) => {
      );
 }
  
-export default SingleNote;
+export default DetailedNote;

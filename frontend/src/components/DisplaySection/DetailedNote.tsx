@@ -1,7 +1,8 @@
 import axios from "axios";
 import { useState, useEffect } from 'react'
-import { Link, useLocation } from "react-router-dom";
 import { note } from "../../shared/interfaces/notes";
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 
 const DetailedNote: React.FC<{id: string | undefined}> = ({id}) => {
     const [note, setNote] = useState<note>({
@@ -13,24 +14,49 @@ const DetailedNote: React.FC<{id: string | undefined}> = ({id}) => {
         dateModified: new Date(0),
         pinned: false
     })
+    const [editNote, setEditNote] = useState(false)
+    const [value, setValue] = useState('')
 
-    const location = useLocation()
+    const editToggler = () => {
+        setEditNote(prev => !prev)
+    }
 
     useEffect(() => {
+        // sets editNote to false when changing route
+        setEditNote(false)
         axios
             .get(`http://localhost:8000/api/notes/${id}`)
-            .then(response => 
+            .then(response => {
                 setNote(response.data)
-            )
+                setValue(response.data.content)
+            })
     }, [id])
+
+    const editing = () => {
+        return (
+            <div>
+                <h1>Editing</h1>
+                <ReactQuill theme='snow' readOnly={false} value={value} onChange={setValue} />
+            </div>
+        )
+    }
+
+    const viewNote = () => {
+        return (
+            <div>
+                <ReactQuill theme='bubble' readOnly={true} value={value} onChange={setValue} />
+            </div>
+        )
+    }
 
     return ( 
         <div>
-            <Link to={`${location.pathname}/edit`}><p>Edit Note</p></Link>
-            <button>Edit Note</button>
+            <button onClick={editToggler}>{editNote ? 'Save Note' : 'Edit Note'}</button>
             <h1>{note.title}</h1>
-            <h1>{note.author}</h1>
-            <div>{note.content}</div>
+            {editNote 
+                ? editing()
+                : viewNote()
+            }
         </div>
      );
 }

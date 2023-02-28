@@ -16,7 +16,6 @@ function App() {
           <Route path='/newnote' element={<CreateNote />}/>
           <Route path='/notebook/:id' element={<Notebook />}/>
           <Route path='/notebook/:id/note/:noteid' element={<Note />}/>
-          <Route path='/notebook/:id/note/:noteid/:param' element={<Note />}/>
         </Routes>
       </div>
     </NotebooksContextProvider>

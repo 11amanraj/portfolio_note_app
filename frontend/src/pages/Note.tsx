@@ -5,10 +5,16 @@ import EditNote from '../components/Operations/EditNote';
 const Note = () => {
     const params = useParams()
 
-    return (
-        // <DetailedNote id={params.noteid}/>
-        <EditNote id={params.noteid}/>
-     );
+    if(params.param === 'edit') {
+        return (
+            <EditNote id={params.noteid}/>
+        )
+    } else {
+        return (
+            <DetailedNote id={params.noteid}/>
+        )
+    }
+
 }
  
 export default Note;

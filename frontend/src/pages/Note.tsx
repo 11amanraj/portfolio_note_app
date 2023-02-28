@@ -6,7 +6,8 @@ const Note = () => {
 
     return (
         <DetailedNote id={params.noteid}/>
-     );
+    )
+
 }
  
 export default Note;

@@ -44,7 +44,7 @@ const NotebookTitles: React.FC<{notebook: notebook}> = ({notebook}) => {
             .post('http://localhost:8000/api/notes', newNote)
             .then(response => {
                 rerenderComponent(true)
-                navigate(`/notebook/${notebook.id}/note/${response.data.id}`)
+                navigate(`/notebook/${notebook.id}/note/${response.data.id}`, {state:{edit: true}})
             })
 
     }

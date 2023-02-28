@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react'
 import { note } from "../../shared/interfaces/notes";
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
+import { useLocation } from "react-router-dom";
 
 const DetailedNote: React.FC<{id: string | undefined}> = ({id}) => {
     const [note, setNote] = useState<note>({
@@ -21,16 +22,26 @@ const DetailedNote: React.FC<{id: string | undefined}> = ({id}) => {
         setEditNote(prev => !prev)
     }
 
+    const location = useLocation()
+
     useEffect(() => {
         // sets editNote to false when changing route
-        setEditNote(false)
+
+        if(location.state === null) {
+            setEditNote(false)
+        } else {
+            if(location.state.edit) {
+                setEditNote(true)
+            }
+        }
+
         axios
             .get(`http://localhost:8000/api/notes/${id}`)
             .then(response => {
                 setNote(response.data)
                 setValue(response.data.content)
             })
-    }, [id])
+    }, [id, location])
 
     const saveNoteHandler = () => {
         axios

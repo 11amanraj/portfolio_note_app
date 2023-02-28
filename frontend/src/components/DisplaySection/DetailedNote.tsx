@@ -4,6 +4,7 @@ import { note } from "../../shared/interfaces/notes";
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { useLocation } from "react-router-dom";
+import useHttp from "../../hooks/use-http";
 
 const DetailedNote: React.FC<{id: string | undefined}> = ({id}) => {
     const [note, setNote] = useState<note>({
@@ -17,6 +18,15 @@ const DetailedNote: React.FC<{id: string | undefined}> = ({id}) => {
     })
     const [editNote, setEditNote] = useState(false)
     const [value, setValue] = useState('')
+
+    const url = `http://localhost:8000/api/notes/${id}`
+
+    const fetchDataHandler = (note: note) => {
+        setNote(note)
+        setValue(note.content)
+    }
+
+    const { loading, message } = useHttp(url, fetchDataHandler)
 
     const editToggler = () => {
         setEditNote(prev => !prev)
@@ -35,13 +45,7 @@ const DetailedNote: React.FC<{id: string | undefined}> = ({id}) => {
             }
         }
 
-        axios
-            .get(`http://localhost:8000/api/notes/${id}`)
-            .then(response => {
-                setNote(response.data)
-                setValue(response.data.content)
-            })
-    }, [id, location])
+    }, [location])
 
     const saveNoteHandler = () => {
         axios

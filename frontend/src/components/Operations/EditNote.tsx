@@ -4,6 +4,7 @@ import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import axios from 'axios';
 import { note } from '../../shared/interfaces/notes';
+import { Link, useLocation } from 'react-router-dom';
 
 const EditNote: React.FC<{id: string | undefined}> = ({id}) => {
     const [note, setNote] = useState<note>({
@@ -17,6 +18,8 @@ const EditNote: React.FC<{id: string | undefined}> = ({id}) => {
     })
     const [value, setValue] = useState('')
     const titleRef = useRef<HTMLInputElement>(null)
+    const location = useLocation()
+    const url = location.pathname.split('/').slice(0,-1).join('/')
 
     useEffect(() => {
         axios
@@ -33,6 +36,7 @@ const EditNote: React.FC<{id: string | undefined}> = ({id}) => {
     return (
         <div>
             <div>
+                <Link to={url}>Save Note</Link>
                 <input ref={titleRef}/>
             </div>
             <ReactQuill theme='snow' value={value} onChange={setValue} />

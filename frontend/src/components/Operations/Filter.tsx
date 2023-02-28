@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 import styles from './Filter.module.css'
 import axios from 'axios'
 import { note, notebook } from '../../shared/interfaces/notes';
+import NotesTitle from '../Navigation/NotesTitle';
+import NotebookTitles from '../Navigation/NotebookTitles';
 
 const Filter = () => {
     const [showResult, setShowResult] = useState(false)
@@ -46,10 +48,13 @@ const Filter = () => {
                         ? notebooks.map(note => <h4 key={note.id}>{note.title}</h4>) 
                         : <h4>No Match Found</h4>
                     }
+
                     {notes && notes.length > 0 
                         ? notes.map(note => <h4 key={note.id}>{note.title}</h4>) 
                         : <h4>No Match Found</h4>
                     }
+                    {/* {notebooks && notebooks.length > 0 && <NotebookTitles notebook={notebooks[0]}/>}
+                    {notes && notes.length > 0 && <NotesTitle note={notes[0]}/>} */}
                 </div>
             }
         </>

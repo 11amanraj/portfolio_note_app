@@ -9,7 +9,6 @@ import NotebooksContextProvider from './store/NotebooksContextProvider';
 function App() {
   return (
     <NotebooksContextProvider>
-      {/* <EditNote id='63fcd94ef0f9621416b102c2'/> */}
       <div style={{display: "flex"}}>
         <SideBar />
         <Routes>

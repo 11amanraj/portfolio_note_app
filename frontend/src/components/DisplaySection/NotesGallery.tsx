@@ -52,7 +52,6 @@ const NotesGallery: React.FC<{id: string | undefined, url: string, type: string}
                     <div className={styles.note}>
                         <div>
                             <h2>{note.title}</h2>
-                            <h2>{note.title}</h2>
                             <p>{`by ${note.author}`}</p>
                             <p>{note
                                 .dateCreated

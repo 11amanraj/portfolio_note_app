@@ -32,10 +32,23 @@ const DetailedNote: React.FC<{id: string | undefined}> = ({id}) => {
             })
     }, [id])
 
+    const saveNoteHandler = () => {
+        axios
+            .put(`http://localhost:8000/api/notes/${id}`, {
+                content: value,
+                dateModified: new Date()
+            })
+            .then(response => {
+                console.log(response)
+                setEditNote(false)
+            })
+    }
+
     const editing = () => {
         return (
             <div>
                 <h1>Editing</h1>
+                <button onClick={saveNoteHandler}>Save Note</button>
                 <ReactQuill theme='snow' readOnly={false} value={value} onChange={setValue} />
             </div>
         )
@@ -51,7 +64,7 @@ const DetailedNote: React.FC<{id: string | undefined}> = ({id}) => {
 
     return ( 
         <div>
-            <button onClick={editToggler}>{editNote ? 'Save Note' : 'Edit Note'}</button>
+            <button onClick={editToggler}>{editNote ? 'Cancel Editing' : 'Edit Note'}</button>
             <h1>{note.title}</h1>
             {editNote 
                 ? editing()

@@ -9,6 +9,7 @@ const NotesGallery: React.FC<{id: string | undefined, url: string, type: string}
     const [notes, setNotes] = useState<note[]>([])
     const [loading, setLoading] = useState(false)
     const [rerender, setRerender] = useState<number>(0)
+    const [link, setLink] = useState('')
 
     useEffect(() => {
         setLoading(true)
@@ -17,7 +18,8 @@ const NotesGallery: React.FC<{id: string | undefined, url: string, type: string}
             .then(response => {
                 if(type === CollectionType.NOTEBOOK) {
                     setNotes(response.data.notes)
-                } else if (CollectionType.IMPORTANT) {
+                    setLink(`/notebook/${response.data.id}/note/`)
+                } else if (type === CollectionType.IMPORTANT) {
                     setNotes(response.data)
                 }
                 setLoading(false)
@@ -43,9 +45,13 @@ const NotesGallery: React.FC<{id: string | undefined, url: string, type: string}
     return (
         <div className={styles.container}>
             {notes.map(note => (
-                <Link key={note.id} to={`/notebook/${note.notebook}/note/${note.id}`}>
+                <Link key={note.id} 
+                    to={type === CollectionType.IMPORTANT 
+                        ? `/notebook/${note.notebook}/note/${note.id}`
+                        : `${link}${note.id}`}>
                     <div className={styles.note}>
                         <div>
+                            <h2>{note.title}</h2>
                             <h2>{note.title}</h2>
                             <p>{`by ${note.author}`}</p>
                             <p>{note

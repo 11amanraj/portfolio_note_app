@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { note } from "../../shared/interfaces/notes";
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
@@ -21,12 +21,14 @@ const DetailedNote: React.FC<{id: string | undefined}> = ({id}) => {
 
     const url = `http://localhost:8000/api/notes/${id}`
 
-    const fetchDataHandler = (note: note) => {
+    const fetchDataHandler = useCallback((note: note) => {
         setNote(note)
         setValue(note.content)
-    }
+    }, [])
 
     const { loading, message } = useHttp(url, fetchDataHandler)
+
+    console.log(loading)
 
     const editToggler = () => {
         setEditNote(prev => !prev)

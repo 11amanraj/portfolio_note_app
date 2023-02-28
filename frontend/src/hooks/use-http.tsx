@@ -7,16 +7,17 @@ const useHttp = (url: string, dataHandler: (note: note) => void) => {
     const [message, setMessage] = useState('')
 
     useEffect(() => {
-        setLoading(true)
-        axios
-            .get<note>(url)
-            .then(response => {
+        (async() => {
+            try {
+                setLoading(true)
+                const response = await axios.get(url)
                 dataHandler(response.data)
-                // setData(response.data)
                 setLoading(false)
-            })
-            .catch(error => setMessage(error))
-    }, [dataHandler, url])
+            } catch(error: any) {
+                setMessage(error)
+            }
+        })()
+    }, [url, dataHandler])
 
     return { loading, message }
 }

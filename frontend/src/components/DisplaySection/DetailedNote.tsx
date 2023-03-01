@@ -5,6 +5,7 @@ import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { useLocation } from "react-router-dom";
 import LoadingButton from "../UI/LoadingButton";
+import Loading from "../UI/Loading";
 
 const DetailedNote: React.FC<{id: string | undefined}> = ({id}) => {
     const [note, setNote] = useState<note>({
@@ -19,6 +20,7 @@ const DetailedNote: React.FC<{id: string | undefined}> = ({id}) => {
     const [editNote, setEditNote] = useState(false)
     const [value, setValue] = useState('')
     const [loading, setLoading] = useState(false)
+    const [fetchLoading, setFetchLoading] = useState(true)
 
     const editToggler = () => {
         setEditNote(prev => !prev)
@@ -37,9 +39,12 @@ const DetailedNote: React.FC<{id: string | undefined}> = ({id}) => {
             }
         }
 
+        setFetchLoading(true)
+
         axios
             .get(`http://localhost:8000/api/notes/${id}`)
             .then(response => {
+                setFetchLoading(false)
                 setNote(response.data)
                 setValue(response.data.content)
             })
@@ -77,16 +82,23 @@ const DetailedNote: React.FC<{id: string | undefined}> = ({id}) => {
         )
     }
 
-    return ( 
-        <div>
-            <button onClick={editToggler}>{editNote ? 'Cancel Editing' : 'Edit Note'}</button>
-            <h1>{note.title}</h1>
-            {editNote 
-                ? editing()
-                : viewNote()
-            }
-        </div>
-     );
+    if(fetchLoading) {
+        return (
+            <Loading />
+        )
+    } else {
+        return ( 
+            <div>
+                <button onClick={editToggler}>{editNote ? 'Cancel Editing' : 'Edit Note'}</button>
+                <h1>{note.title}</h1>
+                {editNote 
+                    ? editing()
+                    : viewNote()
+                }
+            </div>
+         );
+    }
+
 }
  
 export default DetailedNote;

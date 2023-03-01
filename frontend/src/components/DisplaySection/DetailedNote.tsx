@@ -4,6 +4,7 @@ import { note } from "../../shared/interfaces/notes";
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { useLocation } from "react-router-dom";
+import LoadingButton from "../UI/LoadingButton";
 
 const DetailedNote: React.FC<{id: string | undefined}> = ({id}) => {
     const [note, setNote] = useState<note>({
@@ -17,6 +18,7 @@ const DetailedNote: React.FC<{id: string | undefined}> = ({id}) => {
     })
     const [editNote, setEditNote] = useState(false)
     const [value, setValue] = useState('')
+    const [loading, setLoading] = useState(false)
 
     const editToggler = () => {
         setEditNote(prev => !prev)
@@ -44,12 +46,14 @@ const DetailedNote: React.FC<{id: string | undefined}> = ({id}) => {
     }, [id, location])
 
     const saveNoteHandler = () => {
+        setLoading(true)
         axios
             .put(`http://localhost:8000/api/notes/${id}`, {
                 content: value,
                 dateModified: new Date()
             })
             .then(response => {
+                setLoading(false)
                 console.log(response)
                 setEditNote(false)
             })
@@ -59,7 +63,7 @@ const DetailedNote: React.FC<{id: string | undefined}> = ({id}) => {
         return (
             <div>
                 <h1>Editing</h1>
-                <button onClick={saveNoteHandler}>Save Note</button>
+                <LoadingButton onSave={saveNoteHandler} loading={loading}/>
                 <ReactQuill theme='snow' readOnly={false} value={value} onChange={setValue} />
             </div>
         )

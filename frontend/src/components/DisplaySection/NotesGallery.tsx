@@ -43,9 +43,15 @@ const NotesGallery: React.FC<{id: string | undefined, url: string, type: string}
 
     const inputHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
         if(e.target.value.length > 0) {
-            axios
-                .get(`http://localhost:8000/api/notes/search/${e.target.value}`)
-                .then(notes => setNotes(notes.data))
+            if (type === CollectionType.IMPORTANT) {
+                axios
+                    .get(`http://localhost:8000/api/notes/search/${e.target.value}`)
+                    .then(notes => setNotes(notes.data))
+            } else {
+                axios
+                    .get(`http://localhost:8000/api/notebooks/${id}/search/${e.target.value}`)
+                    .then(notebook => setNotes(notebook.data.notes))
+            }
         }
     }
 
@@ -54,7 +60,6 @@ const NotesGallery: React.FC<{id: string | undefined, url: string, type: string}
     return (
         <div className={styles.container}>
             <input onChange={inputHandler} type='text' placeholder='Search Notebook'/>
-            <Filter />
             <div className={styles.allnotes}>
                 {notes.map(note => (
                     <Link key={note.id} 

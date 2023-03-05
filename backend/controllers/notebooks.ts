@@ -37,6 +37,32 @@ notebooksRouter.get('/:id', async (request: Request, response: Response, next: N
     }
 })
 
+notebooksRouter.get('/:id/search/:keyword', async (request: Request, response: Response, next: NextFunction) => {
+    const include = {
+        path: 'notes',
+        match: {
+            title: {
+                $regex: request.params.keyword,
+                $options: 'i'
+            }
+        }
+    }
+    
+    try {
+        const notebook = await Notebook
+            .findById(request.params.id)
+            .populate<{notes: notes}>(include)
+    
+        response.json(notebook)
+    } catch(error: any) {
+        if (error.name === 'CastError') {
+            return response.status(400).json({message:'Notebook does not exist'})
+        } else {
+            next(error)
+        }
+    }
+})
+
 notebooksRouter.get('/search/:keyword', async (request: Request, response: Response, next: NextFunction) => {
     try {
         const notebooks = await Notebook

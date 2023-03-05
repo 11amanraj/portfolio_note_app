@@ -4,6 +4,7 @@ import axios from 'axios';
 import { CollectionType, note } from '../../shared/interfaces/notes'
 import Loading from '../UI/Loading';
 import { Link } from 'react-router-dom'
+import Filter from '../Operations/Filter';
 
 const NotesGallery: React.FC<{id: string | undefined, url: string, type: string}> = ({id, url, type}) => {
     const [notes, setNotes] = useState<note[]>([])
@@ -40,34 +41,46 @@ const NotesGallery: React.FC<{id: string | undefined, url: string, type: string}
             })
     }
 
+    const inputHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if(e.target.value.length > 0) {
+            axios
+                .get(`http://localhost:8000/api/notes/search/${e.target.value}`)
+                .then(notes => setNotes(notes.data))
+        }
+    }
+
     if (loading) return <Loading />
 
     return (
         <div className={styles.container}>
-            {notes.map(note => (
-                <Link key={note.id} 
-                    to={type === CollectionType.IMPORTANT 
-                        ? `/notebook/${note.notebook}/note/${note.id}`
-                        : `${link}${note.id}`}>
-                    <div className={styles.note}>
-                        <div>
-                            <h2>{note.title}</h2>
-                            <p>{`by ${note.author}`}</p>
-                            <p>{note
-                                .dateCreated
-                                .toString()
-                                .split('T')[0]
-                                .split('-')
-                                .reverse()
-                                .join('-')}
-                            </p>
-                            <button onClick={(e) => pinNoteHandler(note.pinned, e, note.id)}>
-                                {note.pinned ? 'Unpin Note' : 'Pin Note'}
-                            </button>
+            <input onChange={inputHandler} type='text' placeholder='Search Notebook'/>
+            <Filter />
+            <div className={styles.allnotes}>
+                {notes.map(note => (
+                    <Link key={note.id} 
+                        to={type === CollectionType.IMPORTANT 
+                            ? `/notebook/${note.notebook}/note/${note.id}`
+                            : `${link}${note.id}`}>
+                        <div className={styles.note}>
+                            <div>
+                                <h2>{note.title}</h2>
+                                <p>{`by ${note.author}`}</p>
+                                <p>{note
+                                    .dateCreated
+                                    .toString()
+                                    .split('T')[0]
+                                    .split('-')
+                                    .reverse()
+                                    .join('-')}
+                                </p>
+                                <button onClick={(e) => pinNoteHandler(note.pinned, e, note.id)}>
+                                    {note.pinned ? 'Unpin Note' : 'Pin Note'}
+                                </button>
+                            </div>
                         </div>
-                    </div>
-                </Link>
-            ))}
+                    </Link>
+                ))}
+            </div>
         </div>
     )
 

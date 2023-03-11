@@ -6,6 +6,8 @@ export interface note {
     pinned: boolean;
     dateCreated: Date;
     dateModified: Date;
+    stringDateCreated: string;
+    stringDateModified: string;
     notebook?: string
 }
 

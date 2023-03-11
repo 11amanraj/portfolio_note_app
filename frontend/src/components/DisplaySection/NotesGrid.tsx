@@ -13,14 +13,7 @@ const NotesGrid: React.FC<{notes: note[]}> = ({notes}) => {
                     <Link to={`/notebook/${note.notebook}/note/${note.id}`} className={styles.inner}>
                         <h2>{note.title}</h2>
                         <p>{`by ${note.author}`}</p>
-                        <p>{note
-                            .dateCreated
-                            .toString()
-                            .split('T')[0]
-                            .split('-')
-                            .reverse()
-                            .join('-')}
-                        </p>
+                        <p>{note.stringDateCreated}</p>
                     </Link>
                 </div>
             ))}

@@ -15,8 +15,11 @@ const DetailedNote: React.FC<{id: string | undefined}> = ({id}) => {
         id: '',
         dateCreated: new Date(0),
         dateModified: new Date(0),
+        stringDateCreated: '',
+        stringDateModified: '',
         pinned: false
     })
+    
     const [editNote, setEditNote] = useState(false)
     const [value, setValue] = useState('')
     const [loading, setLoading] = useState(false)
@@ -54,8 +57,7 @@ const DetailedNote: React.FC<{id: string | undefined}> = ({id}) => {
         setLoading(true)
         axios
             .put(`http://localhost:8000/api/notes/${id}`, {
-                content: value,
-                dateModified: new Date()
+                content: value
             })
             .then(response => {
                 setLoading(false)

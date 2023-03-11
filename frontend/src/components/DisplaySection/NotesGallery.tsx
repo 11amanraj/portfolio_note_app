@@ -71,14 +71,7 @@ const NotesGallery: React.FC<{id: string | undefined, url: string, type: string}
                             <div>
                                 <h2>{note.title}</h2>
                                 <p>{`by ${note.author}`}</p>
-                                <p>{note
-                                    .dateCreated
-                                    .toString()
-                                    .split('T')[0]
-                                    .split('-')
-                                    .reverse()
-                                    .join('-')}
-                                </p>
+                                <p>{note.stringDateCreated}</p>
                                 <button onClick={(e) => pinNoteHandler(note.pinned, e, note.id)}>
                                     {note.pinned ? 'Unpin Note' : 'Pin Note'}
                                 </button>

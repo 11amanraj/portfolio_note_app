@@ -73,6 +73,12 @@ notesRouter.post('/', async (request: Request, response: Response, next: NextFun
             throw new Error('should be populated')  
         } else {
             const date = new Date()
+            const dateString = date
+                .toISOString()
+                .split('T')[0]
+                .split('-')
+                .reverse()
+                .join('-')
 
             const note = new Note({
                 title: request.body.title,
@@ -80,7 +86,9 @@ notesRouter.post('/', async (request: Request, response: Response, next: NextFun
                 author: request.body.author,
                 pinned: false,
                 dateCreated: date,
+                stringDateCreated: dateString,
                 dateModified: date,
+                stringDateModified: dateString,
                 notebook: notebook._id
             })
     
@@ -113,10 +121,22 @@ notesRouter.put('/:id', async (request: Request, response: Response, next: NextF
     try {
         const note = Note.findById(request.params.id)
 
+        const date = new Date()
+        const dateString = date
+            .toISOString()
+            .split('T')[0]
+            .split('-')
+            .reverse()
+            .join('-')
+
         if(!note) {
             response.status(400).json({ error: 'note does not exist'})
         } else {
-            const updatedNote = await Note.findByIdAndUpdate(request.params.id, request.body)
+            const updatedNote = await Note.findByIdAndUpdate(request.params.id, 
+                {...request.body, 
+                    dateModified: date,
+                    stringDateModified: dateString, }
+            )
             response.json(updatedNote)
             response.status(204).end()
         }

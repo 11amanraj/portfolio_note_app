@@ -2,6 +2,7 @@
     display: grid;
     grid-template-columns: 200px 200px;
     grid-template-rows: 300px 300px;
+    grid-auto-flow: dense;
 }
 
 .container > div {
@@ -30,4 +31,34 @@
 .inner h2 {
     margin: 0;
     padding: 0;
+}
+
+.three-column {
+    background-color: green;
+    color: wheat;
+    grid-column: span 3;
+}
+
+.two-column {
+    background-color: blue;
+    color: wheat;
+    grid-column: span 2;
+}
+
+.one {
+    background-color: coral;
+    color: black;
+    grid-column: span 1;
+}
+
+.three-row {
+    background-color: green;
+    color: wheat;
+    grid-row: span 3;
+}
+
+.two-row {
+    background-color: blue;
+    color: wheat;
+    grid-row: span 2;
 }

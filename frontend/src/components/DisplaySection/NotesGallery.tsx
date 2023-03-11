@@ -5,6 +5,7 @@ import { CollectionType, note } from '../../shared/interfaces/notes'
 import Loading from '../UI/Loading';
 import { Link } from 'react-router-dom'
 import Filter from '../Operations/Filter';
+import NotesGrid from './NotesGrid';
 
 const NotesGallery: React.FC<{id: string | undefined, url: string, type: string}> = ({id, url, type}) => {
     const [notes, setNotes] = useState<note[]>([])
@@ -86,6 +87,7 @@ const NotesGallery: React.FC<{id: string | undefined, url: string, type: string}
                     </Link>
                 ))}
             </div>
+            <NotesGrid notes={notes}/>
         </div>
     )
 

@@ -1,0 +1,33 @@
+.container {
+    display: grid;
+    grid-template-columns: 200px 200px;
+    grid-template-rows: 300px 300px;
+}
+
+.container > div {
+    text-align: center;
+    background-color: transparent;
+    color: black;
+    padding: 8px;
+    border-radius: 8px;
+}
+
+.container > div:hover {
+    background-color: rgb(73, 99, 99);
+}
+
+.inner {
+    box-sizing: border-box;
+    background-color: cadetblue;
+    height: 100%;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    padding: 32px;
+    text-align: center;
+}
+
+.inner h2 {
+    margin: 0;
+    padding: 0;
+}

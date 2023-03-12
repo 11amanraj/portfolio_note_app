@@ -72,6 +72,14 @@ notesRouter.post('/', async (request: Request, response: Response, next: NextFun
             console.log('error')
             throw new Error('should be populated')  
         } else {
+            let title
+            
+            if(request.body.title.length < 1) {
+                title = 'Untitled Note'
+            } else {
+                title = request.body.title.length
+            }
+
             const date = new Date()
             const dateString = date
                 .toISOString()
@@ -81,7 +89,7 @@ notesRouter.post('/', async (request: Request, response: Response, next: NextFun
                 .join('-')
 
             const note = new Note({
-                title: request.body.title,
+                title: title,
                 content: request.body.content,
                 author: request.body.author,
                 pinned: false,
@@ -93,12 +101,12 @@ notesRouter.post('/', async (request: Request, response: Response, next: NextFun
             })
     
             const savedNote = await note.save()
-            response.status(201).json(savedNote)
-    
             if(Array.isArray(notebook.notes)) {
                 notebook.notes.push(savedNote._id)
                 await notebook.save()
             }
+            return response.status(201).json(savedNote)
+    
         }
 
     } catch(error) {

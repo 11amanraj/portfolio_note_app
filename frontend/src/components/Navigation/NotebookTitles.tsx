@@ -33,8 +33,6 @@ const NotebookTitles: React.FC<{notebook: notebook}> = ({notebook}) => {
     }
 
     const newNoteHandler = async (title: string) => {
-        console.log(title)
-
         const newNote = {
             title: title,
             content: '',
@@ -46,7 +44,7 @@ const NotebookTitles: React.FC<{notebook: notebook}> = ({notebook}) => {
             .post('http://localhost:8000/api/notes', newNote)
             .then(response => {
                 rerenderComponent(true)
-                messageHandler(false, `${newNote.title} added !`)
+                messageHandler(false, `${response.data.title} added !`)
                 navigate(`/notebook/${notebook.id}/note/${response.data.id}`, {state:{edit: true}})
             })
             .catch(error => console.log(error))

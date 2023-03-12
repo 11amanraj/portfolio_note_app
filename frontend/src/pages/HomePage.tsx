@@ -6,7 +6,7 @@ const HomePage = () => {
     const url = 'http://localhost:8000/api/notes/important'
 
     return ( 
-        <div>
+        <div style={{width: "100%"}}>
             Please Select A Notebook
             <NotesGallery type={CollectionType.IMPORTANT} url={url} id='asgsdg'/>
         </div>

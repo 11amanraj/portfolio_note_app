@@ -2,7 +2,7 @@ import styles from './AddEntry.module.css'
 import { useContext, useRef } from 'react'
 import { MessageContext } from '../../store/MessageContextProvider'
 
-const AddEntry: React.FC<{addEntry: (title: string) => void}> = ({addEntry}) => {
+const AddEntry: React.FC<{addEntry: (title: string) => Promise<boolean>}> = ({addEntry}) => {
     // common component for both input field for new note and notebook in sidebar
     const inputRef = useRef<HTMLInputElement | null>(null)
 
@@ -12,10 +12,14 @@ const AddEntry: React.FC<{addEntry: (title: string) => void}> = ({addEntry}) => 
         }
     }
 
-    const submitHandler = () => {
+    const submitHandler = async () => {
         if(inputRef.current) {
-            addEntry(inputRef.current?.value)
-            inputRef.current.value = ''
+            const request = await addEntry(inputRef.current?.value)
+            if(request) {
+                inputRef.current.value = ''
+            } else {
+                inputRef.current.focus()
+            }
         }
     }
 

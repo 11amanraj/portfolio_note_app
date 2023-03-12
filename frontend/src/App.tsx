@@ -9,8 +9,8 @@ import MessageContextProvider from './store/MessageContextProvider';
 
 function App() {
   return (
-    <NotebooksContextProvider>
-      <MessageContextProvider>
+    <MessageContextProvider>
+      <NotebooksContextProvider>
         <div style={{display: "flex"}}>
           <SideBar />
           <Routes>
@@ -20,8 +20,8 @@ function App() {
             <Route path='/notebook/:id/note/:noteid' element={<Note />}/>
           </Routes>
         </div>
-      </MessageContextProvider>
-    </NotebooksContextProvider>
+      </NotebooksContextProvider>
+    </MessageContextProvider>
   )
 }
 

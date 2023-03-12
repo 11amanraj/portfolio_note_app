@@ -32,7 +32,7 @@ const NotebookTitles: React.FC<{notebook: notebook}> = ({notebook}) => {
         // rerenderComponent(true)
     }
 
-    const newNoteHandler = (title: string) => {
+    const newNoteHandler = async (title: string) => {
         console.log(title)
 
         const newNote = {
@@ -51,6 +51,7 @@ const NotebookTitles: React.FC<{notebook: notebook}> = ({notebook}) => {
             })
             .catch(error => console.log(error))
 
+        return true
     }
 
     

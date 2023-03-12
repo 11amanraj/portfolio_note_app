@@ -9,7 +9,7 @@ interface Message {
 
 const defaultValue: Message = {
     error: false,
-    showMessage: true,
+    showMessage: false,
     title: '',
     messageHandler: (error: boolean, title: string) => {}
 }
@@ -18,7 +18,7 @@ export const MessageContext = React.createContext(defaultValue)
 
 const MessageContextProvider: React.FC<{children: ReactNode}> = ({children}) => {
     const [error, setError] = useState(false)
-    const [showMessage, setShowMessage] = useState(true)
+    const [showMessage, setShowMessage] = useState(false)
     const [title, setTitle] = useState('Working')
 
     const messageHandler = (error: boolean, title: string) => {

@@ -1,13 +1,14 @@
-import React from "react";
+import React, { useContext } from "react";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { notebook } from "../shared/interfaces/notes";
 import { useNavigate } from "react-router-dom";
+import { MessageContext } from "./MessageContextProvider";
 
 interface notebookContext {
     notebooks: null | notebook[],
     loading: boolean,
-    addNotebook: (title: string) => void,
+    addNotebook: (title: string) => Promise<boolean>,
     deleteNotebook: (id: string) => void,
     lastId: string,
     rerenderComponent: (rerender: boolean) => void
@@ -16,7 +17,7 @@ interface notebookContext {
 const defaultValue : notebookContext = {
     notebooks: null,
     loading: false,
-    addNotebook: (title: string) => {},
+    addNotebook: async (title: string) => true,
     deleteNotebook: (id: string) => {},
     lastId: '',
     rerenderComponent: (rerender: boolean) => {}
@@ -25,6 +26,8 @@ const defaultValue : notebookContext = {
 export const NotebooksContext = React.createContext(defaultValue)
 
 const NotebooksContextProvider = ({children}: {children: React.ReactNode}) => {
+    const { messageHandler } = useContext(MessageContext)
+
     const [notebooks, setNotebooks] = useState<notebook[] | null>(null)
     const [loading, setLoading] = useState(false)
 
@@ -44,16 +47,21 @@ const NotebooksContextProvider = ({children}: {children: React.ReactNode}) => {
             .catch(error => console.log(error.message))
     }, [lastID])
 
-    const addNotebookHandler = (title: string) => {
-        axios
-            .post('http://localhost:8000/api/notebooks', {title: title})
-            .then(response => {
-                setLastID(response.data.id)
-                navigate(`/notebook/${response.data.id}`)
-            })
-            .catch(error => console.log('error'))
-        
-        console.log(title)
+    const addNotebookHandler = async (title: string) => {
+        try {
+            const response = await axios.post('http://localhost:8000/api/notebooks', {title: title})
+            
+            setLastID(response.data.id)
+            navigate(`/notebook/${response.data.id}`)
+            messageHandler(false, `${title} added!`)
+            // returns true if request is successful
+            return true
+        } catch(error: any) {
+            messageHandler(true, error.response.data)
+            // returns false if request not successful
+            return false
+
+        }
     }
 
     const deleteNotebookHandler = (id: string) => {

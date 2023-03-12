@@ -1,7 +1,7 @@
 import { useState } from "react"
 import Modal from "../UI/Modal"
 
-const DeleteEntry: React.FC<{onDelete: (id: string) => void, id: string}> = ({onDelete, id}) => {
+const DeleteEntry: React.FC<{onDelete: (id: string) => void, id: string, header: string}> = ({onDelete, id, header}) => {
     const [showModal, setShowModal] = useState(false)
 
     const deleteHandler = () => {
@@ -16,7 +16,7 @@ const DeleteEntry: React.FC<{onDelete: (id: string) => void, id: string}> = ({on
 
     const modalText = (
         <>
-            <h2>Delete Notebook ? </h2>
+            <h4>{header} </h4>
             <button onClick={deleteHandler}>Delete</button>
             <button onClick={() => setShowModal(false)}>Cancel</button>
         </>

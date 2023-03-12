@@ -28,7 +28,7 @@ const NotesTitle: React.FC<{note: note}> = ({note}) => {
                 to={`/notebook/${note.notebook}/note/${note.id}`}>
                         <div className={styles.title}>
                             <span>{note.title}</span>
-                            <DeleteEntry onDelete={deleteHandler} id={note.id}/>
+                            <DeleteEntry header={`Delete Note - ${note.title} ?`} onDelete={deleteHandler} id={note.id}/>
                         </div>
             </NavLink> 
         </> 

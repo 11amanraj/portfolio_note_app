@@ -5,10 +5,12 @@ import Notebook from './pages/Notebook';
 import Note from './pages/Note';
 import CreateNote from './components/CreateNote/CreateNote';
 import NotebooksContextProvider from './store/NotebooksContextProvider';
+import Modal from './components/UI/Modal';
 
 function App() {
   return (
     <NotebooksContextProvider>
+      {/* <Modal /> */}
       <div style={{display: "flex"}}>
         <SideBar />
         <Routes>

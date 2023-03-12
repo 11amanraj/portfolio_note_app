@@ -2,7 +2,11 @@ import { Schema, model } from 'mongoose'
 import { notebook } from '../types/types'
 
 const notebookSchema = new Schema<notebook>({
-    title: String,
+    title: {
+        type: String,
+        minlength: 3
+    },
+    // title: String,
     notes: [
         {
             type: Schema.Types.ObjectId,

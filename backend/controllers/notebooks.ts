@@ -86,8 +86,6 @@ notebooksRouter.post('/', async (request: Request, response: Response, next: Nex
     
     if(existingNotebook.length > 0) {
         console.log(`${request.body.title} already exists`)
-        // response.status(400)
-        // response.send('None shall pass')
         return response.status(400).json(`${request.body.title} already exists`)
     } else {
         try {
@@ -95,7 +93,11 @@ notebooksRouter.post('/', async (request: Request, response: Response, next: Nex
             const savedNotebook = await notebook.save()
             return response.status(201).json(savedNotebook)
         } catch(error: any) {
-            next(error)
+            if(error.name === 'ValidationError') {
+                return response.status(400).json('Title must be atleast 3 characters long')
+            } else {
+                next(error)
+            }
         }
     }
 

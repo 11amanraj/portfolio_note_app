@@ -1,5 +1,6 @@
 import styles from './AddEntry.module.css'
-import { useRef } from 'react'
+import { useContext, useRef } from 'react'
+import { MessageContext } from '../../store/MessageContextProvider'
 
 const AddEntry: React.FC<{addEntry: (title: string) => void}> = ({addEntry}) => {
     // common component for both input field for new note and notebook in sidebar

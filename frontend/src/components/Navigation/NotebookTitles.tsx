@@ -7,6 +7,7 @@ import DeleteEntry from '../Operations/DeleteEntry'
 import { NotebooksContext } from '../../store/NotebooksContextProvider'
 import AddEntry from '../Operations/AddEntry'
 import axios from 'axios'
+import { MessageContext } from '../../store/MessageContextProvider'
 
 const NotebookTitles: React.FC<{notebook: notebook}> = ({notebook}) => {
     const [isActive, setIsActive] = useState(false)
@@ -14,6 +15,7 @@ const NotebookTitles: React.FC<{notebook: notebook}> = ({notebook}) => {
     const navigate = useNavigate()
 
     const { deleteNotebook, rerenderComponent } = useContext(NotebooksContext)
+    const { messageHandler } = useContext(MessageContext)
 
     useEffect(() => {
         const urlArray = location.pathname.split('/')
@@ -44,8 +46,10 @@ const NotebookTitles: React.FC<{notebook: notebook}> = ({notebook}) => {
             .post('http://localhost:8000/api/notes', newNote)
             .then(response => {
                 rerenderComponent(true)
+                messageHandler(false, `${newNote.title} added !`)
                 navigate(`/notebook/${notebook.id}/note/${response.data.id}`, {state:{edit: true}})
             })
+            .catch(error => console.log(error))
 
     }
 

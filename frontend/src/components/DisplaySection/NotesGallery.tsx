@@ -61,7 +61,7 @@ const NotesGallery: React.FC<{id: string | undefined, url: string, type: string}
     return (
         <div className={styles.container}>
             <input onChange={inputHandler} type='text' placeholder='Search Notebook'/>
-            <div className={styles.allnotes}>
+            {/* <div className={styles.allnotes}>
                 {notes.map(note => (
                     <Link key={note.id} 
                         to={type === CollectionType.IMPORTANT 
@@ -79,7 +79,7 @@ const NotesGallery: React.FC<{id: string | undefined, url: string, type: string}
                         </div>
                     </Link>
                 ))}
-            </div>
+            </div> */}
             <NotesGrid notes={notes}/>
         </div>
     )

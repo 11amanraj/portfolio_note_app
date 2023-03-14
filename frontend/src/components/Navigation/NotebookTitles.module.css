@@ -1,9 +1,13 @@
 .container {
-    background-color: green;
+    /* background-color: green; */
     min-height: 56px;
     border-radius: 28px 0 0 28px;
     margin-left: 1.5rem;
     padding-left: 28px;
+}
+
+.container:hover {
+    background-color: var(--dark-800);
 }
 
 .container a {
@@ -12,13 +16,14 @@
 }
 
 .container .title {
+    color: var(--dark-500);
     display: flex;
     justify-content: space-between;
     padding-right: 2rem;
 }
 
 .container.active {
-    background-color: var(--hover-color);
+    background-color: var(--dark-800);
     margin: 0 0.5rem;
     padding-left: 0;
     border-radius: 8px;
@@ -26,8 +31,7 @@
 }
 
 .container.active .title {
-    background-color: var(--active-color);
-
+    background-color: var(--dark-900);
     box-sizing: border-box;
     height: 56px;
     display: flex;
@@ -88,109 +92,3 @@
     margin-left: rem;
     padding-right: 1rem;
 }
-
-
-
-/* .container .notes {
-    max-height: 0px;
-}
-
-.container.active .notes {
-    max-height: 320px;
-    overflow-y: scroll;
-    scrollbar-width: none;
-}
-
-.container a {
-    text-decoration: none;
-} */
-
-/* .title {
-    padding: 0;
-    outline: 1px solid red;
-    box-sizing: border-box;
-    height: 100%;
-} */
-
-
-
-/* .container {
-    margin: 0px 0.5rem;
-}
-
-.container a {
-    text-decoration: none;
-}
-
-.container .title {
-    border: 1px solid red;
-    box-sizing: border-box;
-    height: 56px;
-    border-radius: 28px 0 0 28px;
-    background-color: var(--hover-color);
-    color: var(--text-color);
-    font-weight: 500;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding-left: 28px;
-    margin-left: 1rem;
-    margin-right: -0.5rem;
-    padding-right: 2rem;
-}
-
-.container.active:hover {
-    background-color: rgb(60, 60, 60);
-}
-
-.container .title:hover {
-    cursor: pointer;
-    background-color: grey;
-}
-
-.container.active .title {
-    background-color: var(--active-color);
-}
-
-.container.active .title:hover {
-    background-color: rgb(47, 47, 47);
-}
-
-.container.active {
-    background-color: var(--hover-color);
-    border-radius: 8px;
-}
-
-.notes {
-    max-height: 320px;
-    overflow-y: scroll;
-    scrollbar-width: none; */
-    /* margin: 1rem 2rem 1rem 0.5rem; */
-/* }
-
-.notes input {
-    box-sizing: border-box;
-    height: 36px;
-    width: 100%;
-    border-radius: 0 18px 18px 0;
-    border: none;
-    background-color: rgb(116, 116, 116);
-    font-size: 1rem;
-    color: white;
-}
-
-.notes input:focus {
-    outline: none;
-}
-
-.notes p {
-    box-sizing: border-box;
-    height: 36px;
-    background-color: rgb(116, 116, 116);
-    color: rgb(0, 0, 0);
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    border-radius: 0 18px 18px 0;
-    margin-left: rem;
-} */

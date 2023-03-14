@@ -15,15 +15,15 @@ const SideBar = () => {
     // Add loading component here
 
     return ( 
-        <div className={styles.container}>
+        <nav className={styles.container}>
             {showMessage && <Message error={error} message={title}/>}
             <Link to={'/'}><h2>TheNotesApp</h2></Link>
-            <AddEntry addEntry={addNotebook}/>
+            {/* <AddEntry addEntry={addNotebook}/> */}
             <Filter />
             {notebooks && notebooks.map(notebook => (
                 <NotebookTitles key={notebook.id} notebook={notebook}/>
             ))}
-        </div>
+        </nav>
      );
 }
  

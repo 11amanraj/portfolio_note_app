@@ -20,5 +20,10 @@ code {
   --hover-color: #4E4949;
   --active-color: #0C0C0C;
   --text-color: #ffffff;
+  --dark-900: #22223B;
+  --dark-800: #4A4E69;
+  --dark-700: #9A8C98;
+  --dark-600: #C9ADA7;
+  --dark-500: #F2E9E4;
 }
 

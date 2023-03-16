@@ -13,7 +13,13 @@ export interface notes {
         {
             type: Types.ObjectId,
             ref: string
+        };
+    tags: [
+        {
+            type: Types.ObjectId,
+            ref: string
         }
+    ]
 }
 
 export interface notebook {

@@ -2,6 +2,7 @@ import { Request, Response, NextFunction, Router } from 'express'
 const notesRouter = Router()
 import Note from '../models/note'
 import Notebook from '../models/notebook'
+import Tag from '../models/tag'
 
 
 notesRouter.get('/', async (request: Request, response: Response, next: NextFunction) => {
@@ -10,6 +11,7 @@ notesRouter.get('/', async (request: Request, response: Response, next: NextFunc
             .find({})
             // .sort({ dateCreated: -1 }) 
             .populate('notebook', { title: 1, id: 1 })
+            .populate('tags', { name: 1 })
 
         response.json(notes)
     } catch(error) {
@@ -54,6 +56,7 @@ notesRouter.get('/important', async (request: Request, response: Response, next:
 notesRouter.get('/:id', async (request: Request, response: Response, next: NextFunction) => {
     try {
         const note = await Note.findById(request.params.id)
+            .populate('tags', { name: 1 })
         response.json(note)
     } catch(error: any) {
         if(error.name === 'CastError') {
@@ -66,8 +69,9 @@ notesRouter.get('/:id', async (request: Request, response: Response, next: NextF
 
 notesRouter.post('/', async (request: Request, response: Response, next: NextFunction) => {
     try {
-        const notebook = await Notebook.findById(request.body.notebookID) 
-    
+        const notebook = await Notebook.findById(request.body.notebookID)
+        const tagsID = ['64131005cad642433b1d3fe8','6413035cd287211fd0df11a2']
+
         if (notebook === null) {
             console.log('error')
             throw new Error('should be populated')  
@@ -77,7 +81,7 @@ notesRouter.post('/', async (request: Request, response: Response, next: NextFun
             if(request.body.title.length < 1) {
                 title = 'Untitled Note'
             } else {
-                title = request.body.title.length
+                title = request.body.title
             }
 
             const date = new Date()
@@ -97,14 +101,30 @@ notesRouter.post('/', async (request: Request, response: Response, next: NextFun
                 stringDateCreated: dateString,
                 dateModified: date,
                 stringDateModified: dateString,
-                notebook: notebook._id
+                notebook: notebook._id,
+                tags: tagsID
             })
     
             const savedNote = await note.save()
+            
             if(Array.isArray(notebook.notes)) {
                 notebook.notes.push(savedNote._id)
                 await notebook.save()
             }
+
+            const tagsDocument = await Tag.find({
+                '_id': { 
+                    $in: tagsID
+                }
+            })
+
+            tagsDocument.forEach(async (tag) => {
+                if(Array.isArray(tag?.notes)) {
+                    tag.notes?.push(savedNote._id)
+                    await tag.save()
+                }
+            })
+            
             return response.status(201).json(savedNote)
     
         }

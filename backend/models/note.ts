@@ -13,7 +13,13 @@ const noteSchema = new Schema<notes>({
     notebook: {
         type: Schema.Types.ObjectId,
         ref: 'Notebook'
-    }
+    },
+    tags: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'Tag'
+        }
+    ]
 })
 
 noteSchema.set('toJSON', {

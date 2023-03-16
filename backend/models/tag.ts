@@ -1,20 +1,24 @@
-import { Schema, model, Types } from 'mongoose'
+import { Schema, model, Types, PopulatedDoc } from 'mongoose'
 
 interface tag {
     name: string,
-    // note: 
+    notes: PopulatedDoc<Document & Types.ObjectId[]>
+    // notes: [
     //     {
     //         type: Types.ObjectId,
     //         ref: string
     //     }
+    // ]
 }
 
 const tagSchema = new Schema<tag>({
     name: String,
-    // note: {
-    //     type: Schema.Types.ObjectId,
-    //     ref: 'Note'
-    // }
+    notes: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'Note'
+        }
+    ]
 })
 
 tagSchema.set('toJSON', {

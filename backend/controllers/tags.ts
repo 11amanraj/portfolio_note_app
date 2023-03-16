@@ -7,10 +7,7 @@ tagsRouter.get('/', async (request: Request, response: Response, next: NextFunct
     try {
         const tags = await Tag
             .find({})
-            // .populate({
-            //     path: 'notes',
-            //     options: { sort: { title: 1 } }
-            // })
+            .populate('notes', { title: 1, id: 1 })
 
         response.json(tags)
     } catch (error: any) {

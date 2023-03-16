@@ -1,3 +1,8 @@
+export interface tag {
+    name: string,
+    id: string
+}
+
 export interface note {
     title: string;
     content: string;
@@ -8,7 +13,8 @@ export interface note {
     dateModified: Date;
     stringDateCreated: string;
     stringDateModified: string;
-    notebook?: string
+    notebook?: string;
+    tags?: tag[]
 }
 
 export interface notebook {

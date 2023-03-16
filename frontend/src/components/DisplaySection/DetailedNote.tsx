@@ -6,6 +6,7 @@ import 'react-quill/dist/quill.snow.css';
 import { useLocation } from "react-router-dom";
 import LoadingButton from "../UI/LoadingButton";
 import Loading from "../UI/Loading";
+import TagSection from "./TagSection";
 
 const DetailedNote: React.FC<{id: string | undefined}> = ({id}) => {
     const [note, setNote] = useState<note>({
@@ -17,7 +18,8 @@ const DetailedNote: React.FC<{id: string | undefined}> = ({id}) => {
         dateModified: new Date(0),
         stringDateCreated: '',
         stringDateModified: '',
-        pinned: false
+        pinned: false,
+        tags: []
     })
     
     const [editNote, setEditNote] = useState(false)
@@ -70,6 +72,7 @@ const DetailedNote: React.FC<{id: string | undefined}> = ({id}) => {
         return (
             <div>
                 <h1>Editing</h1>
+                <TagSection tags={note.tags} editing={true} />
                 <LoadingButton onSave={saveNoteHandler} loading={loading}/>
                 <ReactQuill theme='snow' readOnly={false} value={value} onChange={setValue} />
             </div>
@@ -79,6 +82,7 @@ const DetailedNote: React.FC<{id: string | undefined}> = ({id}) => {
     const viewNote = () => {
         return (
             <div>
+                <TagSection tags={note.tags} editing={false} />
                 <ReactQuill theme='bubble' readOnly={true} value={value} onChange={setValue} />
             </div>
         )

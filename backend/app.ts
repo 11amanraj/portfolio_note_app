@@ -4,6 +4,7 @@ const app = express()
 import cors = require('cors');
 import notesRouter from './controllers/notes'
 import notebooksRouter from './controllers/notebooks'
+import tagsRouter from './controllers/tags'
 import mongoose from 'mongoose'
 import logger from './utils/logger'
 import middleware from './utils/middleware'
@@ -24,6 +25,7 @@ app.use(middleware.requestLogger)
 
 app.use('/api/notes', notesRouter)
 app.use('/api/notebooks', notebooksRouter)
+app.use('/api/tags', tagsRouter)
 
 app.use(middleware.unknownEndpoint)
 app.use(middleware.errorHandler)

@@ -4,13 +4,15 @@
     outline: 1px solid red;
     display: flex;
     gap: 32px;
+    flex-direction: column;
 }
 
 .input-field {
     border: 2px solid black;
     display: flex;
     border-radius: 8px;
-    overflow: hidden;
+    /* overflow: hidden; */
+    position: relative;
 }
 
 .input-field input {
@@ -18,4 +20,27 @@
     outline: none;
     border: 0;
     font-size: 16px;
+}
+
+.dropdown {
+    width: 100%;
+    position: absolute;
+    top: 20px;
+    background-color: black;
+    color: white;
+    list-style: none;
+    border-radius: 8px;
+    /* outline: 1px solid red; */
+    padding: 0;
+    overflow: hidden;
+}
+
+.dropdown li {
+    padding: 8px 16px;
+}
+
+.dropdown li:hover {
+    background-color: rgb(71, 53, 176);
+    color: black;
+    cursor: pointer;
 }

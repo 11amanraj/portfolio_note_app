@@ -70,7 +70,6 @@ notesRouter.get('/:id', async (request: Request, response: Response, next: NextF
 notesRouter.post('/', async (request: Request, response: Response, next: NextFunction) => {
     try {
         const notebook = await Notebook.findById(request.body.notebookID)
-        const tagsID = ['64131005cad642433b1d3fe8','6413035cd287211fd0df11a2']
 
         if (notebook === null) {
             console.log('error')
@@ -102,7 +101,7 @@ notesRouter.post('/', async (request: Request, response: Response, next: NextFun
                 dateModified: date,
                 stringDateModified: dateString,
                 notebook: notebook._id,
-                tags: tagsID
+                tags: []
             })
     
             const savedNote = await note.save()
@@ -111,19 +110,6 @@ notesRouter.post('/', async (request: Request, response: Response, next: NextFun
                 notebook.notes.push(savedNote._id)
                 await notebook.save()
             }
-
-            const tagsDocument = await Tag.find({
-                '_id': { 
-                    $in: tagsID
-                }
-            })
-
-            tagsDocument.forEach(async (tag) => {
-                if(Array.isArray(tag?.notes)) {
-                    tag.notes?.push(savedNote._id)
-                    await tag.save()
-                }
-            })
             
             return response.status(201).json(savedNote)
     
@@ -148,6 +134,7 @@ notesRouter.delete('/:id', async (request: Request, response: Response, next: Ne
 notesRouter.put('/:id', async (request: Request, response: Response, next: NextFunction) => {
     try {
         const note = Note.findById(request.params.id)
+        const tagsID = request.body.tags
 
         const date = new Date()
         const dateString = date
@@ -165,6 +152,20 @@ notesRouter.put('/:id', async (request: Request, response: Response, next: NextF
                     dateModified: date,
                     stringDateModified: dateString, }
             )
+
+            const tagsDocument = await Tag.find({
+                '_id': { 
+                    $in: tagsID
+                }
+            })
+    
+            tagsDocument.forEach(async (tag) => {
+                if(Array.isArray(tag?.notes) && updatedNote) {
+                    tag.notes?.push(updatedNote._id)
+                    await tag.save()
+                }
+            })
+
             response.json(updatedNote)
             response.status(204).end()
         }

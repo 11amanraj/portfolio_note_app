@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useState, useEffect } from 'react'
-import { note } from "../../shared/interfaces/notes";
+import { note, tag } from "../../shared/interfaces/notes";
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { useLocation } from "react-router-dom";
@@ -26,6 +26,7 @@ const DetailedNote: React.FC<{id: string | undefined}> = ({id}) => {
     const [value, setValue] = useState('')
     const [loading, setLoading] = useState(false)
     const [fetchLoading, setFetchLoading] = useState(true)
+    const [selectedTags, setSelectedTags] = useState<tag[]>([])
 
     const editToggler = () => {
         setEditNote(prev => !prev)
@@ -52,14 +53,25 @@ const DetailedNote: React.FC<{id: string | undefined}> = ({id}) => {
                 setFetchLoading(false)
                 setNote(response.data)
                 setValue(response.data.content)
+                setSelectedTags(response.data.tags)
             })
     }, [id, location])
 
+    const selectTagHandler = (newTag: tag) => {
+        const checkDuplicate = selectedTags.filter(tag => tag.id === newTag.id)
+        if(checkDuplicate.length === 0) {
+            setSelectedTags(prev => [...prev, newTag])
+        }
+    }
+
     const saveNoteHandler = () => {
+        const tagID = selectedTags.map(tag => tag.id) 
+        console.log(tagID)
+
         setLoading(true)
         axios
             .put(`http://localhost:8000/api/notes/${id}`, {
-                content: value
+                content: value, tags: tagID
             })
             .then(response => {
                 setLoading(false)
@@ -72,7 +84,7 @@ const DetailedNote: React.FC<{id: string | undefined}> = ({id}) => {
         return (
             <div>
                 <h1>Editing</h1>
-                <TagSection tags={note.tags} editing={true} />
+                <TagSection onSelect={selectTagHandler} tags={selectedTags} editing={true} />
                 <LoadingButton onSave={saveNoteHandler} loading={loading}/>
                 <ReactQuill theme='snow' readOnly={false} value={value} onChange={setValue} />
             </div>
@@ -82,7 +94,7 @@ const DetailedNote: React.FC<{id: string | undefined}> = ({id}) => {
     const viewNote = () => {
         return (
             <div>
-                <TagSection tags={note.tags} editing={false} />
+                <TagSection onSelect={selectTagHandler} tags={selectedTags} editing={false} />
                 <ReactQuill theme='bubble' readOnly={true} value={value} onChange={setValue} />
             </div>
         )

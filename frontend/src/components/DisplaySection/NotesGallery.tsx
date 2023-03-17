@@ -61,26 +61,7 @@ const NotesGallery: React.FC<{id: string | undefined, url: string, type: string}
     return (
         <div className={styles.container}>
             <input onChange={inputHandler} type='text' placeholder='Search Notebook'/>
-            {/* <div className={styles.allnotes}>
-                {notes.map(note => (
-                    <Link key={note.id} 
-                        to={type === CollectionType.IMPORTANT 
-                            ? `/notebook/${note.notebook}/note/${note.id}`
-                            : `${link}${note.id}`}>
-                        <div className={styles.note}>
-                            <div>
-                                <h2>{note.title}</h2>
-                                <p>{`by ${note.author}`}</p>
-                                <p>{note.stringDateCreated}</p>
-                                <button onClick={(e) => pinNoteHandler(note.pinned, e, note.id)}>
-                                    {note.pinned ? 'Unpin Note' : 'Pin Note'}
-                                </button>
-                            </div>
-                        </div>
-                    </Link>
-                ))}
-            </div> */}
-            <NotesGrid notes={notes}/>
+            <NotesGrid onPin={pinNoteHandler} notes={notes}/>
         </div>
     )
 

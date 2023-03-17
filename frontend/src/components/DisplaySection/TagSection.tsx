@@ -4,7 +4,11 @@ import { tag } from '../../shared/interfaces/notes';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 
-const TagSection: React.FC<{onSelect: (tag: tag) => void ,editing: boolean, tags: tag[] | undefined}> = ({onSelect, editing, tags}) => {
+const TagSection: React.FC<{onSelect: (tag: tag) => void , 
+        onRemove: (tag: tag) => void, 
+        editing: boolean , 
+        tags: tag[] | undefined
+    }> = ({onSelect, onRemove, editing, tags}) => {
     const [input, setInput] = useState('')
     const [allTags, setAllTags] = useState<tag[] | null>(null)
     const [showAllTags, setShowAllTags] = useState(false)
@@ -75,7 +79,7 @@ const TagSection: React.FC<{onSelect: (tag: tag) => void ,editing: boolean, tags
             <div className={styles.tags}>
                 {
                     tags && tags.length > 0 
-                        ? tags.map(tag => <Tags key={tag.id} tag={tag.name}/>)
+                        ? tags.map(tag => <Tags key={tag.id} onDelete={() => onRemove(tag)} tag={tag.name}/>)
                         : 'It is Empty Here :('
                 }
             </div>

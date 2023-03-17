@@ -64,6 +64,15 @@ const DetailedNote: React.FC<{id: string | undefined}> = ({id}) => {
         }
     }
 
+    const removeNoteHandler = (tag: tag) => {
+        const newTags = selectedTags.filter(selTag => selTag.id !== tag.id)
+        setSelectedTags([...newTags])
+    }
+
+    const dummyRemoveTagHandler = () => {
+        console.log('dummy')
+    }
+
     const saveNoteHandler = () => {
         const tagID = selectedTags.map(tag => tag.id) 
         console.log(tagID)
@@ -84,7 +93,7 @@ const DetailedNote: React.FC<{id: string | undefined}> = ({id}) => {
         return (
             <div>
                 <h1>Editing</h1>
-                <TagSection onSelect={selectTagHandler} tags={selectedTags} editing={true} />
+                <TagSection onRemove={removeNoteHandler} onSelect={selectTagHandler} tags={selectedTags} editing={true} />
                 <LoadingButton onSave={saveNoteHandler} loading={loading}/>
                 <ReactQuill theme='snow' readOnly={false} value={value} onChange={setValue} />
             </div>
@@ -94,7 +103,7 @@ const DetailedNote: React.FC<{id: string | undefined}> = ({id}) => {
     const viewNote = () => {
         return (
             <div>
-                <TagSection onSelect={selectTagHandler} tags={selectedTags} editing={false} />
+                <TagSection onRemove={dummyRemoveTagHandler} onSelect={selectTagHandler} tags={selectedTags} editing={false} />
                 <ReactQuill theme='bubble' readOnly={true} value={value} onChange={setValue} />
             </div>
         )

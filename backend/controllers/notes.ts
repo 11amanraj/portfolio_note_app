@@ -158,6 +158,8 @@ notesRouter.put('/:id', async (request: Request, response: Response, next: NextF
                     $in: tagsID
                 }
             })
+
+            // add code to remove note id from tag when specific tag is removed
     
             tagsDocument.forEach(async (tag) => {
                 if(Array.isArray(tag?.notes) && updatedNote) {

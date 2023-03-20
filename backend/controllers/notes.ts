@@ -4,7 +4,6 @@ import Note from '../models/note'
 import Notebook from '../models/notebook'
 import Tag from '../models/tag'
 
-
 notesRouter.get('/', async (request: Request, response: Response, next: NextFunction) => {
     try {
         const notes = await Note
@@ -121,11 +120,18 @@ notesRouter.post('/', async (request: Request, response: Response, next: NextFun
 })
 
 notesRouter.delete('/:id', async (request: Request, response: Response, next: NextFunction) => {
-    // deleting note also removes the note id from associated notebook
+    // deleting note also removes the note id from associated tags
 
     try {
         await Note.findByIdAndDelete(request.params.id)
+        await Notebook.updateOne(
+            { 'notes': request.params.id },
+            { '$pull': { 'notes': request.params.id }}
+        )
         return response.status(204).end()
+
+        // await Note.findByIdAndDelete(request.params.id)
+        // return response.status(204).end()
     } catch(error) {
         next(error)
     }
@@ -214,9 +220,18 @@ notesRouter.put('/:id', async (request: Request, response: Response, next: NextF
                         console.log('checking')
                         console.log(notes)
                         console.log(newNotes)
-                        const updatedTag = await Tag.findByIdAndUpdate(
-                            tag.id, { $pull: { 'notes': { _id: updatedNote?._id } } }, { safe: true, upsert: true })
+                        const updatedTag = await Tag.updateOne(
+                            { 'notes': request.params.id },
+                            { '$pull': { 'notes': request.params.id }}
+                        )
+                        // const updatedTag = await tagDocument.updateOne(
+                        //     { 'notes': request.params.id },
+                        //     { '$pull': { 'notes': request.params.id }}
+                        // )
+                        // const updatedTag = await Tag.findByIdAndUpdate(
+                        //     tag.id, { $pull: { 'notes': { _id: updatedNote?._id } } }, { safe: true, upsert: true })
                         // const updatedTag = await Tag.findByIdAndUpdate(tag.id, { notes : newNotes })
+                        // tagDocument.notes = newNotes
                         console.log(updatedTag)
                         console.log('check over')
                     }

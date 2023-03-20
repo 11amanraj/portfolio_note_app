@@ -3,6 +3,7 @@ import { Schema, model, Types, PopulatedDoc } from 'mongoose'
 interface tag {
     name: string,
     notes: PopulatedDoc<Document & Types.ObjectId[]>
+    // notes: Types.ObjectId[]
     // notes: [
     //     {
     //         type: Types.ObjectId,

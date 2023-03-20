@@ -37,7 +37,8 @@ export interface allNotes {
 
 export enum CollectionType {
     NOTEBOOK = 'notebook',
-    IMPORTANT = 'important'
+    IMPORTANT = 'important',
+    TAG = 'tag'
 }
 
 // export enum TypeofSelection {

@@ -2,9 +2,9 @@ import styles from './NotesCollection.module.css'
 import SingleNote from './SingleNote';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import { note } from '../../shared/interfaces/notes';
+import { CollectionType, note } from '../../shared/interfaces/notes';
 
-const NotesCollection = () => {
+const NotesCollection: React.FC<{type: string, url: string}> = ({type, url}) => {
     const [notes, setNotes] = useState<note[]>([{
         title: '',
         content: '',
@@ -16,12 +16,22 @@ const NotesCollection = () => {
         stringDateCreated: '',
         stringDateModified: ''
     }])
+    const [loading, setLoading] = useState(false)
 
     useEffect(() => {
+        setLoading(true)
         axios
-            .get('http://localhost:8000/api/notes')
-            .then(response => setNotes(response.data))
-    }, [])
+            .get(url)
+            .then(response => {
+                if(type === CollectionType.NOTEBOOK) {
+                    setNotes(response.data.notes)
+                    // setLink(`/notebook/${response.data.id}/note/`)
+                } else if (type === CollectionType.IMPORTANT) {
+                    setNotes(response.data)
+                }
+                setLoading(false)
+            })
+    }, [type, url])
 
     return ( 
         <section className={styles.container}>

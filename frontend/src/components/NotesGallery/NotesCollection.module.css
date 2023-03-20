@@ -1,0 +1,35 @@
+.container {
+    border-radius: 16px;
+    padding: 8px; 
+    background: rgb(34,193,195);
+    background: linear-gradient(0deg, rgba(34,193,195,1) 0%, rgba(253,187,45,1) 100%);
+    width: 100%;
+    outline: 1px solid red;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+    grid-template-rows: 320px 320px;
+    grid-auto-flow: dense;
+}
+
+.title {
+    margin: 8px;
+    border-radius: 8px;
+    grid-column: span 2;
+    position: relative;
+    overflow: hidden;
+}
+
+.bgd {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    background-color: #7954cf60;
+    filter: blur(8px);
+}
+
+.text {
+    padding: 16px;
+    backdrop-filter: blur(10px);
+    position: absolute;
+    color: black;
+}

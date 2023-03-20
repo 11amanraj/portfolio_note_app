@@ -1,0 +1,35 @@
+.container {
+    box-sizing: border-box;
+    height: 100vh;
+    overflow-y: scroll;
+    width: 100%;
+    position: relative;
+}
+
+.search {
+    padding: 16px 64px;
+    background-color: #f5deb350;
+    position: sticky;
+    top: 0;
+    z-index: 4;
+    backdrop-filter: blur(4px);
+}
+
+.search input {
+    width: 100%;
+    font-size: 24px;
+    font-weight: 700;
+    top: 0;
+}
+
+.collection {
+    box-sizing: border-box;
+    /* padding: 0 64px; */
+    /* outline: 1px solid red; */
+}
+
+.collection > section {
+    box-sizing: border-box;
+    margin: 16px 0;
+    /* margin: 16px; */
+}

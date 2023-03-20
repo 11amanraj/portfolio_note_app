@@ -1,13 +1,18 @@
 .container {
+    box-sizing: border-box;
+    padding: 64px;
+}
+
+.backdrop {
+    box-sizing: border-box;
     border-radius: 16px;
     padding: 8px; 
     background: rgb(34,193,195);
     background: linear-gradient(0deg, rgba(34,193,195,1) 0%, rgba(253,187,45,1) 100%);
     width: 100%;
-    outline: 1px solid red;
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
-    grid-template-rows: 320px 320px;
+    grid-template-rows: 240px 240px;
     grid-auto-flow: dense;
 }
 

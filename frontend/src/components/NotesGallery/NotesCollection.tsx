@@ -25,16 +25,18 @@ const NotesCollection = () => {
 
     return ( 
         <section className={styles.container}>
-            <div className={styles.title}>
-                <div className={styles.bgd}>
+            <div className={styles.backdrop}>
+                <div className={styles.title}>
+                    <div className={styles.bgd}>
+                    </div>
+                    <div className={styles.text}>
+                        <h1>Important</h1>
+                        <p>Today</p>
+                        <div>Tags</div>
+                    </div>
                 </div>
-                <div className={styles.text}>
-                    <h1>Important</h1>
-                    <p>Today</p>
-                    <div>Tags</div>
-                </div>
+                {notes.map(note => <SingleNote key={note.id} id={note.id}/>)}
             </div>
-            {notes.map(note => <SingleNote key={note.id} id={note.id}/>)}
         </section>
      );
 }

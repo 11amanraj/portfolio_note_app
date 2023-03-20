@@ -6,6 +6,7 @@ import Loading from '../UI/Loading';
 import { Link } from 'react-router-dom'
 import Filter from '../Operations/Filter';
 import NotesGrid from './NotesGrid';
+import SingleNote from '../NotesGallery/SingleNote';
 
 const NotesGallery: React.FC<{id: string | undefined, url: string, type: string}> = ({id, url, type}) => {
     const [notes, setNotes] = useState<note[]>([])
@@ -31,10 +32,11 @@ const NotesGallery: React.FC<{id: string | undefined, url: string, type: string}
     const pinNoteHandler = (pinStatus: boolean, e: React.MouseEvent<HTMLButtonElement>, id: string) => {
         e.preventDefault()
         e.stopPropagation()
+        const newStatus = !pinStatus
 
         axios
             .put(`http://localhost:8000/api/notes/${id}`, {
-                pinned: !pinStatus,
+                pinned: newStatus,
                 dateModified: new Date()
             })
             .then(response => {

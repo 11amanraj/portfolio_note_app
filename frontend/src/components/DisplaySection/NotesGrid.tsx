@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { note } from '../../shared/interfaces/notes';
+import SingleNote from '../NotesGallery/SingleNote';
 import styles from './NotesGrid.module.css'
 
 const NotesGrid: React.FC<{notes: note[], 
@@ -9,6 +10,7 @@ const NotesGrid: React.FC<{notes: note[],
 
     return ( 
         <div className={styles.container}>
+            {notes[0] && <SingleNote id={notes[0].id}/>}
             {notes.map(note => (
                 <div key={note.id}>
                 {/* <div className={`${styles.note} ${styles[note.size]}`}> */}

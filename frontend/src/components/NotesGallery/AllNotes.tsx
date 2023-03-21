@@ -57,15 +57,20 @@ const AllNotes = () => {
         return <Loading />
     }
 
-    const url2 = 'http://localhost:8000/api/notebooks/64173d1f503e6a8f3699a977'
-    const url3 = 'http://localhost:8000/api/notebooks/6418645795c0466b50572125'
-
     const galleryView = () => {
         return (
             <section className={styles.collection}>
-                <NotesCollection type={CollectionType.IMPORTANT} url={'http://localhost:8000/api/notes/important'}/>
-                <NotesCollection type={CollectionType.NOTEBOOK} url={url2}/>
-                <NotesCollection type={CollectionType.NOTEBOOK} url={url3}/>
+                <NotesCollection 
+                    type={CollectionType.IMPORTANT} 
+                    url={'http://localhost:8000/api/notes/important'}
+                />
+                {notebooks.map(notebook => 
+                    <NotesCollection
+                        key={notebook.id} 
+                        type={CollectionType.NOTEBOOK} 
+                        url={`http://localhost:8000/api/notebooks/${notebook.id}`}
+                    />)
+                }
             </section>
         )
     }

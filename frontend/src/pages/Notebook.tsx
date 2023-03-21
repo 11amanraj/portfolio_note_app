@@ -1,7 +1,7 @@
 import { useParams } from 'react-router-dom'
 import NotesGallery from '../components/DisplaySection/NotesGallery'
 import SideBar from '../components/Navigation/Sidebar'
-import AllNotes from '../components/NotesGallery/AllNotes'
+import AllNotes from '../components/NotesGallery/AllNotebooks'
 import { CollectionType } from '../shared/interfaces/notes'
 
 const Notebook = () => {

@@ -1,4 +1,4 @@
-import styles from './AllNotes.module.css'
+import styles from './AllNotebooks.module.css'
 import NotesCollection from './NotesCollection';
 import axios from 'axios'
 import { useEffect, useState, useRef, useCallback } from 'react';
@@ -6,7 +6,7 @@ import { CollectionType, note, notebook } from '../../shared/interfaces/notes';
 import Loading from '../UI/Loading';
 import Search from '../Operations/Search';
 
-const AllNotes = () => {
+const AllNotebooks = () => {
     const [notebooks, setNotebooks] = useState<notebook[]>([{
         title: '',
         id: '',
@@ -89,4 +89,4 @@ const AllNotes = () => {
      );
 }
  
-export default AllNotes;
+export default AllNotebooks;

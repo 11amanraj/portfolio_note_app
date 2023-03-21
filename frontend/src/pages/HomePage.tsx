@@ -1,7 +1,7 @@
 import React from 'react'
 import NotesGallery from '../components/DisplaySection/NotesGallery';
 import SideBar from '../components/Navigation/Sidebar';
-import AllNotes from '../components/NotesGallery/AllNotes';
+import AllNotes from '../components/NotesGallery/AllNotebooks';
 import NotesCollection from '../components/NotesGallery/NotesCollection';
 import { CollectionType } from '../shared/interfaces/notes';
 import styles from './Style.module.css'

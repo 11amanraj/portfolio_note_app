@@ -4,6 +4,7 @@ import axios from 'axios'
 import { useEffect, useState, useRef, useCallback } from 'react';
 import { CollectionType, note, notebook } from '../../shared/interfaces/notes';
 import Loading from '../UI/Loading';
+import Search from '../Operations/Search';
 
 const AllNotes = () => {
     const [notebooks, setNotebooks] = useState<notebook[]>([{
@@ -22,8 +23,6 @@ const AllNotes = () => {
         }]
     }])
     const [loading, setLoading] = useState(false)
-
-    const observer = useRef()
 
     useEffect(() => {
         setLoading(true)
@@ -77,20 +76,15 @@ const AllNotes = () => {
 
     return ( 
         <div className={styles.container}>
-            <section className={styles.search}>
+            <Search />
+            {/* <section className={styles.search}>
                 <input onChange={inputHandler} type='text' placeholder='Search Notebook'/>
-            </section>
+            </section> */}
             {
                 loading 
                     ? loadingView () 
                     : galleryView()
             }
-            {/* <Loading /> */}
-            {/* <section className={styles.collection}>
-                <NotesCollection />
-                <NotesCollection />
-                <NotesCollection />
-            </section> */}
         </div>
      );
 }

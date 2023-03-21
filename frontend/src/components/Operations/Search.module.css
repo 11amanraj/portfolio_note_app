@@ -1,0 +1,15 @@
+.search {
+    padding: 16px 64px;
+    background-color: #f5deb350;
+    position: sticky;
+    top: 0;
+    z-index: 4;
+    backdrop-filter: blur(4px);
+}
+
+.search input {
+    width: 100%;
+    font-size: 24px;
+    font-weight: 700;
+    top: 0;
+}

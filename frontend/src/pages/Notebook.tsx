@@ -1,6 +1,7 @@
 import { useParams } from 'react-router-dom'
 import NotesGallery from '../components/DisplaySection/NotesGallery'
 import SideBar from '../components/Navigation/Sidebar'
+import AllNotes from '../components/NotesGallery/AllNotes'
 import { CollectionType } from '../shared/interfaces/notes'
 
 const Notebook = () => {
@@ -10,6 +11,7 @@ const Notebook = () => {
 
     return (
         <>
+            {/* {params.id && <AllNotes type={CollectionType.NOTEBOOK} url={url} id={params.id}/>} */}
             <NotesGallery type={CollectionType.NOTEBOOK} url={url} id={params.id}/>
         </>
     )

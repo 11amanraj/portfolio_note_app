@@ -40,7 +40,7 @@ const NotesCollection: React.FC<{type: string, url: string}> = ({type, url}) => 
                     <div className={styles.bgd}>
                     </div>
                     <div className={styles.text}>
-                        <h1>Important</h1>
+                        <h3>Important</h3>
                         <p>Today</p>
                         <div>Tags</div>
                     </div>

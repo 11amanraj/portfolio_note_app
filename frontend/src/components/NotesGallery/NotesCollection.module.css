@@ -4,6 +4,7 @@
 }
 
 .backdrop {
+    outline: 1px solid red;
     box-sizing: border-box;
     border-radius: 16px;
     padding: 8px; 
@@ -12,7 +13,7 @@
     width: 100%;
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
-    grid-template-rows: 240px 240px;
+    grid-template-rows: repeat(autofit, 240px);
     grid-auto-flow: dense;
 }
 

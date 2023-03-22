@@ -1,5 +1,29 @@
 .container {
     box-sizing: border-box;
+    /* padding: 8px 32px; */
+    padding: 0 8px;
+    height: 40px;
+    border-radius: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    background-color: rgba(48, 47, 47, 0.899);
+    color: white;
+    /* min-height: 80px; */
+}
+
+.container.active {
+    background-color: green;
+}
+
+.cancel {
+    position: absolute;
+    right: 16px;
+}
+
+/* .container {
+    box-sizing: border-box;
     display: inline-block;
     padding: 8px 16px;
     background-color: black;
@@ -42,4 +66,4 @@
 
 .container:hover .text .cancel {
     visibility: visible;
-}
+} */

@@ -63,16 +63,16 @@ const TagSection: React.FC<{onSelect: (tag: tag) => void ,
         )
     }
 
-    // const viewMode = () => {
-    //     return ( 
-    //         <>
-    //             {tags && tags.length > 0 
-    //                 ? tags.map(tag => <Tags key={tag.id} tag={tag.name}/>)
-    //                 : 'It is Empty Here :('
-    //             }
-    //         </>
-    //      );
-    // }
+    const viewMode = () => {
+        return ( 
+            <>
+                {tags && tags.length > 0 
+                    ? tags.map(tag => <Tags key={tag.id} tag={tag.name}/>)
+                    : 'It is Empty Here :('
+                }
+            </>
+         );
+    }
 
     return (
         <div className={styles.container}>

@@ -7,6 +7,7 @@ import { useLocation } from "react-router-dom";
 import LoadingButton from "../UI/LoadingButton";
 import Loading from "../UI/Loading";
 import TagSection from "./TagSection";
+import TagsSection from "../Tags/TagsSection";
 
 const DetailedNote: React.FC<{id: string | undefined}> = ({id}) => {
     const [note, setNote] = useState<note>({
@@ -103,6 +104,7 @@ const DetailedNote: React.FC<{id: string | undefined}> = ({id}) => {
     const viewNote = () => {
         return (
             <div>
+                {/* <TagsSection /> */}
                 <TagSection onRemove={dummyRemoveTagHandler} onSelect={selectTagHandler} tags={selectedTags} editing={false} />
                 <ReactQuill theme='bubble' readOnly={true} value={value} onChange={setValue} />
             </div>

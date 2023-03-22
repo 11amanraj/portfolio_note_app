@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction, Router } from 'express'
+import Note from '../models/note'
 
 const tagsRouter = Router()
 import Tag from '../models/tag'
@@ -24,25 +25,6 @@ tagsRouter.post('/', async (request: Request, response: Response, next: NextFunc
     } catch(error: any) {
         next(error)
     }
-    
-
-    // const existingNotebook = await Notebook.find({title: request.body.title})
-    
-    // if(existingNotebook.length > 0) {
-    //     console.log(`${request.body.title} already exists`)
-    //     return response.status(400).json(`${request.body.title} already exists`)
-    // } else {
-    //     try {
-    //         const notebook = new Notebook(request.body)
-    //         const savedNotebook = await notebook.save()
-    //         return response.status(201).json(savedNotebook)
-    //     } catch(error: any) {
-    //         if(error.name === 'ValidationError') {
-    //             return response.status(400).json('Title must be atleast 3 characters long')
-    //         } else {
-    //             next(error)
-    //         }
-    //     }
 })
 
 export default tagsRouter

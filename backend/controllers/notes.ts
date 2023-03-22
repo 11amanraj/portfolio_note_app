@@ -3,7 +3,7 @@ const notesRouter = Router()
 import Note from '../models/note'
 import Notebook from '../models/notebook'
 import Tag from '../models/tag'
-import { ObjectId } from 'mongodb'
+import { ObjectId } from 'mongoose'
 
 notesRouter.get('/', async (request: Request, response: Response, next: NextFunction) => {
     try {
@@ -157,27 +157,11 @@ notesRouter.put('/:id', async (request: Request, response: Response, next: NextF
         } else {
             const oldTagsID = note.tags.map(tag => tag.toString())
 
-            // console.log(oldTagsID)
-            // console.log(newTagsID)
-
-            // const updatedNote = await Note.findByIdAndUpdate(request.params.id, 
-            //     {...request.body, 
-            //         dateModified: date,
-            //         stringDateModified: dateString, }
-            // )
             const updatedNote = await Note.findOneAndUpdate({_id: request.params.id},
                 {...request.body, 
                     dateModified: date,
                     stringDateModified: dateString,
                 })
-            console.log(request.body.pinned)
-            console.log(updatedNote)
-
-            const tagsDocument = await Tag.find({
-                '_id': { 
-                    $in: newTagsID
-                }
-            })
 
             const arrayAdditionRemovalSeparator = (oldArray: string[], newArray: string[]) => {
                 // compares two array 'old' and 'new' and separate addited item and removed item
@@ -204,10 +188,6 @@ notesRouter.put('/:id', async (request: Request, response: Response, next: NextF
                 }
             })
 
-            // // console.log(tagsDocument)
-            // // add code to remove note id from tag when specific tag is removed
-
-
             // note id is added to new tags if any 
             addedTagsDocument.length>0 && addedTagsDocument.forEach(async (tag) => {
                 console.log('new items added')
@@ -216,82 +196,15 @@ notesRouter.put('/:id', async (request: Request, response: Response, next: NextF
                     await tag.save()
                 }
             })
-
-            // await Tag.updateOne(
-
-            // )
-
-            // await Tag.update(
-            //     { _id: { $in: ['id1', 'id2', 'id3'] } },
-            //     { $set: { visibility : yourvisibility } },
-            //     {multi: true}
-            //  )
-            // const updatedTag = await Tag.findByIdAndUpdate(
-            //     removedItems[0],
-            //     { 'notes': updatedNote?._id },
-            //     // { '$pull': updatedNote?._id}
-            //     { '$pull': { 'notes': [updatedNote?._id] }}
-            //     // { '$set': { 'notes': ['working'] }}
-            //     // { '$push': { 'notes': 'ahghjdgh' }}
-            // )
-            // const updatedTag = await Tag.updateOne(
-            //     { id: removedItems[0]},
-            //     { 'notes': request.params.id },
-            //     { '$pull': { 'notes': updatedNote?._id }}
-            // )
-            if(removedItems.length > 0) {
-                // let result = await foundGroup.update({ $pull: { listItems: { _id: itemId } } });
-                const updatedTag = await Tag.updateOne(
-                    { id: removedItems[0]},
-                    { notes: request.params.id },
-                    // { '$pull': updatedNote?._id }
-                    { '$pull': { notes: { _id: updatedNote?._id } }}
-                ).exec()  
-                console.log(updatedTag)
-            }
-            // const removedTag = await Tag.find({_id: removedItems[0]})
-            // const upTag = await removedTag.update({_id: removedItems[0]})
-            // console.log(upTag)
-            // removedTag.notes()
-            // const updatedTag = await Tag.updateMany(
-            //     { 'notes': request.params.id },
-            //     { '$pull': { 'notes': request.params.id }}
-            // )
-            // await Tag.updateMany(
-            //     { _id: removedItems[0] },
-            //     { 'notes': request.params.id },
-            //     { '$pull': { 'notes': request.params.id }}
-            // )
-
-            // // note id is removed from removed tags if any
-            // removedTagsDocument.length>0 && removedTagsDocument.forEach(async (tag) => {
-            //     console.log(`removing ${request.params.id} note from ${tag.id}`)
-            //     const tagDocument = await Tag.findById(tag.id)
-            //     if(tagDocument && tagDocument.notes) {
-            //         const notes = tagDocument.notes
-            //         if(Array.isArray(notes)) {
-            //             // console.log('working')
-            //             const newNotes = notes.filter(note => note._id.toString() !== updatedNote?._id.toString())
-            //             console.log('checking')
-            //             console.log(notes)
-            //             console.log(newNotes)
-            //             const updatedTag = await Tag.updateOne(
-            //                 { 'notes': request.params.id },
-            //                 { '$pull': { 'notes': request.params.id }}
-            //             )
-            //             // const updatedTag = await tagDocument.updateOne(
-            //             //     { 'notes': request.params.id },
-            //             //     { '$pull': { 'notes': request.params.id }}
-            //             // )
-            //             // const updatedTag = await Tag.findByIdAndUpdate(
-            //             //     tag.id, { $pull: { 'notes': { _id: updatedNote?._id } } }, { safe: true, upsert: true })
-            //             // const updatedTag = await Tag.findByIdAndUpdate(tag.id, { notes : newNotes })
-            //             // tagDocument.notes = newNotes
-            //             console.log(updatedTag)
-            //             console.log('check over')
-            //         }
-            //     }
-            // })
+            
+            // note id is removed from new tags if any 
+            removedTagsDocument.length>0 && removedTagsDocument.forEach(async (tag) => {
+                console.log('items removed')
+                if(Array.isArray(tag?.notes) && updatedNote) {
+                    tag.notes?.pull(updatedNote._id)
+                    await tag.save()
+                }
+            })
 
             response.json(updatedNote)
             response.status(204).end()

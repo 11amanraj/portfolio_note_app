@@ -30,7 +30,10 @@ const DetailedNote: React.FC<{id: string | undefined}> = ({id}) => {
     const [selectedTags, setSelectedTags] = useState<tag[]>([])
 
     const editToggler = () => {
-        // add code to reset changes if editing canceled
+        if(editNote) {
+            setValue(note.content)
+            note.tags && setSelectedTags(note.tags)
+        }
         setEditNote(prev => !prev)
     }
 

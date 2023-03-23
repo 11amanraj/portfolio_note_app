@@ -1,8 +1,10 @@
 import NotesCollection from '../components/NotesGallery/NotesCollection';
 import { CollectionType } from '../shared/interfaces/notes';
+import { useParams } from 'react-router-dom'
 
-const Tags = () => {
-    const url = 'http://localhost:8000/api/tags/641b464433f999c895309325'
+const EachTag = () => {
+    const params = useParams()
+    const url = `http://localhost:8000/api/tags/${params.id}`
 
     return ( 
         <>
@@ -11,4 +13,4 @@ const Tags = () => {
      );
 }
  
-export default Tags;
+export default EachTag;

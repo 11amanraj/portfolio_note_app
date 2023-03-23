@@ -6,6 +6,7 @@ import Note from './pages/Note';
 import NotebooksContextProvider from './store/NotebooksContextProvider';
 import MessageContextProvider from './store/MessageContextProvider';
 import Tags from './pages/Tags';
+import EachTag from './pages/EachTag';
 import TagContextProvider from './store/TagsContextProvider';
 
 function App() {
@@ -20,6 +21,7 @@ function App() {
               <Route path='/notebook/:id' element={<Notebook />}/>
               <Route path='/notebook/:id/note/:noteid' element={<Note />}/>
               <Route path='/tags' element={<Tags />}/>
+              <Route path='/tags/:id' element={<EachTag />}/>
             </Routes>
           </div>
         </TagContextProvider>

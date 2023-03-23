@@ -16,6 +16,7 @@ const NotesCollection: React.FC<{type: string, url: string}> = ({type, url}) => 
         stringDateCreated: '',
         stringDateModified: ''
     }])
+    const [title, setTitle] = useState<string>('')
     const [loading, setLoading] = useState(false)
 
     useEffect(() => {
@@ -24,10 +25,15 @@ const NotesCollection: React.FC<{type: string, url: string}> = ({type, url}) => 
             .get(url)
             .then(response => {
                 if(type === CollectionType.NOTEBOOK) {
+                    setTitle(response.data.title)
                     setNotes(response.data.notes)
                     // setLink(`/notebook/${response.data.id}/note/`)
                 } else if (type === CollectionType.IMPORTANT) {
+                    setTitle('Important Notes')
                     setNotes(response.data)
+                } else if (type === CollectionType.TAG) {
+                    setTitle(response.data.name)
+                    setNotes(response.data.notes)
                 }
                 setLoading(false)
             })
@@ -40,7 +46,7 @@ const NotesCollection: React.FC<{type: string, url: string}> = ({type, url}) => 
                     <div className={styles.bgd}>
                     </div>
                     <div className={styles.text}>
-                        <h3>Important</h3>
+                        <h3>{title}</h3>
                         <p>Today</p>
                         <div>Tags</div>
                     </div>

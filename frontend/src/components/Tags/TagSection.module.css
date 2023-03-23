@@ -2,9 +2,19 @@
     padding: 32px;
     width: 100%;
     outline: 1px solid red;
-    display: flex;
+    /* display: flex; */
     gap: 32px;
     flex-direction: column;
+}
+
+.tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.tags span {
+    flex: 1;
 }
 
 .input-field {

@@ -35,13 +35,13 @@ export const TagContext = React.createContext(defaultValue)
 const TagContextProvider: React.FC<{children: ReactNode}> = ({children}) => {
     const [allTags, setAllTags] = useState<tagCollection[] | null>(null)
 
-    // useEffect(() => {
-    //     axios
-    //         .get('http://localhost:8000/api/tags')
-    //         .then(response => {
-    //             setAllTags(response.data)
-    //         }).catch(error => console.log(error))
-    // }, [])
+    useEffect(() => {
+        axios
+            .get('http://localhost:8000/api/tags')
+            .then(response => {
+                setAllTags(response.data)
+            }).catch(error => console.log(error))
+    }, [])
 
     return ( 
         <TagContext.Provider value={{ allTags: allTags }}>

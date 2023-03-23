@@ -6,8 +6,7 @@ import 'react-quill/dist/quill.snow.css';
 import { useLocation } from "react-router-dom";
 import LoadingButton from "../UI/LoadingButton";
 import Loading from "../UI/Loading";
-import TagSection from "./TagSection";
-import TagsSection from "../Tags/TagsSection";
+import TagSection from "../Tags/TagSection";
 
 const DetailedNote: React.FC<{id: string | undefined}> = ({id}) => {
     const [note, setNote] = useState<note>({
@@ -58,16 +57,28 @@ const DetailedNote: React.FC<{id: string | undefined}> = ({id}) => {
             })
     }, [id, location])
 
-    const selectTagHandler = (newTag: tag) => {
-        const checkDuplicate = selectedTags.filter(tag => tag.id === newTag.id)
-        if(checkDuplicate.length === 0) {
-            setSelectedTags(prev => [...prev, newTag])
+    const selectTagHandler = (newTag: tag, editing: boolean) => {
+        console.log(editing)
+        if(editing) {
+            // check if active or inactive tag
+            const isActive = selectedTags.map(eachTag => eachTag.id).includes(newTag.id)
+            if (isActive) {
+                // console.log('removed')
+                const newTags = selectedTags.filter(tag => tag.id !== newTag.id)
+                setSelectedTags([...newTags])
+            } else {
+                setSelectedTags(prev => [...prev, newTag])
+            }
+        } else {
+            // add popup later
+            console.log(newTag)
         }
     }
 
     const removeNoteHandler = (tag: tag) => {
-        const newTags = selectedTags.filter(selTag => selTag.id !== tag.id)
-        setSelectedTags([...newTags])
+        console.log(selectedTags.map(eachTag => eachTag.id).includes(tag.id))
+        // const newTags = selectedTags.filter(selTag => selTag.id !== tag.id)
+        // setSelectedTags([...newTags])
     }
 
     const dummyRemoveTagHandler = () => {
@@ -104,7 +115,6 @@ const DetailedNote: React.FC<{id: string | undefined}> = ({id}) => {
     const viewNote = () => {
         return (
             <div>
-                {/* <TagsSection /> */}
                 <TagSection onRemove={dummyRemoveTagHandler} onSelect={selectTagHandler} tags={selectedTags} editing={false} />
                 <ReactQuill theme='bubble' readOnly={true} value={value} onChange={setValue} />
             </div>

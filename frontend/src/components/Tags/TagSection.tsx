@@ -13,6 +13,7 @@ const TagSection: React.FC<{
     }> = ({onSelect, onRemove, editing, tags}) => {
     const [input, setInput] = useState('')
     const [existingTags, setExistingTags] = useState<tag[] | null>(null)
+    const [showAllTags, setShowAllTags] = useState(false)
 
     const { allTags } = useContext(TagContext)
 
@@ -20,13 +21,14 @@ const TagSection: React.FC<{
         allTags && setExistingTags([...allTags])
     }, [allTags])
 
-    const inactiveTags = (biggerArray: tag[], smallerArray: tag[]) => {
-        const smallerArrayIDs = smallerArray.map(tag => tag.id)
-        return biggerArray
-            .filter(tag => !smallerArrayIDs.includes(tag.id))
-    }
-
+    
     const editMode = () => {
+        const inactiveTags = (biggerArray: tag[], smallerArray: tag[]) => {
+            const smallerArrayIDs = smallerArray.map(tag => tag.id)
+            return biggerArray
+                .filter(tag => !smallerArrayIDs.includes(tag.id))
+        }
+
         const changeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
             setInput(e.target.value)
         }
@@ -49,23 +51,31 @@ const TagSection: React.FC<{
           }
 
         return (
-            <div className={styles.editing}>
-                <input type='text' onKeyDown={handleKeyDown} placeholder='Add Tag'/>
-                {
-                    existingTags && tags && inactiveTags(existingTags, tags)
-                        .map(tag => <Tags onSelect={() => onSelect(tag, editing)} 
-                            active={false} 
-                            key={tag.id} 
-                            onDelete={() => onRemove(tag)} 
-                            tag={tag.name}/>)
-                }
-            </div>
+            <>
+                <button onClick={() => setShowAllTags(prev => !prev)}>Add New Tag</button>
+                {showAllTags && 
+                    <div className={styles.editing}>
+                        <input type='text' 
+                            onChange={changeHandler} 
+                            onKeyDown={handleKeyDown} 
+                            placeholder='Add Tag'
+                        />
+                        {
+                            existingTags && tags && inactiveTags(existingTags, tags)
+                                .filter(tag => tag.name.includes(input))
+                                .map(tag => <Tags onSelect={() => onSelect(tag, editing)} 
+                                    active={false} 
+                                    key={tag.id} 
+                                    onDelete={() => onRemove(tag)} 
+                                    tag={tag.name}/>)
+                        }
+                    </div>}
+            </>
         )
     }
 
     return (
         <div className={styles.container}>
-            <h1>Tags</h1>
             <div className={styles.tags}>
                 {
                     tags && tags.length > 0 

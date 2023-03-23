@@ -1,7 +1,7 @@
 import styles from './TagSection.module.css'
 import Tags from '../UI/Tags';
 import { tag } from '../../shared/interfaces/notes';
-import axios, { all } from 'axios';
+import axios from 'axios';
 import { useContext, useEffect, useState } from 'react';
 import { TagContext } from '../../store/TagsContextProvider';
 
@@ -12,18 +12,13 @@ const TagSection: React.FC<{
         tags: tag[] | undefined
     }> = ({onSelect, onRemove, editing, tags}) => {
     const [input, setInput] = useState('')
-    // const [allTags, setAllTags] = useState<tag[] | null>(null)
-    const [showAllTags, setShowAllTags] = useState(false)
+    const [existingTags, setExistingTags] = useState<tag[] | null>(null)
 
     const { allTags } = useContext(TagContext)
 
-    // useEffect(() => {
-    //     axios
-    //         .get('http://localhost:8000/api/tags')
-    //         .then(response => {
-    //             setAllTags(response.data)
-    //         }).catch(error => console.log(error))
-    // }, [])
+    useEffect(() => {
+        allTags && setExistingTags([...allTags])
+    }, [allTags])
 
     const inactiveTags = (biggerArray: tag[], smallerArray: tag[]) => {
         const smallerArrayIDs = smallerArray.map(tag => tag.id)
@@ -32,24 +27,32 @@ const TagSection: React.FC<{
     }
 
     const editMode = () => {
-        const saveHandler = () => {
-            axios
-                .post('http://localhost:8000/api/tags', {
-                    name: input
-                })
-                .then(response => {
-                    console.log(response)
-                }).catch(error => console.log(error))
-        }
-
         const changeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
             setInput(e.target.value)
         }
 
+        const handleKeyDown = async (e: React.KeyboardEvent<HTMLInputElement>) => {
+            if (e.key === 'Enter') {
+                try {
+                    const response = await axios
+                        .post('http://localhost:8000/api/tags', {
+                            name: e.currentTarget.value
+                        })
+                    if(existingTags) {
+                        const newTags = [...existingTags, response.data]
+                        setExistingTags(newTags)
+                    }
+                } catch (error) {
+                    console.log(error)
+                }
+            }
+          }
+
         return (
             <div className={styles.editing}>
+                <input type='text' onKeyDown={handleKeyDown} placeholder='Add Tag'/>
                 {
-                    allTags && tags && inactiveTags(allTags, tags)
+                    existingTags && tags && inactiveTags(existingTags, tags)
                         .map(tag => <Tags onSelect={() => onSelect(tag, editing)} 
                             active={false} 
                             key={tag.id} 
@@ -60,19 +63,9 @@ const TagSection: React.FC<{
         )
     }
 
-    // const viewMode = () => {
-    //     return ( 
-    //         <>
-    //             {tags && tags.length > 0 
-    //                 ? tags.map(tag => <Tags key={tag.id} tag={tag.name}/>)
-    //                 : 'It is Empty Here :('
-    //             }
-    //         </>
-    //      );
-    // }
-
     return (
         <div className={styles.container}>
+            <h1>Tags</h1>
             <div className={styles.tags}>
                 {
                     tags && tags.length > 0 

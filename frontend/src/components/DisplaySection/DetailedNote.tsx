@@ -7,6 +7,7 @@ import { useLocation } from "react-router-dom";
 import LoadingButton from "../UI/LoadingButton";
 import Loading from "../UI/Loading";
 import TagSection from "../Tags/TagSection";
+import styles from './DetailedNote.module.css'
 
 const DetailedNote: React.FC<{id: string | undefined}> = ({id}) => {
     const [note, setNote] = useState<note>({
@@ -29,6 +30,7 @@ const DetailedNote: React.FC<{id: string | undefined}> = ({id}) => {
     const [selectedTags, setSelectedTags] = useState<tag[]>([])
 
     const editToggler = () => {
+        // add code to reset changes if editing canceled
         setEditNote(prev => !prev)
     }
 
@@ -58,12 +60,10 @@ const DetailedNote: React.FC<{id: string | undefined}> = ({id}) => {
     }, [id, location])
 
     const selectTagHandler = (newTag: tag, editing: boolean) => {
-        console.log(editing)
         if(editing) {
             // check if active or inactive tag
             const isActive = selectedTags.map(eachTag => eachTag.id).includes(newTag.id)
             if (isActive) {
-                // console.log('removed')
                 const newTags = selectedTags.filter(tag => tag.id !== newTag.id)
                 setSelectedTags([...newTags])
             } else {
@@ -104,7 +104,6 @@ const DetailedNote: React.FC<{id: string | undefined}> = ({id}) => {
     const editing = () => {
         return (
             <div>
-                <h1>Editing</h1>
                 <TagSection onRemove={removeNoteHandler} onSelect={selectTagHandler} tags={selectedTags} editing={true} />
                 <LoadingButton onSave={saveNoteHandler} loading={loading}/>
                 <ReactQuill theme='snow' readOnly={false} value={value} onChange={setValue} />
@@ -127,7 +126,7 @@ const DetailedNote: React.FC<{id: string | undefined}> = ({id}) => {
         )
     } else {
         return ( 
-            <div>
+            <div className={styles.container}>
                 <button onClick={editToggler}>{editNote ? 'Cancel Editing' : 'Edit Note'}</button>
                 <h1>{note.title}</h1>
                 {editNote 

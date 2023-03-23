@@ -7,15 +7,11 @@ const Tags: React.FC<{ tag: string,
     return (
         <span 
             onClick={onSelect} 
-            className={`${styles.container} ${active ? styles.active : ''}`
-        }>
-            {tag}
-            {/* <span className={`${styles.container} ${styles.active}`}> */}
-                {/* <span>{tag}</span> */}
-                {/* <span onClick={onDelete} className={styles.cancel}>X</span> */}
-            {/* <span className={styles.text}>
-            </span> */}
-            {/* <span className={styles.arrow}></span> */}
+            className={styles.container}
+        >
+            <p className={`${styles.title} ${active ? styles.active : ''}`}>
+                {tag}
+            </p>
         </span>
     );
 }

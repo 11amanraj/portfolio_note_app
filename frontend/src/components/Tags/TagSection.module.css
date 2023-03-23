@@ -1,8 +1,25 @@
-.container {
+/* .container {
+    padding: 32px;
+    width: 500px;
+    outline: 1px solid red;
+    display: flex;
+    gap: 32px;
+    flex-direction: column;
+}
+
+.tags {
+    gap: 8px;
+}
+
+.tags div {
+    flex: 1;
+} */
+
+/* .container {
     padding: 32px;
     width: 100%;
     outline: 1px solid red;
-    /* display: flex; */
+    display: flex;
     gap: 32px;
     flex-direction: column;
 }
@@ -21,7 +38,6 @@
     border: 2px solid black;
     display: flex;
     border-radius: 8px;
-    /* overflow: hidden; */
     position: relative;
 }
 
@@ -40,7 +56,6 @@
     color: white;
     list-style: none;
     border-radius: 8px;
-    /* outline: 1px solid red; */
     padding: 0;
     overflow: hidden;
 }
@@ -53,4 +68,4 @@
     background-color: rgb(71, 53, 176);
     color: black;
     cursor: pointer;
-}
+} */

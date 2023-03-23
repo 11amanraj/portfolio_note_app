@@ -47,40 +47,15 @@ const TagSection: React.FC<{
         }
 
         return (
-            <div className={styles['input-field']}>
-                {allTags && tags && inactiveTags(allTags, tags)
-                    .map(tag => <Tags onSelect={() => onSelect(tag, editing)} active={false} key={tag.id} onDelete={() => onRemove(tag)} tag={tag.name}/>)}
-                {/* {allTags && allTags
-                        .filter(tag => tag.name.toLowerCase().includes(input.toLowerCase()))
-                        .map(tag => <Tags active={false} key={tag.id} onDelete={() => onRemove(tag)} tag={tag.name}/>)} */}
-                {/* <input onChange={changeHandler}  
-                    onFocus={() => setShowAllTags(true)} 
-                     />
-                <button onClick={saveHandler}>Save</button>
-                {/* {
-                    showAllTags && allTags && 
-                    <ul className={styles.dropdown}>
-                        {
-                            input.length > 0 && 
-                            <li onClick={saveHandler}>
-                                {input}
-                                <button onClick={saveHandler}>Save</button>
-                            </li>
-                        }
-                        {
-                            allTags
-                                .filter(tag => tag.name.toLowerCase().includes(input.toLowerCase()))
-                                .map(tag => <li onClick={() => onSelect(tag)} key={tag.id}>{tag.name}</li>)
-                        }
-                    </ul>
-                } */}
-                {/* {
-                    showAllTags && allTags && 
-                    allTags
-                        .filter(tag => tag.name.toLowerCase().includes(input.toLowerCase()))
-                        .map(tag => <Tags active={false} key={tag.id} onDelete={() => onRemove(tag)} tag={tag.name}/>)
-                        // .map(tag => <li onClick={() => onSelect(tag)} key={tag.id}>{tag.name}</li>)
-                }  */}
+            <div className={styles.editing}>
+                {
+                    allTags && tags && inactiveTags(allTags, tags)
+                        .map(tag => <Tags onSelect={() => onSelect(tag, editing)} 
+                            active={false} 
+                            key={tag.id} 
+                            onDelete={() => onRemove(tag)} 
+                            tag={tag.name}/>)
+                }
             </div>
         )
     }

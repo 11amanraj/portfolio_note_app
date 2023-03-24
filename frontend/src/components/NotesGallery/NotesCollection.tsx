@@ -2,7 +2,8 @@ import styles from './NotesCollection.module.css'
 import SingleNote from './SingleNote';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import { CollectionType, note } from '../../shared/interfaces/notes';
+import { CollectionType, note, tag } from '../../shared/interfaces/notes';
+import Tags from '../UI/Tags';
 
 const NotesCollection: React.FC<{type: string, url: string}> = ({type, url}) => {
     const [notes, setNotes] = useState<note[]>([{
@@ -17,6 +18,7 @@ const NotesCollection: React.FC<{type: string, url: string}> = ({type, url}) => 
         stringDateModified: ''
     }])
     const [title, setTitle] = useState<string>('')
+    const [tags, setTags] = useState<tag[]>([])
     const [loading, setLoading] = useState(false)
 
     useEffect(() => {
@@ -25,7 +27,7 @@ const NotesCollection: React.FC<{type: string, url: string}> = ({type, url}) => 
             .get(url)
             .then(response => {
                 if(type === CollectionType.NOTEBOOK) {
-                    console.log(response.data.tags)
+                    setTags(response.data.tags)
                     setTitle(response.data.title)
                     setNotes(response.data.notes)
                     // setLink(`/notebook/${response.data.id}/note/`)
@@ -40,6 +42,20 @@ const NotesCollection: React.FC<{type: string, url: string}> = ({type, url}) => 
             })
     }, [type, url])
 
+    const allTags = () => {
+        const selectHandler = () => {
+            console.log('clicked')
+        }
+
+        console.log(tags)
+
+        return (
+            <>
+                {tags.map(tag => <Tags onSelect={selectHandler} key={tag.id} tag={tag.name} active={true} />)}
+            </>
+        )
+    }
+
     return ( 
         <section className={styles.container}>
             <div className={styles.backdrop}>
@@ -49,7 +65,8 @@ const NotesCollection: React.FC<{type: string, url: string}> = ({type, url}) => 
                     <div className={styles.text}>
                         <h3>{title}</h3>
                         <p>Today</p>
-                        <div>Tags</div>
+                        {/* <div>Tags</div> */}
+                        {type === CollectionType.NOTEBOOK ? allTags() : <div>Tags</div>}
                     </div>
                 </div>
                 {notes.map(note => <SingleNote key={note.id} id={note.id}/>)}

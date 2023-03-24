@@ -8,11 +8,14 @@ import styles from './Style.module.css'
 const Tags = () => {
     const { allTags } = useContext(TagContext)
 
+    console.log(allTags)
+
     return ( 
         <section className={styles.container}>
             <Search />
             {allTags && (allTags.length > 0) && allTags.
-                map(tag => <NotesCollection 
+                map(tag => <NotesCollection
+                    key={tag.id} 
                     renderComponent={true} 
                     type={CollectionType.TAG} 
                     url={`http://localhost:8000/api/tags/${tag.id}`}

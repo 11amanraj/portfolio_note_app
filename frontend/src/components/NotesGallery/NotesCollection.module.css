@@ -43,3 +43,27 @@
     position: absolute;
     color: black;
 }
+
+.add {
+    text-align: center;
+    background-color: transparent;
+    color: black;
+    padding: 8px;
+    border-radius: 8px;
+    height: 240px
+}
+
+.add:hover {
+    background-color: rgb(140, 171, 171);
+}
+
+.inner {
+    box-sizing: border-box;
+    background-color: var(--dark-800);
+    height: 100%;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    padding: 32px;
+    text-align: center;
+}

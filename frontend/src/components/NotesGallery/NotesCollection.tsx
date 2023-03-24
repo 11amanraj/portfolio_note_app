@@ -1,15 +1,16 @@
 import styles from './NotesCollection.module.css'
 import SingleNote from './SingleNote';
 import axios from 'axios';
-import { useEffect, useState } from 'react';
+import { LegacyRef, useEffect, useState } from 'react';
 import { CollectionType, note, tag } from '../../shared/interfaces/notes';
 import Tags from '../UI/Tags';
 
 const NotesCollection: React.FC<{type: string, 
         url: string, 
         renderComponent: boolean,
-        description?: {title: string}
-    }> = ({type, url, renderComponent, description}) => {
+        description?: {title: string},
+        ref?: LegacyRef<HTMLDivElement>
+    }> = ({type, url, renderComponent, description}, ref) => {
     const [notes, setNotes] = useState<note[]>([{
         title: '',
         content: '',
@@ -75,7 +76,7 @@ const NotesCollection: React.FC<{type: string,
                     <div className={styles.text}>
                         <h3>{title}</h3>
                         <p>Today</p>
-                        {/* <div>Tags</div> */}
+                        {/* <div ref={ref}>Tags</div> */}
                         {type === CollectionType.NOTEBOOK ? allTags() : <div>Tags</div>}
                     </div>
                 </div>

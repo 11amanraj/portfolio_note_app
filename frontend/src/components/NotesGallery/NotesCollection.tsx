@@ -25,6 +25,7 @@ const NotesCollection: React.FC<{type: string, url: string}> = ({type, url}) => 
             .get(url)
             .then(response => {
                 if(type === CollectionType.NOTEBOOK) {
+                    console.log(response.data.tags)
                     setTitle(response.data.title)
                     setNotes(response.data.notes)
                     // setLink(`/notebook/${response.data.id}/note/`)

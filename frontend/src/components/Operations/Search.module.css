@@ -2,7 +2,7 @@
     padding: 16px 64px;
     background-color: #f5deb350;
     position: sticky;
-    top: 0;
+    top: 0px;
     z-index: 4;
     backdrop-filter: blur(4px);
 }

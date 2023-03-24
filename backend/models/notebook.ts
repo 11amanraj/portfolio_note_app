@@ -12,6 +12,16 @@ const notebookSchema = new Schema<notebook>({
             type: Schema.Types.ObjectId,
             ref: 'Note'
         }
+    ],
+    tags: [
+        {
+            name: {
+                type: String
+            },
+            id: {
+                type: String
+            }
+        }
     ]
 })
 

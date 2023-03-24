@@ -20,6 +20,7 @@ const NotesGallery: React.FC<{id: string | undefined, url: string, type: string}
             .get(url)
             .then(response => {
                 if(type === CollectionType.NOTEBOOK) {
+                    console.log(response.data)
                     setNotes(response.data.notes)
                     setLink(`/notebook/${response.data.id}/note/`)
                 } else if (type === CollectionType.IMPORTANT) {

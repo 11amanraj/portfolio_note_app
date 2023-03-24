@@ -17,7 +17,7 @@ const SingleNote: React.FC<{id: string}> = ({id}) => {
         stringDateCreated: '',
         stringDateModified: ''
     })
-    const [loading, setLoading] = useState(false)
+    const [loading, setLoading] = useState(true)
 
     useEffect(() => {
         setLoading(true)

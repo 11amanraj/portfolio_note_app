@@ -1,4 +1,5 @@
 import NotesCollection from '../components/NotesGallery/NotesCollection';
+import Search from '../components/Operations/Search';
 import { CollectionType } from '../shared/interfaces/notes';
 
 const Tags = () => {
@@ -6,6 +7,7 @@ const Tags = () => {
 
     return ( 
         <>
+            <Search />
             <NotesCollection type={CollectionType.TAG} url={url}/>
         </>
      );

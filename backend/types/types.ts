@@ -22,7 +22,13 @@ export interface notes {
     ]
 }
 
+interface tag {
+    name: string,
+    id: string
+}
+
 export interface notebook {
     title: string;
     notes: PopulatedDoc<Document & Types.ObjectId[]>
+    tags: tag[]
 }

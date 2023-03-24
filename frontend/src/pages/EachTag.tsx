@@ -1,6 +1,7 @@
 import NotesCollection from '../components/NotesGallery/NotesCollection';
 import { CollectionType } from '../shared/interfaces/notes';
 import { useParams } from 'react-router-dom'
+import Search from '../components/Operations/Search';
 
 const EachTag = () => {
     const params = useParams()
@@ -8,6 +9,7 @@ const EachTag = () => {
 
     return ( 
         <>
+            <Search />
             <NotesCollection type={CollectionType.TAG} url={url}/>
         </>
      );

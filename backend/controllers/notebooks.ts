@@ -38,9 +38,7 @@ notebooksRouter.get('/:id', async (request: Request, response: Response, next: N
                     {
                         $match:
                         {
-                            notebook: new ObjectId(
-                                '641afffc26313f8e7380310c'
-                            ),
+                            notebook: new ObjectId(request.params.id)
                         },
                     },
                     {

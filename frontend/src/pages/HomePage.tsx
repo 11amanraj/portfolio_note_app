@@ -1,22 +1,27 @@
-import React from 'react'
-import NotesGallery from '../components/DisplaySection/NotesGallery';
-import SideBar from '../components/Navigation/Sidebar';
-import AllNotes from '../components/NotesGallery/AllNotebooks';
+import { useContext } from 'react'
 import NotesCollection from '../components/NotesGallery/NotesCollection';
+import Search from '../components/Operations/Search';
 import { CollectionType } from '../shared/interfaces/notes';
 import styles from './Style.module.css'
+import { NotebooksContext } from '../store/NotebooksContextProvider';
 
 const HomePage = () => {
-    const url = 'http://localhost:8000/api/notes/important'
+    const importantUrl = 'http://localhost:8000/api/notes/important'
 
-    return ( 
-        <>
-            {/* <SideBar />
-            <div> */}
-                <AllNotes />
-                {/* <NotesGallery type={CollectionType.IMPORTANT} url={url} id='asgsdg'/> */}
-            {/* </div> */}
-        </>
+    const { notebooks } =  useContext(NotebooksContext)
+
+    return (
+        <section className={styles.container}>
+            <Search />
+            <NotesCollection type={CollectionType.IMPORTANT} url={importantUrl} />
+            {notebooks && notebooks.length > 0 && notebooks.map(notebook => 
+                <NotesCollection
+                    key={notebook.id} 
+                    type={CollectionType.NOTEBOOK}
+                    url={`http://localhost:8000/api/notebooks/${notebook.id}`} 
+                /> 
+            )}
+        </section> 
      );
 }
  

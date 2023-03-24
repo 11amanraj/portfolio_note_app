@@ -9,8 +9,7 @@ const NotesCollection: React.FC<{type: string,
         url: string, 
         renderComponent: boolean,
         description?: {title: string},
-        ref?: LegacyRef<HTMLDivElement>
-    }> = ({type, url, renderComponent, description}, ref) => {
+    }> = ({type, url, renderComponent, description}) => {
     const [notes, setNotes] = useState<note[]>([{
         title: '',
         content: '',
@@ -76,7 +75,6 @@ const NotesCollection: React.FC<{type: string,
                     <div className={styles.text}>
                         <h3>{title}</h3>
                         <p>Today</p>
-                        {/* <div ref={ref}>Tags</div> */}
                         {type === CollectionType.NOTEBOOK ? allTags() : <div>Tags</div>}
                     </div>
                 </div>

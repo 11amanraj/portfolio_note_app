@@ -11,7 +11,6 @@ const HomePage = () => {
 
     const [renderItem, setRenderItem] = useState<number>(0)
     const { notebooks } =  useContext(NotebooksContext)
-    const unrenderedElement = useRef<HTMLDivElement>(null)
 
     const [ref, inView] = useInView({triggerOnce: true})
 
@@ -20,8 +19,6 @@ const HomePage = () => {
             setRenderItem(prev => prev + 1)
         }
     }, [inView])
-
-    console.log(renderItem)
 
     return (
         <section className={styles.container}>

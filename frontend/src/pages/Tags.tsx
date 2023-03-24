@@ -12,8 +12,12 @@ const Tags = () => {
         <section className={styles.container}>
             <Search />
             {allTags && (allTags.length > 0) && allTags.
-                map(tag => <NotesCollection type={CollectionType.TAG} url={`http://localhost:8000/api/tags/${tag.id}`}/>)
-            }
+                map(tag => <NotesCollection 
+                    renderComponent={true} 
+                    type={CollectionType.TAG} 
+                    url={`http://localhost:8000/api/tags/${tag.id}`}
+                    />
+            )}
         </section>
      );
 }

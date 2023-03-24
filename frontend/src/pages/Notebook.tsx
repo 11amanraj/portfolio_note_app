@@ -11,10 +11,9 @@ const Notebook = () => {
 
     return (
         <section className={styles.container}>            
-            {/* {params.id && <AllNotes type={CollectionType.NOTEBOOK} url={url} id={params.id}/>} */}
-            {/* <NotesGallery type={CollectionType.NOTEBOOK} url={url} id={params.id}/> */}
             <Search />
             <NotesCollection
+                    renderComponent={true}
                     type={CollectionType.NOTEBOOK}
                     url={url} 
                 /> 

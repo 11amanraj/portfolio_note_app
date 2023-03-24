@@ -13,10 +13,17 @@ const HomePage = () => {
     return (
         <section className={styles.container}>
             <Search />
-            <NotesCollection type={CollectionType.IMPORTANT} url={importantUrl} />
+            <NotesCollection
+                description={{title: 'Important Notes'}}  
+                renderComponent={true} 
+                type={CollectionType.IMPORTANT} 
+                url={importantUrl} 
+            />
             {notebooks && notebooks.length > 0 && notebooks.map(notebook => 
                 <NotesCollection
-                    key={notebook.id} 
+                    key={notebook.id}
+                    renderComponent={true}
+                    description={{title: notebook.title}} 
                     type={CollectionType.NOTEBOOK}
                     url={`http://localhost:8000/api/notebooks/${notebook.id}`} 
                 /> 

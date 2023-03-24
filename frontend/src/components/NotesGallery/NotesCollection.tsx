@@ -5,7 +5,11 @@ import { useEffect, useState } from 'react';
 import { CollectionType, note, tag } from '../../shared/interfaces/notes';
 import Tags from '../UI/Tags';
 
-const NotesCollection: React.FC<{type: string, url: string}> = ({type, url}) => {
+const NotesCollection: React.FC<{type: string, 
+        url: string, 
+        renderComponent: boolean,
+        description?: {title: string}
+    }> = ({type, url, renderComponent, description}) => {
     const [notes, setNotes] = useState<note[]>([{
         title: '',
         content: '',
@@ -22,32 +26,38 @@ const NotesCollection: React.FC<{type: string, url: string}> = ({type, url}) => 
     const [loading, setLoading] = useState(false)
 
     useEffect(() => {
-        setLoading(true)
-        axios
-            .get(url)
-            .then(response => {
-                if(type === CollectionType.NOTEBOOK) {
-                    setTags(response.data.tags)
-                    setTitle(response.data.title)
-                    setNotes(response.data.notes)
-                    // setLink(`/notebook/${response.data.id}/note/`)
-                } else if (type === CollectionType.IMPORTANT) {
-                    setTitle('Important Notes')
-                    setNotes(response.data)
-                } else if (type === CollectionType.TAG) {
-                    setTitle(response.data.name)
-                    setNotes(response.data.notes)
-                }
-                setLoading(false)
-            })
-    }, [type, url])
+        if(description) {
+            setTitle(description.title)
+        }
+    }, [description])
+
+    useEffect(() => {
+        if(renderComponent) {
+            setLoading(true)
+            axios
+                .get(url)
+                .then(response => {
+                    if(type === CollectionType.NOTEBOOK) {
+                        setTags(response.data.tags)
+                        setTitle(response.data.title)
+                        setNotes(response.data.notes)
+                        // setLink(`/notebook/${response.data.id}/note/`)
+                    } else if (type === CollectionType.IMPORTANT) {
+                        setTitle('Important Notes')
+                        setNotes(response.data)
+                    } else if (type === CollectionType.TAG) {
+                        setTitle(response.data.name)
+                        setNotes(response.data.notes)
+                    }
+                    setLoading(false)
+                })
+        }
+    }, [type, url, renderComponent])
 
     const allTags = () => {
         const selectHandler = () => {
             console.log('clicked')
         }
-
-        console.log(tags)
 
         return (
             <>

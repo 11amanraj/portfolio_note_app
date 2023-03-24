@@ -10,7 +10,6 @@ const EachTag = () => {
     return ( 
         <>
             <Search />
-            <NotesCollection type={CollectionType.TAG} url={url}/>
         </>
      );
 }

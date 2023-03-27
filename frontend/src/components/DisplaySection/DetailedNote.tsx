@@ -105,11 +105,46 @@ const DetailedNote: React.FC<{id: string | undefined}> = ({id}) => {
     }
 
     const editing = () => {
+        const modules = {
+            toolbar: [
+              [{ header: [1, 2, 3, 4, 5, 6, false] }],
+          
+              [{ list: "ordered" }, { list: "bullet" }],
+              ["bold", "italic", "underline"],
+              [{ color: [] }, { background: [] }],
+              // [{ script: 'sub' }, { script: 'super' }],
+              [{ align: [] }],
+              ["link", "blockquote", "emoji"],
+              ["clean"],
+            ],
+            clipboard: {
+              // toggle to add extra line breaks when pasting HTML:
+              matchVisual: false,
+            }
+          };
+          
+        const formats = [
+        "header",
+        "font",
+        "size",
+        "bold",
+        "italic",
+        "underline",
+        "strike",
+        "blockquote",
+        "list",
+        "bullet",
+        "indent",
+        "link",
+        "mention",
+        "emoji",
+        ];
+
         return (
             <div>
                 <TagSection onRemove={removeNoteHandler} onSelect={selectTagHandler} tags={selectedTags} editing={true} />
                 <LoadingButton onSave={saveNoteHandler} loading={loading}/>
-                <ReactQuill theme='snow' readOnly={false} value={value} onChange={setValue} />
+                <ReactQuill theme='snow' modules={modules} formats={formats} readOnly={false} value={value} onChange={setValue} />
             </div>
         )
     }

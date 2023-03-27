@@ -3,14 +3,19 @@
     height: 240px;
     width: 280px;
     margin: 16px;
-    padding: 16px;
     background-color: var(--dark-700);
     border-radius: 16px;
-    outline: 1px solid red;
     position: relative;
+}
+
+.tags {
+    box-sizing: border-box;
     display: flex;
     flex-wrap: wrap;
+    height: 100%;
+    padding: 16px;
     overflow-y: scroll;
+    overflow-x: hidden;
 }
 
 .loading > div {
@@ -20,4 +25,17 @@
 .loading > div > div {
     height: 100px;
     width: 100px;
+}
+
+.working {
+    position: absolute;
+    box-sizing: border-box;
+    height: 240px;
+    width: 280px;
+    background-color: var(--dark-700);
+    border-radius: 16px;
+    top: 0;
+    left: calc(100% + 32px);
+    /* left: 100%; */
+    z-index: 5;
 }

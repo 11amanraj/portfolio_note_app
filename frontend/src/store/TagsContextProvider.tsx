@@ -13,7 +13,7 @@ interface tagCollection extends tag {
 
 interface tagContext {
     allTags: tagCollection[] | null,
-    loading: boolean
+    loading: boolean,
 }
 
 const defaultValue: tagContext = {
@@ -29,7 +29,7 @@ const defaultValue: tagContext = {
             ]
         }
     ],
-    loading: false
+    loading: false,
 }
 
 export const TagContext = React.createContext(defaultValue)
@@ -49,7 +49,9 @@ const TagContextProvider: React.FC<{children: ReactNode}> = ({children}) => {
     }, [])
 
     return ( 
-        <TagContext.Provider value={{ allTags: allTags, loading: loading }}>
+        <TagContext.Provider value={{ allTags: allTags, 
+            loading: loading
+        }}>
             {children}
         </TagContext.Provider>
      );

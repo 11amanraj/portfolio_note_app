@@ -51,11 +51,6 @@ const NotesCollection: React.FC<{type: string,
                     } else if (type === CollectionType.IMPORTANT) {
                         setTitle('Important Notes')
                         setNotes(response.data)
-                    } else if (type === CollectionType.TAG) {
-                        console.log(url)
-                        console.log(response.data)
-                        // setTitle(response.data.name)
-                        // setNotes(response.data.notes)
                     }
                     setLoading(false)
                 })
@@ -91,7 +86,7 @@ const NotesCollection: React.FC<{type: string,
 
         return (
             <>
-                {tags.map(tag => <Tags onSelect={selectHandler} key={tag.id} tag={tag.name} active={true} />)}
+                {tags.map(tag => <Tags onSelect={selectHandler} key={tag.id} tag={tag} active={true} />)}
             </>
         )
     }

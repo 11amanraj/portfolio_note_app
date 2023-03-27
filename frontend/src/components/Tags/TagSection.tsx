@@ -63,11 +63,12 @@ const TagSection: React.FC<{
                         {
                             existingTags && tags && inactiveTags(existingTags, tags)
                                 .filter(tag => tag.name.includes(input))
-                                .map(tag => <Tags onSelect={() => onSelect(tag, editing)} 
+                                .map(tag => <Tags onSelect={() => onSelect(tag, editing)}
+                                    assignMode={editing} 
                                     active={false} 
                                     key={tag.id} 
                                     onDelete={() => onRemove(tag)} 
-                                    tag={tag.name}/>)
+                                    tag={tag}/>)
                         }
                     </div>}
             </>
@@ -79,7 +80,7 @@ const TagSection: React.FC<{
             <div className={styles.tags}>
                 {
                     tags && tags.length > 0 
-                        ? tags.map(tag => <Tags active={true} key={tag.id} onSelect={() => onSelect(tag, editing)} onDelete={() => onRemove(tag)} tag={tag.name}/>)
+                        ? tags.map(tag => <Tags assignMode={editing} active={true} key={tag.id} onSelect={() => onSelect(tag, editing)} onDelete={() => onRemove(tag)} tag={tag}/>)
                         : 'It is Empty Here :('
                 }
             </div>

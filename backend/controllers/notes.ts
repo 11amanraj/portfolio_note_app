@@ -3,7 +3,6 @@ const notesRouter = Router()
 import Note from '../models/note'
 import Notebook from '../models/notebook'
 import Tag from '../models/tag'
-import { ObjectId } from 'mongoose'
 
 notesRouter.get('/', async (request: Request, response: Response, next: NextFunction) => {
     try {
@@ -121,8 +120,6 @@ notesRouter.post('/', async (request: Request, response: Response, next: NextFun
 })
 
 notesRouter.delete('/:id', async (request: Request, response: Response, next: NextFunction) => {
-    // deleting note also removes the note id from associated tags
-
     try {
         await Note.findByIdAndDelete(request.params.id)
         await Notebook.updateOne(

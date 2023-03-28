@@ -19,11 +19,13 @@ const Tags: React.FC<{ tag: tag,
     const [loading, setLoading] = useState(false)
     const [showModal, setShowModal] = useState(false)
 
+    const url = `http://localhost:8000/api/tags/${tag.id}`
+
     useEffect(() => {
         if(showModal) {
             setLoading(true)
             axios
-                .get(`http://localhost:8000/api/tags/${tag.id}`)
+                .get(url)
                 .then(response => {
                     setTagDetail(response.data)
                     setLoading(false)
@@ -38,9 +40,18 @@ const Tags: React.FC<{ tag: tag,
     }
  
     const modalView = () => {
+        const tagDeleteHandler = () => {
+            console.log(tag.name) 
+            axios
+                .delete(url)
+                .then(response => console.log(response))
+                .catch(error => console.log(error))
+        }
+
         return (
           <div className={styles.modal}>
             <h3>{tag.name}</h3>
+            <button onClick={tagDeleteHandler}>Delete Tag</button>
             <div>
                 {tagDetail && tagDetail.notes && tagDetail.notes.map(note => <p>{note.title}</p>)}
             </div>

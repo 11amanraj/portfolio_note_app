@@ -49,4 +49,18 @@ tagsRouter.post('/', async (request: Request, response: Response, next: NextFunc
     }
 })
 
+tagsRouter.delete('/:id', async (request: Request, response: Response, next: NextFunction) => {
+    try {
+        await Note.updateMany(
+            { 'tags': request.params.id },
+            { '$pull': { 'tags': request.params.id }}
+        )
+        await Tag.findByIdAndDelete(request.params.id)
+
+        return response.status(204).end()
+    } catch(error) {
+        next(error)
+    }
+})
+
 export default tagsRouter

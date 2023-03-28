@@ -84,10 +84,6 @@ const DetailedNote: React.FC<{id: string | undefined}> = ({id}) => {
         // setSelectedTags([...newTags])
     }
 
-    const dummyRemoveTagHandler = () => {
-        console.log('dummy')
-    }
-
     const saveNoteHandler = () => {
         const tagID = selectedTags.map(tag => tag.id) 
         console.log(tagID)
@@ -152,7 +148,7 @@ const DetailedNote: React.FC<{id: string | undefined}> = ({id}) => {
     const viewNote = () => {
         return (
             <div>
-                <TagSection onRemove={dummyRemoveTagHandler} onSelect={selectTagHandler} tags={selectedTags} editing={false} />
+                <TagSection onSelect={() => console.log('viewing')} tags={selectedTags} editing={false} />
                 <ReactQuill theme='bubble' readOnly={true} value={value} onChange={setValue} />
             </div>
         )

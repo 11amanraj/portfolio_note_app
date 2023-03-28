@@ -80,13 +80,9 @@ const NotesCollection: React.FC<{type: string,
     }
 
     const allTags = () => {
-        const selectHandler = () => {
-            console.log('clicked')
-        }
-
         return (
             <>
-                {tags.map(tag => <Tags onSelect={selectHandler} key={tag.id} tag={tag} active={true} />)}
+                {tags.map(tag => <Tags key={tag.id} tag={tag} active={true} />)}
             </>
         )
     }

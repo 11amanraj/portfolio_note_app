@@ -34,6 +34,10 @@
     background-color: rgb(4, 95, 4);
 }
 
+.modal {
+    outline: 1px solid red;
+}
+
 @keyframes border-animate {
     from {
         border: 4px solid transparent;

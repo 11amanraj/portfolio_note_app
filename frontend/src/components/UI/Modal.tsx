@@ -11,9 +11,9 @@ const Backdrop = () => {
 const ModalOverlay: React.FC<{children: ReactNode}> = ({children}) => {
     return (
         <div className={styles.bgd}>
-            <div className={styles.modal}>
                 {children}
-            </div>
+            {/* <div className={styles.modal}>
+            </div> */}
         </div>
     )
 }

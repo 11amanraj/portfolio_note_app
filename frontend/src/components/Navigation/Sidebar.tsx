@@ -24,7 +24,6 @@ const SideBar = () => {
             {notebooks && notebooks.map(notebook => (
                 <NotebookTitles key={notebook.id} notebook={notebook}/>
             ))}
-            {/* <Link to={'/tags'}><h2>Tags</h2></Link> */}
             <EveryTag />
         </nav>
      );

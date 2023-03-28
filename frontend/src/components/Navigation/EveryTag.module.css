@@ -1,21 +1,14 @@
 .container {
     box-sizing: border-box;
-    height: 240px;
-    width: 280px;
-    margin: 16px;
-    background-color: var(--dark-700);
-    border-radius: 16px;
-    position: relative;
-}
-
-.tags {
-    box-sizing: border-box;
     display: flex;
     flex-wrap: wrap;
-    height: 100%;
+    height: 400px;
     padding: 16px;
     overflow-y: scroll;
     overflow-x: hidden;
+    width: 300px;
+    background-color: black;
+    border-radius: 8px;
 }
 
 .loading > div {
@@ -25,17 +18,4 @@
 .loading > div > div {
     height: 100px;
     width: 100px;
-}
-
-.working {
-    position: absolute;
-    box-sizing: border-box;
-    height: 240px;
-    width: 280px;
-    background-color: var(--dark-700);
-    border-radius: 16px;
-    top: 0;
-    left: calc(100% + 32px);
-    /* left: 100%; */
-    z-index: 5;
 }

@@ -7,7 +7,7 @@ import { TagContext } from '../../store/TagsContextProvider';
 
 const TagSection: React.FC<{
         onSelect: (tag: tag, editing: boolean) => void , 
-        onRemove: (tag: tag) => void, 
+        onRemove?: (tag: tag) => void, 
         editing: boolean , 
         tags: tag[] | undefined
     }> = ({onSelect, onRemove, editing, tags}) => {
@@ -20,7 +20,6 @@ const TagSection: React.FC<{
     useEffect(() => {
         allTags && setExistingTags([...allTags])
     }, [allTags])
-
     
     const editMode = () => {
         const inactiveTags = (biggerArray: tag[], smallerArray: tag[]) => {
@@ -67,7 +66,6 @@ const TagSection: React.FC<{
                                     assignMode={editing} 
                                     active={false} 
                                     key={tag.id} 
-                                    onDelete={() => onRemove(tag)} 
                                     tag={tag}/>)
                         }
                     </div>}
@@ -80,7 +78,13 @@ const TagSection: React.FC<{
             <div className={styles.tags}>
                 {
                     tags && tags.length > 0 
-                        ? tags.map(tag => <Tags assignMode={editing} active={true} key={tag.id} onSelect={() => onSelect(tag, editing)} onDelete={() => onRemove(tag)} tag={tag}/>)
+                        ? tags.map(tag => <Tags 
+                                assignMode={editing} 
+                                active={true} 
+                                key={tag.id} 
+                                onSelect={() => onSelect(tag, editing)} 
+                                tag={tag}
+                            />)
                         : 'It is Empty Here :('
                 }
             </div>

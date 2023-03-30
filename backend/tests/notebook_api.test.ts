@@ -2,6 +2,7 @@ import mongoose from 'mongoose'
 import supertest from 'supertest'
 import app from '../app'
 import Notebook from '../models/notebook'
+import { notebook } from '../types/types'
 
 const api = supertest(app)
 
@@ -30,7 +31,7 @@ describe('Check Property', () => {
     test('Checks if id property exists', async () => {
         const response = await api.get('/api/notebooks')
     
-        response.body.forEach(notebook => {
+        response.body.forEach((notebook: notebook) => {
             expect(notebook.id).toBeDefined()
         })
     })

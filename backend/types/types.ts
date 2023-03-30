@@ -28,7 +28,8 @@ interface tag {
 }
 
 export interface notebook {
-    title: string;
-    notes: PopulatedDoc<Document & Types.ObjectId[]>
-    tags: tag[]
+    title: string,
+    notes: PopulatedDoc<Document & Types.ObjectId[]>,
+    tags: tag[],
+    id?: string
 }

@@ -16,12 +16,12 @@ notebooksRouter.get('/', async (request: Request, response: Response, next: Next
                 options: { sort: { title: 1} }
             })
 
-        const nb = await Notebook.aggregate([
-            {$match: { '_id': '641afffc26313f8e7380310c'}},
-            {$unwind: '$notes'},
-        ])
+        // const nb = await Notebook.aggregate([
+        //     {$match: { '_id': '641afffc26313f8e7380310c'}},
+        //     {$unwind: '$notes'},
+        // ])
 
-        console.log(nb)
+        // console.log(nb)
             
         response.json(notebook)
     } catch (error: any) {
@@ -89,7 +89,6 @@ notebooksRouter.get('/:id', async (request: Request, response: Response, next: N
 
     } catch(error: any) {
         if (error.name === 'CastError') {
-            console.log(error)
             return response.status(400).json({message:'Notebook does not exist'})
         } else {
             next(error)
@@ -139,8 +138,11 @@ notebooksRouter.get('/search/:keyword', async (request: Request, response: Respo
 notebooksRouter.post('/', async (request: Request, response: Response, next: NextFunction) => {
     const existingNotebook = await Notebook.find({title: request.body.title})
     
+    console.log(existingNotebook)
+    // if(existingNotebook.length > 0) {
+    //     console.log(`${request.body.title} already exists`)
+    //     return response.status(400).json(`${request.body.title} already exists`)
     if(existingNotebook.length > 0) {
-        console.log(`${request.body.title} already exists`)
         return response.status(400).json(`${request.body.title} already exists`)
     } else {
         try {
@@ -162,13 +164,10 @@ notebooksRouter.post('/', async (request: Request, response: Response, next: Nex
 notebooksRouter.delete('/:id', async (request: Request, response: Response, next: NextFunction) => {
     try {
         const notebook = await Notebook.findById(request.params.id)
+        
         if(notebook) {
             const notes = notebook.notes
-            if(Array.isArray(notes)) {
-                notes.map(async (noteID) => {
-                    await Note.findByIdAndDelete(noteID)
-                })
-            }
+            await Note.deleteMany({ _id: { $in: notes } })
         } 
 
         await Notebook.findByIdAndDelete(request.params.id)

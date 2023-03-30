@@ -1,6 +1,7 @@
 import { Date, PopulatedDoc, Types } from 'mongoose'
 
 export interface notes {
+    id?: string;
     title: string;
     content: string;
     author: string;

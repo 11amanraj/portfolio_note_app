@@ -7,6 +7,7 @@ import AddEntry from '../Operations/AddEntry';
 import Filter from '../Operations/Filter';
 import { MessageContext } from '../../store/MessageContextProvider';
 import Message from '../UI/Message';
+import EveryTag from './EveryTag';
 
 const SideBar = () => {
     const { notebooks, loading, addNotebook } = useContext(NotebooksContext)
@@ -23,7 +24,7 @@ const SideBar = () => {
             {notebooks && notebooks.map(notebook => (
                 <NotebookTitles key={notebook.id} notebook={notebook}/>
             ))}
-            <Link to={'/tags'}><h2>Tags</h2></Link>
+            <EveryTag />
         </nav>
      );
 }

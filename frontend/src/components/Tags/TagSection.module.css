@@ -1,4 +1,41 @@
 .container {
+    border: 2px solid black;
+}
+
+.editing {
+    border-top: 2px solid black;
+    max-height: 600px;
+    overflow-y: scroll;
+    animation: expand 2s linear forwards;
+}
+
+@keyframes expand {
+    from {
+        max-height: 0px;
+    } to {
+        max-height: 600px;
+    }
+}
+
+
+/* .container {
+    padding: 32px;
+    width: 500px;
+    outline: 1px solid red;
+    display: flex;
+    gap: 32px;
+    flex-direction: column;
+}
+
+.tags {
+    gap: 8px;
+}
+
+.tags div {
+    flex: 1;
+} */
+
+/* .container {
     padding: 32px;
     width: 100%;
     outline: 1px solid red;
@@ -7,11 +44,20 @@
     flex-direction: column;
 }
 
+.tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.tags span {
+    flex: 1;
+}
+
 .input-field {
     border: 2px solid black;
     display: flex;
     border-radius: 8px;
-    /* overflow: hidden; */
     position: relative;
 }
 
@@ -30,7 +76,6 @@
     color: white;
     list-style: none;
     border-radius: 8px;
-    /* outline: 1px solid red; */
     padding: 0;
     overflow: hidden;
 }
@@ -43,4 +88,4 @@
     background-color: rgb(71, 53, 176);
     color: black;
     cursor: pointer;
-}
+} */

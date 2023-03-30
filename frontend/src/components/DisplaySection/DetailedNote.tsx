@@ -6,7 +6,8 @@ import 'react-quill/dist/quill.snow.css';
 import { useLocation } from "react-router-dom";
 import LoadingButton from "../UI/LoadingButton";
 import Loading from "../UI/Loading";
-import TagSection from "./TagSection";
+import TagSection from "../Tags/TagSection";
+import styles from './DetailedNote.module.css'
 
 const DetailedNote: React.FC<{id: string | undefined}> = ({id}) => {
     const [note, setNote] = useState<note>({
@@ -29,6 +30,10 @@ const DetailedNote: React.FC<{id: string | undefined}> = ({id}) => {
     const [selectedTags, setSelectedTags] = useState<tag[]>([])
 
     const editToggler = () => {
+        if(editNote) {
+            setValue(note.content)
+            note.tags && setSelectedTags(note.tags)
+        }
         setEditNote(prev => !prev)
     }
 
@@ -57,20 +62,26 @@ const DetailedNote: React.FC<{id: string | undefined}> = ({id}) => {
             })
     }, [id, location])
 
-    const selectTagHandler = (newTag: tag) => {
-        const checkDuplicate = selectedTags.filter(tag => tag.id === newTag.id)
-        if(checkDuplicate.length === 0) {
-            setSelectedTags(prev => [...prev, newTag])
+    const selectTagHandler = (newTag: tag, editing: boolean) => {
+        if(editing) {
+            // check if active or inactive tag
+            const isActive = selectedTags.map(eachTag => eachTag.id).includes(newTag.id)
+            if (isActive) {
+                const newTags = selectedTags.filter(tag => tag.id !== newTag.id)
+                setSelectedTags([...newTags])
+            } else {
+                setSelectedTags(prev => [...prev, newTag])
+            }
+        } else {
+            // add popup later
+            console.log(newTag)
         }
     }
 
     const removeNoteHandler = (tag: tag) => {
-        const newTags = selectedTags.filter(selTag => selTag.id !== tag.id)
-        setSelectedTags([...newTags])
-    }
-
-    const dummyRemoveTagHandler = () => {
-        console.log('dummy')
+        console.log(selectedTags.map(eachTag => eachTag.id).includes(tag.id))
+        // const newTags = selectedTags.filter(selTag => selTag.id !== tag.id)
+        // setSelectedTags([...newTags])
     }
 
     const saveNoteHandler = () => {
@@ -90,12 +101,46 @@ const DetailedNote: React.FC<{id: string | undefined}> = ({id}) => {
     }
 
     const editing = () => {
+        const modules = {
+            toolbar: [
+              [{ header: [1, 2, 3, 4, 5, 6, false] }],
+          
+              [{ list: "ordered" }, { list: "bullet" }],
+              ["bold", "italic", "underline"],
+              [{ color: [] }, { background: [] }],
+              // [{ script: 'sub' }, { script: 'super' }],
+              [{ align: [] }],
+              ["link", "blockquote", "emoji"],
+              ["clean"],
+            ],
+            clipboard: {
+              // toggle to add extra line breaks when pasting HTML:
+              matchVisual: false,
+            }
+          };
+          
+        const formats = [
+        "header",
+        "font",
+        "size",
+        "bold",
+        "italic",
+        "underline",
+        "strike",
+        "blockquote",
+        "list",
+        "bullet",
+        "indent",
+        "link",
+        "mention",
+        "emoji",
+        ];
+
         return (
             <div>
-                <h1>Editing</h1>
                 <TagSection onRemove={removeNoteHandler} onSelect={selectTagHandler} tags={selectedTags} editing={true} />
                 <LoadingButton onSave={saveNoteHandler} loading={loading}/>
-                <ReactQuill theme='snow' readOnly={false} value={value} onChange={setValue} />
+                <ReactQuill theme='snow' modules={modules} formats={formats} readOnly={false} value={value} onChange={setValue} />
             </div>
         )
     }
@@ -103,7 +148,7 @@ const DetailedNote: React.FC<{id: string | undefined}> = ({id}) => {
     const viewNote = () => {
         return (
             <div>
-                <TagSection onRemove={dummyRemoveTagHandler} onSelect={selectTagHandler} tags={selectedTags} editing={false} />
+                <TagSection onSelect={() => console.log('viewing')} tags={selectedTags} editing={false} />
                 <ReactQuill theme='bubble' readOnly={true} value={value} onChange={setValue} />
             </div>
         )
@@ -115,7 +160,7 @@ const DetailedNote: React.FC<{id: string | undefined}> = ({id}) => {
         )
     } else {
         return ( 
-            <div>
+            <div className={styles.container}>
                 <button onClick={editToggler}>{editNote ? 'Cancel Editing' : 'Edit Note'}</button>
                 <h1>{note.title}</h1>
                 {editNote 

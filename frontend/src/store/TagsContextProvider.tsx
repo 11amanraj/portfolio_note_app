@@ -12,7 +12,8 @@ interface tagCollection extends tag {
 }
 
 interface tagContext {
-    allTags: tagCollection[] | null
+    allTags: tagCollection[] | null,
+    loading: boolean,
 }
 
 const defaultValue: tagContext = {
@@ -27,24 +28,30 @@ const defaultValue: tagContext = {
                 }
             ]
         }
-    ]
+    ],
+    loading: false,
 }
 
 export const TagContext = React.createContext(defaultValue)
 
 const TagContextProvider: React.FC<{children: ReactNode}> = ({children}) => {
     const [allTags, setAllTags] = useState<tagCollection[] | null>(null)
+    const [loading, setLoading] = useState(false)
 
     useEffect(() => {
+        setLoading(true)
         axios
             .get('http://localhost:8000/api/tags')
             .then(response => {
                 setAllTags(response.data)
+                setLoading(false)
             }).catch(error => console.log(error))
     }, [])
 
     return ( 
-        <TagContext.Provider value={{ allTags: allTags }}>
+        <TagContext.Provider value={{ allTags: allTags, 
+            loading: loading
+        }}>
             {children}
         </TagContext.Provider>
      );

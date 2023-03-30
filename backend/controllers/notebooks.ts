@@ -1,8 +1,10 @@
 import { Request, Response, NextFunction, Router } from 'express'
+import { ObjectId } from 'mongodb'
 
 const notebooksRouter = Router()
 import Notebook from '../models/notebook'
 import Note from '../models/note'
+import Tag from '../models/tag'
 import { notes } from '../types/types'
 
 notebooksRouter.get('/', async (request: Request, response: Response, next: NextFunction) => {
@@ -13,6 +15,13 @@ notebooksRouter.get('/', async (request: Request, response: Response, next: Next
                 path: 'notes',
                 options: { sort: { title: 1} }
             })
+
+        const nb = await Notebook.aggregate([
+            {$match: { '_id': '641afffc26313f8e7380310c'}},
+            {$unwind: '$notes'},
+        ])
+
+        console.log(nb)
             
         response.json(notebook)
     } catch (error: any) {
@@ -23,8 +32,52 @@ notebooksRouter.get('/', async (request: Request, response: Response, next: Next
 
 notebooksRouter.get('/:id', async (request: Request, response: Response, next: NextFunction) => {
     try {
-        const notebook = await Notebook
-            .findById(request.params.id)
+        const tags = await Note.
+            aggregate(
+                [
+                    {
+                        $match:
+                        {
+                            notebook: new ObjectId(request.params.id)
+                        },
+                    },
+                    {
+                        $unwind: { path: '$tags' },
+                    },
+                    {
+                        $group:  { _id: '$tags' }
+                    },
+                    {   $lookup:
+                        {
+                            from: 'tags',
+                            localField: '_id',
+                            foreignField: '_id',
+                            as: 'tag',
+                        },
+                    },
+                    {   $set:
+                        {
+                            tag: {
+                                $arrayElemAt: ['$tag', 0],
+                            },
+                        },
+                    },
+                    {   $replaceRoot:
+                        {
+                            newRoot: '$tag',
+                        },
+                    },
+                    { 
+                        $addFields: { id: { $toString: '$_id' } }
+                    },
+                    {
+                        $unset: ['_id', 'notes', '__v']
+                    }
+                ]
+            )
+
+        const updatedNotebook = await Notebook
+            .findByIdAndUpdate(request.params.id, {tags: tags})
             .populate<{notes: notes}>('notes', 
                 {   title: 1, 
                     author: 1, 
@@ -32,9 +85,11 @@ notebooksRouter.get('/:id', async (request: Request, response: Response, next: N
                     stringDateCreated: 1, 
                     pinned: 1})
     
-        response.json(notebook)
+        response.json(updatedNotebook)
+
     } catch(error: any) {
         if (error.name === 'CastError') {
+            console.log(error)
             return response.status(400).json({message:'Notebook does not exist'})
         } else {
             next(error)

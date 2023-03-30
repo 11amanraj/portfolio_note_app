@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction, Router } from 'express'
+import Note from '../models/note'
 
 const tagsRouter = Router()
 import Tag from '../models/tag'
@@ -15,6 +16,28 @@ tagsRouter.get('/', async (request: Request, response: Response, next: NextFunct
     }
 })
 
+tagsRouter.get('/:id', async (request: Request, response: Response, next: NextFunction) => {
+    try {
+        const tag = await Tag.findById(request.params.id)
+            .populate(
+                {   path: 'notes',
+                    select: 'title id tags',
+                    populate: {
+                        path: 'tags',
+                        select: 'id name'
+                    }
+                }
+            )
+        response.json(tag)
+    } catch(error: any) {
+        if(error.name === 'CastError') {
+            return response.status(400).json({message:'Tag does not exist'})
+        } else {
+            next(error)
+        }
+    } 
+})
+
 tagsRouter.post('/', async (request: Request, response: Response, next: NextFunction) => {
     const tag = new Tag(request.body)
 
@@ -24,25 +47,20 @@ tagsRouter.post('/', async (request: Request, response: Response, next: NextFunc
     } catch(error: any) {
         next(error)
     }
-    
+})
 
-    // const existingNotebook = await Notebook.find({title: request.body.title})
-    
-    // if(existingNotebook.length > 0) {
-    //     console.log(`${request.body.title} already exists`)
-    //     return response.status(400).json(`${request.body.title} already exists`)
-    // } else {
-    //     try {
-    //         const notebook = new Notebook(request.body)
-    //         const savedNotebook = await notebook.save()
-    //         return response.status(201).json(savedNotebook)
-    //     } catch(error: any) {
-    //         if(error.name === 'ValidationError') {
-    //             return response.status(400).json('Title must be atleast 3 characters long')
-    //         } else {
-    //             next(error)
-    //         }
-    //     }
+tagsRouter.delete('/:id', async (request: Request, response: Response, next: NextFunction) => {
+    try {
+        await Note.updateMany(
+            { 'tags': request.params.id },
+            { '$pull': { 'tags': request.params.id }}
+        )
+        await Tag.findByIdAndDelete(request.params.id)
+
+        return response.status(204).end()
+    } catch(error) {
+        next(error)
+    }
 })
 
 export default tagsRouter

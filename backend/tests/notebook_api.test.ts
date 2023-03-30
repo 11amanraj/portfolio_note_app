@@ -20,14 +20,12 @@ beforeEach(async () => {
     })
 })
 
-describe('Get Request', () => {
+describe('GET Request', () => {
     test('get all notebooks', async () => {
         const response = await api.get('/api/notebooks')
         expect(response.body).toHaveLength(2)
     })
-})
-
-describe('Check Property', () => {
+    
     test('Checks if id property exists', async () => {
         const response = await api.get('/api/notebooks')
     

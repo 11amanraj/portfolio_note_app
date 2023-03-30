@@ -23,7 +23,7 @@ export interface notes {
     ]
 }
 
-interface tag {
+export interface tag {
     name: string,
     id: string
 }

@@ -39,11 +39,17 @@ tagsRouter.get('/:id', async (request: Request, response: Response, next: NextFu
 })
 
 tagsRouter.post('/', async (request: Request, response: Response, next: NextFunction) => {
-    const tag = new Tag(request.body)
-
     try {
+        const duplicateTag = await Tag.findOne({ name: { $regex: request.body.name, $options: 'i' } })
+        
+        if(duplicateTag !== null) {
+            return response.status(400).json('tag already exists')
+        }
+        
+        const tag = new Tag({name: request.body.name.replace(/\s/g, '')})
         const savedTag = await tag.save()
         return response.status(201).json(savedTag)
+
     } catch(error: any) {
         next(error)
     }

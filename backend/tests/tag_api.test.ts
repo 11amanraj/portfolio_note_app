@@ -30,6 +30,7 @@ describe('GET request', () => {
 describe('POST request', () => {
     test('creating new tag', async () => {
         const tagName ='newTag'
+        
         await api
             .post('/api/tags')
             .send({name: tagName})
@@ -40,6 +41,33 @@ describe('POST request', () => {
 
         expect(response.body.find((tag: tag) => tag.name === tagName))
             .toBeDefined()
+    })
+
+    test('new tag is always created without spaces', async () => {
+        const tagName ='New Tag  '
+        const noSpaceName = 'NewTag'
+        
+        const response = await api
+            .post('/api/tags')
+            .send({name: tagName})
+            .expect(201)
+
+        expect(response.body.name).toBe(noSpaceName)
+    })
+
+    test('if tag name already exists in database (case insensitive) then it returns error 400', async () => {
+        const tagName ='newTag'
+        const tagNameInsensitive = 'NewTag'
+        
+        await api
+            .post('/api/tags')
+            .send({name: tagName})
+            .expect(201)
+
+        await api
+            .post('/api/tags')
+            .send({name: tagNameInsensitive})
+            .expect(400)
     })
 })
 

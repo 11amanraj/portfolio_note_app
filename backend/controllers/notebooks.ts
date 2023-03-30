@@ -138,10 +138,6 @@ notebooksRouter.get('/search/:keyword', async (request: Request, response: Respo
 notebooksRouter.post('/', async (request: Request, response: Response, next: NextFunction) => {
     const existingNotebook = await Notebook.find({title: request.body.title})
     
-    console.log(existingNotebook)
-    // if(existingNotebook.length > 0) {
-    //     console.log(`${request.body.title} already exists`)
-    //     return response.status(400).json(`${request.body.title} already exists`)
     if(existingNotebook.length > 0) {
         return response.status(400).json(`${request.body.title} already exists`)
     } else {

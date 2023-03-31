@@ -179,6 +179,7 @@ describe('PUT request', () => {
         const allNotes = await api
             .get('/api/notes')
 
+        // note is pinned
         await api
             .put(`/api/notes/${allNotes.body[0].id}`)
             .set('Content-Type', 'application/json')
@@ -189,6 +190,21 @@ describe('PUT request', () => {
             .get('/api/notes')
 
         expect(response.body[0].pinned).toBe(pinStatus)
+
+        // note is unpinned
+
+        const newPinStatus = false
+
+        await api
+            .put(`/api/notes/${allNotes.body[0].id}`)
+            .set('Content-Type', 'application/json')
+            .send({ pinned: newPinStatus})
+            .expect(200)
+
+        const newResponse = await api
+            .get('/api/notes')
+
+        expect(newResponse.body[0].pinned).toBe(newPinStatus)
     })
 
     test('tag is added to note', async () => {
@@ -289,4 +305,4 @@ afterAll(() => {
 })
 
 // npm run test tests/note_api.test.js
-// npm test -- -t "removing tag removes associated reference"
+// npm test -- -t "note is pinned"

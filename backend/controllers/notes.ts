@@ -156,7 +156,9 @@ notesRouter.put('/:id', async (request: Request, response: Response, next: NextF
                 {...request.body, 
                     dateModified: date,
                     stringDateModified: dateString,
-                })
+                },
+                {new: true}
+            )
                 
             if(newTagsID) {
                 const oldTagsID = note.tags.map(tag => tag.toString())
@@ -206,10 +208,7 @@ notesRouter.put('/:id', async (request: Request, response: Response, next: NextF
 
             }
 
-            // response.json(updatedNote)
-            // response.status(204).end()
-            // return response.json(updatedNote)
-            return response.status(204).json(updatedNote)
+            return response.json(updatedNote)
         }
     } catch(error) {
         next(error)

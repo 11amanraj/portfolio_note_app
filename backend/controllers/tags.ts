@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction, Router } from 'express'
 import Note from '../models/note'
+import { ObjectId } from 'mongodb'
 
 const tagsRouter = Router()
 import Tag from '../models/tag'
@@ -39,11 +40,45 @@ tagsRouter.get('/:id', async (request: Request, response: Response, next: NextFu
 })
 
 tagsRouter.post('/', async (request: Request, response: Response, next: NextFunction) => {
-    const tag = new Tag(request.body)
-
     try {
+        const duplicateTag = await Tag.findOne({ name: { $regex: request.body.name, $options: 'i' } })
+        
+        if(duplicateTag !== null) {
+            return response.status(400).json('tag already exists')
+        }
+        
+        const tag = new Tag({name: request.body.name.replace(/\s/g, '')})
         const savedTag = await tag.save()
         return response.status(201).json(savedTag)
+
+    } catch(error: any) {
+        next(error)
+    }
+})
+
+tagsRouter.put('/:id', async (request: Request, response: Response, next: NextFunction) => {
+    try {
+        const { id } = request.params
+        const { name } = request.body
+
+        if(!name) response.status(400).json('Incomplete request! Please add Name')
+
+        const duplicateTag = await Tag
+            .findOne({ $and: [
+                { _id: {$ne: new ObjectId(id)} },
+                { name: { $regex: name, $options: 'i' }}
+            ]})
+
+        if(duplicateTag !== null) {
+            return response.status(400).json('tag already exists')
+        }
+
+        const updatedTag = await Tag
+            .findByIdAndUpdate(id, { name: name.replace(/\s/g, '') }, { new: true })
+
+        if(updatedTag === null) response.status(400).json('Tag does not exist')
+
+        return response.status(201).json(updatedTag)
     } catch(error: any) {
         next(error)
     }

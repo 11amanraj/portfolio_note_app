@@ -2,7 +2,15 @@ POST http://localhost:8000/api/notebooks
 content-type: application/json
 
 {
-    "title": "2nd Notebook"
+    "title": "Third Notebook"
+}
+
+####
+PUT http://localhost:8000/api/notebooks/6426c4ec23998dbed4521a44
+content-type: application/json
+
+{
+    "title": "Testing Notebook"
 }
 
 ####

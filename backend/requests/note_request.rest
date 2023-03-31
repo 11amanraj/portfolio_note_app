@@ -3,13 +3,23 @@ content-type: application/json
 
 {
     "title": "Final Check",
-    "content": "Added Pinning and Date",
+    "content": "Checking UpdatedNote return",
     "author": "John Doe",
-    "notebookID": "63e65a149c1fc9b290d2ce58"
+    "notebookID": "64253d115c6663c1adda83d7"
 }
 
 ####
 GET http://localhost:8000/api/notes
 
 ####
-DELETE http://localhost:8000/api/notes/63f86b49809c60418c45360a
+GET http://localhost:8000/api/notes/64253d155c6663c1adda83e1
+
+####
+DELETE http://localhost:8000/api/notes/64253d155c6663c1adda83e1
+######
+PUT http://localhost:8000/api/notes/6425dc2a1736900b00628fae
+content-type: application/json
+
+{
+    "title": "Seventh Check"
+}

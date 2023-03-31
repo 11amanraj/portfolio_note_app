@@ -15,13 +15,6 @@ notebooksRouter.get('/', async (request: Request, response: Response, next: Next
                 path: 'notes',
                 options: { sort: { title: 1} }
             })
-
-        // const nb = await Notebook.aggregate([
-        //     {$match: { '_id': '641afffc26313f8e7380310c'}},
-        //     {$unwind: '$notes'},
-        // ])
-
-        // console.log(nb)
             
         response.json(notebook)
     } catch (error: any) {
@@ -152,10 +145,38 @@ notebooksRouter.post('/', async (request: Request, response: Response, next: Nex
                 next(error)
             }
         }
-    }
-
-    
+    }    
 })
+
+notebooksRouter.put('/:id', async (request: Request, response: Response, next: NextFunction) => {
+    try {
+        const { id } = request.params
+        const { title } = request.body
+    
+        if(!title) response.status(400).json('Incomplete request! Please add title')
+
+        const existingTitle = await Notebook.findOne({ $and: [
+            { _id: {$ne: new ObjectId(id)} },
+            { title: title },
+        ]})
+
+        if(existingTitle !== null) response.status(400).json(`${title} already exists! Please choose another title`)
+        
+        const updatedNotebook = await Notebook
+            .findByIdAndUpdate(id, { title: title }, { new: true, runValidators: true })
+  
+        if(updatedNotebook === null) return response.status(404).json('Notebook not found')
+
+        return response.status(201).json(updatedNotebook)
+    } catch(error: any) {
+        if(error.name === 'ValidationError') {
+            return response.status(400).json('Title must be atleast 3 characters long')
+        } else {
+            next(error)
+        }
+    }
+})
+
 
 notebooksRouter.delete('/:id', async (request: Request, response: Response, next: NextFunction) => {
     try {

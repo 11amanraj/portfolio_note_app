@@ -154,6 +154,46 @@ describe('DELETE request', () => {
     })
 })
 
+describe('PUT request', () => {
+    test('put requests changes title and returns updated notebook', async () => {
+        const { body: [selectedNotebook] } = await api
+            .get('/api/notebooks')
+
+        const newTitle = 'not' + selectedNotebook.title
+
+        const { body: updatedNotebook } = await api
+            .put(`/api/notebooks/${selectedNotebook.id}`)
+            .send({title: newTitle})
+            .expect(201)
+
+        expect(updatedNotebook.title).toBe(newTitle)
+    })
+
+    test('put request with already similar title to another notebook returns error', async () => {
+        const { body: [selectedNotebook, differentNotebook] } = await api
+            .get('/api/notebooks')
+
+        const newTitle = differentNotebook.title
+
+        await api
+            .put(`/api/notebooks/${selectedNotebook.id}`)
+            .send({title: newTitle})
+            .expect(400)
+    })
+
+    test('put request with title having less than 3 characters returns error', async() => {
+        const { body: [selectedNotebook] } = await api
+            .get('/api/notebooks')
+
+        const newTitle = 'to'
+
+        await api
+            .put(`/api/notebooks/${selectedNotebook.id}`)
+            .send({title: newTitle})
+            .expect(400)
+    })
+})
+
 
 afterAll(() => {
     mongoose.connection.close()

@@ -56,10 +56,13 @@ notesRouter.get('/:id', async (request: Request, response: Response, next: NextF
     try {
         const note = await Note.findById(request.params.id)
             .populate('tags', { name: 1 })
+
+        if(note === null) return response.status(404).json({message:'Note was not found'})
+
         response.json(note)
     } catch(error: any) {
         if(error.name === 'CastError') {
-            return response.status(400).json({message:'Notebook does not exist'})
+            return response.status(400).json({message:'Wrong Identification'})
         } else {
             next(error)
         }

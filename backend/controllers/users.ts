@@ -47,7 +47,8 @@ usersRouter.post('/', async (request: Request, response: Response, next: NextFun
         const user = new User({
             username: username,
             name: name,
-            passwordHash: passwordHash
+            passwordHash: passwordHash,
+            notebooks: []
         })
 
         const savedUser = await user.save()

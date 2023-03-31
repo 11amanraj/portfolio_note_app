@@ -32,7 +32,8 @@ export interface notebook {
     title: string,
     notes: PopulatedDoc<Document & Types.ObjectId[]>,
     tags: tag[],
-    id?: string
+    id?: string,
+    user?: string
 }
 
 export interface user {

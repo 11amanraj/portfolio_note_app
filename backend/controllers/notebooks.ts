@@ -129,23 +129,31 @@ notebooksRouter.get('/search/:keyword', async (request: Request, response: Respo
 })
 
 notebooksRouter.post('/', async (request: Request, response: Response, next: NextFunction) => {
-    const existingNotebook = await Notebook.find({title: request.body.title})
-    
-    if(existingNotebook.length > 0) {
-        return response.status(400).json(`${request.body.title} already exists`)
-    } else {
-        try {
-            const notebook = new Notebook(request.body)
-            const savedNotebook = await notebook.save()
-            return response.status(201).json(savedNotebook)
-        } catch(error: any) {
-            if(error.name === 'ValidationError') {
-                return response.status(400).json('Title must be atleast 3 characters long')
-            } else {
-                next(error)
-            }
+    try {
+        const { title, user } = request.body
+        
+        if(!user || !title) return response.status(400).json('Required value missing')
+        
+        const existingNotebook = await Notebook.findOne({title: title})
+        if(existingNotebook !== null ) {
+            return response.status(400).json(`${request.body.title} already exists`)
         }
-    }    
+        
+        const notebook = new Notebook(request.body)
+        const savedNotebook = await notebook.save()
+        return response.status(201).json(savedNotebook)
+    } catch(error: any) {
+        if(error.name === 'ValidationError') {
+            return response.status(400).json('Title must be atleast 3 characters long')
+        } else {
+            next(error)
+        }
+    }
+    
+    // if(existingNotebook.length > 0) {
+    //     return response.status(400).json(`${request.body.title} already exists`)
+    // } else {
+    // }    
 })
 
 notebooksRouter.put('/:id', async (request: Request, response: Response, next: NextFunction) => {

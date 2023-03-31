@@ -139,19 +139,20 @@ notesRouter.delete('/:id', async (request: Request, response: Response, next: Ne
 notesRouter.put('/:id', async (request: Request, response: Response, next: NextFunction) => {
     try {
         const note = await Note.findById(request.params.id)
-        const newTagsID = request.body.tags
-
-        const date = new Date()
-        const dateString = date
-            .toISOString()
-            .split('T')[0]
-            .split('-')
-            .reverse()
-            .join('-')
-
+        
         if(!note) {
             response.status(400).json({ error: 'note does not exist'})
         } else {
+            const newTagsID = request.body.tags
+    
+            const date = new Date()
+            const dateString = date
+                .toISOString()
+                .split('T')[0]
+                .split('-')
+                .reverse()
+                .join('-')
+
             const updatedNote = await Note.findOneAndUpdate({_id: request.params.id},
                 {...request.body, 
                     dateModified: date,
@@ -176,36 +177,15 @@ notesRouter.put('/:id', async (request: Request, response: Response, next: NextF
     
                 const { removedItems, addedItems } = arrayAdditionRemovalSeparator(oldTagsID, newTagsID)
     
-                const removedTagsDocument = await Tag.find({
-                    '_id': { 
-                        $in: removedItems
-                    }
-                })
-    
-                const addedTagsDocument = await Tag.find({
-                    '_id': { 
-                        $in: addedItems
-                    }
-                })
-    
-                // note id is added to new tags if any 
-                addedTagsDocument.length>0 && addedTagsDocument.forEach(async (tag) => {
-                    console.log('new items added')
-                    if(Array.isArray(tag?.notes) && updatedNote) {
-                        tag.notes?.push(updatedNote._id)
-                        await tag.save()
-                    }
-                })
-                
-                // note id is removed from new tags if any 
-                removedTagsDocument.length>0 && removedTagsDocument.forEach(async (tag) => {
-                    console.log('items removed')
-                    if(Array.isArray(tag?.notes) && updatedNote) {
-                        tag.notes?.pull(updatedNote._id)
-                        await tag.save()
-                    }
-                })
+                await Tag.updateMany(
+                    { _id: { $in: addedItems } },
+                    { '$push': { 'notes': request.params.id }}
+                )
 
+                await Tag.updateMany(
+                    { _id: { $in: removedItems } },
+                    { '$pull': { 'notes': request.params.id }}
+                )
             }
 
             return response.json(updatedNote)

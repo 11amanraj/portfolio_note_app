@@ -173,6 +173,20 @@ describe('PUT request', () => {
         expect(updatedNote.body.content).toBe(content)
     })
 
+    test('title is changed', async () => {
+        const { body: [selectedNote] } = await api
+            .get('/api/notes')
+
+        const newTitle = 'Very New Title'
+
+        const { body: updatedNote } = await api
+            .put(`/api/notes/${selectedNote.id}`)
+            .send({ title: newTitle })
+            .expect(200)
+
+        expect(updatedNote.title).toBe(newTitle)
+    })
+
     test('note is pinned', async () => {
         const pinStatus = true
 
@@ -213,8 +227,6 @@ describe('PUT request', () => {
 
         const allTags = await api
             .get('/api/tags')
-
-        console.log(allTags.body)
 
         const tagID = allTags.body[0].id
 

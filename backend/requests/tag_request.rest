@@ -10,3 +10,11 @@ GET http://localhost:8000/api/tags
 
 ####
 GET http://localhost:8000/api/tags/641b465133f999c895309327
+
+####
+PUT http://localhost:8000/api/tags/641b465133f999c895309327
+content-type: application/json
+
+{
+    "name": "geo"
+}

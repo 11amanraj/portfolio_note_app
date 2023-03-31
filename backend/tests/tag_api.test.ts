@@ -71,6 +71,34 @@ describe('POST request', () => {
     })
 })
 
+describe('PUT request', () => {
+    test('put requests changes title and returns updated notebook', async () => {
+        const { body: [selectedTag] } = await api
+            .get('/api/tags')
+
+        const newName = 'not' + selectedTag.name
+
+        const { body: updatedTag } = await api
+            .put(`/api/tags/${selectedTag.id}`)
+            .send({ name: newName })
+            .expect(201)
+
+        expect(updatedTag.name).toBe(newName)
+    })
+
+    test('put request with similar title to another notebook returns error', async () => {
+        const { body: [selectedTag, differentTag] } = await api
+            .get('/api/tags')
+
+        const newName = differentTag.name
+
+        await api
+            .put(`/api/tags/${selectedTag.id}`)
+            .send({ name: newName })
+            .expect(400)
+    })
+})
+
 afterAll(() => {
     mongoose.connection.close()
 })

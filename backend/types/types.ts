@@ -34,3 +34,11 @@ export interface notebook {
     tags: tag[],
     id?: string
 }
+
+export interface user {
+    username: string,
+    name: string,
+    passwordHash: string,
+    id?: string,
+    notebooks?: notebook[]
+}

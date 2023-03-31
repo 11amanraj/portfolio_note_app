@@ -43,6 +43,14 @@ describe('GET request', () => {
             .get(`/api/users/${savedUser.id}`)
             .expect(200)
     })
+
+    test('wrong id return 404 error', async () => {
+        const id = 'falseid'
+        
+        await api
+            .get(`/api/users/${id}`)
+            .expect(404)
+    })
 })
 
 describe('POST request', () => {

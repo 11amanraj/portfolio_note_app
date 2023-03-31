@@ -10,6 +10,3 @@ const logger = {
     info, error
 };
 exports.default = logger;
-// module.exports = {
-//     info, error
-// }

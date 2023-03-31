@@ -2,7 +2,10 @@ import { Schema, model, Types } from 'mongoose'
 import { user } from '../types/types'
 
 const userSchema = new Schema<user>({
-    username: String,
+    username: {
+        type: String,
+        minlength: 4
+    },
     name: String,
     passwordHash: String,
     notebooks: [

@@ -65,6 +65,44 @@ describe('POST request', () => {
             user.id === savedUser.id
         )).toBeDefined()
     })
+
+    test('returns error is any one of username, name or password is missing', async () => {
+        const newUser = {
+            username: 'JaneD',
+            password: 'goodbye'
+        }
+
+        await api
+            .post('/api/users')
+            .send(newUser)
+            .expect(400)
+    })
+
+    test('returns error if username has less than 4 characters', async () => {
+        const newUser = {
+            username: 'JD',
+            name: 'Jane Doe',
+            password: 'goodbye',
+        }
+
+        await api
+            .post('/api/users')
+            .send(newUser)
+            .expect(400)
+    })
+
+    test('returns error if username is not unique (case sensitive)', async () => {
+        const newUser = {
+            username: 'JDoe',
+            name: 'Jane Doe',
+            password: 'goodbye',
+        }
+
+        await api
+            .post('/api/users')
+            .send(newUser)
+            .expect(400)
+    })
 })
 
 afterAll(() => {

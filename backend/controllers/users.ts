@@ -19,8 +19,13 @@ usersRouter.get('/:id', async (request: Request, response: Response, next: NextF
         const { id } = request.params
         const user = await User.findById(id)
 
+        if(user === null) return response.status(404).json('User not found')
+
         return response.status(200).json(user)
-    } catch(error) {
+    } catch(error: any) {
+        if(error.name === 'CastError') {
+            return response.status(404).json('User not found')
+        }
         next(error)
     }
 })
@@ -28,6 +33,15 @@ usersRouter.get('/:id', async (request: Request, response: Response, next: NextF
 usersRouter.post('/', async (request: Request, response: Response, next: NextFunction) => {
     try {
         const { username, name, password } = request.body
+
+        if(!username || !name || !password) {
+            return response.status(400).json('Necessary field is missing')
+        }
+
+        const duplicateUser = await User.findOne({username: username})
+
+        if(duplicateUser !== null) return response.status(400).json(`User ${username} already exists`)
+
         const passwordHash = await bcrypt.hash(password, 10)
 
         const user = new User({
@@ -38,7 +52,10 @@ usersRouter.post('/', async (request: Request, response: Response, next: NextFun
 
         const savedUser = await user.save()
         return response.status(201).json(savedUser)
-    } catch(error) {
+    } catch(error: any) {
+        if(error.name === 'ValidationError') {
+            return response.status(400).json('Username must be atleast 4 characters long')
+        }
         next(error)
     }
 })

@@ -7,8 +7,12 @@ import Tag from '../models/tag'
 
 tagsRouter.get('/', async (request: Request, response: Response, next: NextFunction) => {
     try {
+        const user = request.user
+        if(!user) return response.status(401).json('Authorization Error')
+
         const tags = await Tag
-            .find({})
+            .find({user: user._id})
+            .populate('user')
             .populate('notes', { title: 1, id: 1 })
 
         response.json(tags)
@@ -19,6 +23,9 @@ tagsRouter.get('/', async (request: Request, response: Response, next: NextFunct
 
 tagsRouter.get('/:id', async (request: Request, response: Response, next: NextFunction) => {
     try {
+        const user = request.user
+        if(!user) return response.status(401).json('Authorization Error')
+        
         const tag = await Tag.findById(request.params.id)
             .populate(
                 {   path: 'notes',

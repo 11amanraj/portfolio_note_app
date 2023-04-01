@@ -3,19 +3,19 @@ import { notes } from '../types/types'
 
 interface tag {
     name: string,
-    notes: PopulatedDoc<Document & Types.ObjectId[]>
-    // notes: Types.ObjectId[]
-    // notes: PopulatedDoc<notes>
-    // notes: [
-    //     {
-    //         type: Types.ObjectId,
-    //         ref: string
-    //     }
-    // ]
+    notes: PopulatedDoc<Document & Types.ObjectId[]>,
+    user?: {
+        type: Schema.Types.ObjectId,
+        ref: string
+    }
 }
 
 const tagSchema = new Schema<tag>({
     name: String,
+    user: {
+        type: Schema.Types.ObjectId,
+        ref: 'User'
+    },
     notes: [
         {
             type: Schema.Types.ObjectId,

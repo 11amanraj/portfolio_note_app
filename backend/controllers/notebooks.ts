@@ -1,11 +1,25 @@
 import { Request, Response, NextFunction, Router } from 'express'
 import { ObjectId } from 'mongodb'
-
-const notebooksRouter = Router()
 import Notebook from '../models/notebook'
 import Note from '../models/note'
 import Tag from '../models/tag'
 import { notes } from '../types/types'
+import User from '../models/user'
+import jwt, { JwtPayload } from 'jsonwebtoken'
+const notebooksRouter = Router()
+
+const getToken = (request: Request) => {
+    const auth = request.get('authorization')
+    if(auth && auth.startsWith('Bearer ')) {
+        return auth.replace('Bearer ', '')
+    }
+    return null 
+}
+
+interface token extends JwtPayload {
+    username: string,
+    id: string
+}
 
 notebooksRouter.get('/', async (request: Request, response: Response, next: NextFunction) => {
     try {
@@ -71,6 +85,7 @@ notebooksRouter.get('/:id', async (request: Request, response: Response, next: N
 
         const updatedNotebook = await Notebook
             .findByIdAndUpdate(request.params.id, {tags: tags})
+            .populate('user')
             .populate<{notes: notes}>('notes', 
                 {   title: 1, 
                     author: 1, 
@@ -129,17 +144,45 @@ notebooksRouter.get('/search/:keyword', async (request: Request, response: Respo
 })
 
 notebooksRouter.post('/', async (request: Request, response: Response, next: NextFunction) => {
+    let token
+    const authHeader = request.get('authorization')
+    
+    if(!authHeader) {
+        return response.status(400).json('authorization header missing')
+    } else if (authHeader.startsWith('Bearer ')){
+        token = authHeader.substring(7, authHeader.length)
+    } else {
+        console.log(authHeader)
+        return response.status(400).json('incorrect token format')
+    }
+
+    const verifiedToken = jwt.verify(token, process.env.SECRET as string) as JwtPayload    
+    
+    if(!verifiedToken.id) {
+        return response.status(401).json('Token invalid')
+    }
+    // if (!decodedToken.id) {    return response.status(401).json({ error: 'token invalid' })  }  const user = await User.findById(decodedToken.id)
+
     try {
-        const { title, user } = request.body
+        const { title } = request.body
         
-        if(!user || !title) return response.status(400).json('Required value missing')
+        if(!title) return response.status(400).json('Title missing')
         
         const existingNotebook = await Notebook.findOne({title: title})
         if(existingNotebook !== null ) {
-            return response.status(400).json(`${request.body.title} already exists`)
+            return response.status(400).json(`${title} already exists`)
+        }
+
+        const user = await User.findById(verifiedToken.id)
+
+        if(!user) return response.status(404).json('User not found')
+
+        const newNotebook = {
+            title: title,
+            user: user._id
         }
         
-        const notebook = new Notebook(request.body)
+        const notebook = new Notebook(newNotebook)
         const savedNotebook = await notebook.save()
         return response.status(201).json(savedNotebook)
     } catch(error: any) {

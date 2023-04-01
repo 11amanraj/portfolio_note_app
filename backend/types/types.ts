@@ -1,4 +1,4 @@
-import { Date, PopulatedDoc, Types } from 'mongoose'
+import { Date, ObjectId, PopulatedDoc, Types } from 'mongoose'
 
 export interface notes {
     id?: string;
@@ -30,6 +30,8 @@ export interface notes {
 export interface tag {
     title: string,
     notes: PopulatedDoc<Document & Types.ObjectId[]>,
+    id?: string,
+    _id?: ObjectId
     user: {
         type: Types.ObjectId,
         ref: string

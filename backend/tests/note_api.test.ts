@@ -55,30 +55,16 @@ beforeEach(async () => {
         await newNote.save() 
     })
     await Promise.all(notesPromiseArray)
-    
-    // const savedNewNotebook = await api
-    //     .post('/api/notebooks')
-    //     .send({ title: 'Alpha Notebook' })
 
-    // const tagList = ['tag1', 'tag2', 'tag3']
-
-    // const tagPromiseArray = tagList.map(async (tag) => {
-    //     const newTag = new Tag({name: tag})
-    //     await newTag.save() 
-    // })
-    // await Promise.all(tagPromiseArray)
-
-    // const promiseArray = notesTitle.map(note => 
-    //     api
-    //         .post('/api/notes')
-    //         .send({
-    //             title: note,
-    //             content: '',
-    //             author: 'John Doe',
-    //             notebookID: savedNewNotebook.body.id
-    //         })
-    // )
-    // await Promise.all(promiseArray)
+    const tagList = ['tag1', 'tag2', 'tag3']
+    const tagPromiseArray = tagList.map(async (tag) => {
+        const newTag = new Tag({
+            title: tag,
+            user: savedUser._id
+        })
+        await newTag.save() 
+    })
+    await Promise.all(tagPromiseArray)
 }, 10000)
 
 // npm run test tests/note_api.test.js
@@ -219,6 +205,187 @@ describe('POST request', () => {
     })
 })
 
+describe('PUT request', () => {
+    test('content is updated and put request returns updatedDocument', async () => {
+        const content = 'Working'
+
+        const allNotes = await api
+            .get('/api/notes')
+            .set({ Authorization: token })
+
+        const { body: updatedNote } = await api
+            .put(`/api/notes/${allNotes.body[0].id}`)
+            .set('Content-Type', 'application/json')
+            .send({content: content})
+            .set({ Authorization: token })
+            .expect(200)
+
+        const { body: note } = await api
+            .get(`/api/notes/${updatedNote.id}`)
+            .set({ Authorization: token })
+
+        expect(note.content).toBe(content)
+        expect(updatedNote.content).toBe(content)
+    })
+    
+    test('title is changed', async () => {
+        const { body: [selectedNote] } = await api
+            .get('/api/notes')
+            .set({ Authorization: token })
+
+        const newTitle = 'Very New Title'
+
+        const { body: updatedNote } = await api
+            .put(`/api/notes/${selectedNote.id}`)
+            .send({ title: newTitle })
+            .set({ Authorization: token })
+            .expect(200)
+
+        expect(updatedNote.title).toBe(newTitle)
+    })
+    
+    test('note is pinned', async () => {
+        const pinStatus = true
+
+        const allNotes = await api
+            .get('/api/notes')
+            .set({ Authorization: token })
+
+        // note is pinned
+        await api
+            .put(`/api/notes/${allNotes.body[0].id}`)
+            .set('Content-Type', 'application/json')
+            .send({ pinned: pinStatus})
+            .set({ Authorization: token })
+            .expect(200)
+
+        const response = await api
+            .get('/api/notes')
+            .set({ Authorization: token })
+
+        expect(response.body[0].pinned).toBe(pinStatus)
+
+        // note is unpinned
+
+        const newPinStatus = false
+
+        await api
+            .put(`/api/notes/${allNotes.body[0].id}`)
+            .set('Content-Type', 'application/json')
+            .send({ pinned: newPinStatus})
+            .set({ Authorization: token })
+            .expect(200)
+
+        const newResponse = await api
+            .get('/api/notes')
+            .set({ Authorization: token })
+
+        expect(newResponse.body[0].pinned).toBe(newPinStatus)
+    })
+    
+    test('tag is added to note', async () => {
+        const allNotes = await api
+            .get('/api/notes')
+            .set({ Authorization: token })
+
+        const allTags = await api
+            .get('/api/tags')
+            .set({ Authorization: token })
+
+        const tagID = allTags.body[0].id
+
+        await api
+            .put(`/api/notes/${allNotes.body[0].id}`)
+            .set('Content-Type', 'application/json')
+            .send({tags: [tagID]})
+            .set({ Authorization: token })
+            .expect(200)
+
+        const response = await api
+            .get('/api/notes')
+            .set({ Authorization: token })
+
+        expect(response.body[0].tags.find((tag: tag) => 
+            tag.id === tagID)
+        ).toBeDefined()
+    })
+    
+    test('removing tag removes associated reference', async () => {
+        const allNotes = await api
+            .get('/api/notes')
+            .set({ Authorization: token })
+
+        const allTags = await api
+            .get('/api/tags')
+            .set({ Authorization: token })
+
+        const selectedNote = allNotes.body[0].id
+
+        const tagID1 = allTags.body[0].id
+        const tagID2 = allTags.body[1].id
+        const tagID3 = allTags.body[2].id
+
+        // adding tag1 and tag 2
+        
+        const firstAction = [tagID1, tagID2]
+
+        const firstActionResponse = await api
+            .put(`/api/notes/${selectedNote}`)
+            .set('Content-Type', 'application/json')
+            .send({tags: firstAction})
+            .set({ Authorization: token })
+            .expect(200)
+
+        expect(firstActionResponse.body.tags.filter((tag: tag) => 
+            firstAction.includes(tag)
+        )).toHaveLength(2)
+
+        // checking if note id is added to corresponding tag
+        const tagPromiseArray = firstAction.map(async (tag) => {
+            const response = await api
+                .get(`/api/tags/${tag}`)
+                .set({ Authorization: token })
+            expect(response.body.notes.find((note: notes) => 
+                note.id === selectedNote)
+            ).toBeDefined()
+        })
+
+        await Promise.all(tagPromiseArray)
+
+        // adding tag3 and removing tag 2
+
+        const secondAction = [tagID1, tagID3]
+
+        const secondActionResponse = await api
+            .put(`/api/notes/${selectedNote}`)
+            .set('Content-Type', 'application/json')
+            .send({tags: secondAction})
+            .set({ Authorization: token })
+            .expect(200)
+
+        expect(secondActionResponse.body.tags.filter((tag: tag) => 
+            secondAction.includes(tag)
+        )).toHaveLength(2)
+
+        // checking if note id is added to new tag (tag3)
+        const tagID3Response = await api
+            .get(`/api/tags/${tagID3}`)
+            .set({ Authorization: token })
+        expect(tagID3Response.body.notes.find((note: notes) => 
+            note.id === selectedNote)
+        ).toBeDefined()
+
+        // checking if note id is removed from the removed tag (tag2)
+        const tagID2Response = await api
+            .get(`/api/tags/${tagID2}`)
+            .set({ Authorization: token })
+        expect(tagID2Response.body.notes.find((note: notes) => 
+            note.id === selectedNote)
+        ).toBeUndefined()
+    })
+})
+    
+
 // describe('DELETE request', () => {
 //     test('deleting note is succesful and also remove reference in associated Notebook', async () => {
 //         const allNotebooks = await api.get('/api/notebooks')
@@ -298,165 +465,6 @@ describe('POST request', () => {
 //             note.id === selectedNote)
 //         ).toBeUndefined()
 //         expect(responseTag2.body.notes.find((note: notes) => 
-//             note.id === selectedNote)
-//         ).toBeUndefined()
-//     })
-// })
-
-// describe('PUT request', () => {
-//     test('content is updated and put request returns updatedDocument', async () => {
-//         const content = 'Working'
-
-//         const allNotes = await api
-//             .get('/api/notes')
-
-//         const updatedNote = await api
-//             .put(`/api/notes/${allNotes.body[0].id}`)
-//             .set('Content-Type', 'application/json')
-//             .send({content: content})
-//             .expect(200)
-
-//         const response = await api
-//             .get('/api/notes')
-
-//         expect(response.body[0].content).toBe(content)
-//         expect(updatedNote.body.content).toBe(content)
-//     })
-
-//     test('title is changed', async () => {
-//         const { body: [selectedNote] } = await api
-//             .get('/api/notes')
-
-//         const newTitle = 'Very New Title'
-
-//         const { body: updatedNote } = await api
-//             .put(`/api/notes/${selectedNote.id}`)
-//             .send({ title: newTitle })
-//             .expect(200)
-
-//         expect(updatedNote.title).toBe(newTitle)
-//     })
-
-//     test('note is pinned', async () => {
-//         const pinStatus = true
-
-//         const allNotes = await api
-//             .get('/api/notes')
-
-//         // note is pinned
-//         await api
-//             .put(`/api/notes/${allNotes.body[0].id}`)
-//             .set('Content-Type', 'application/json')
-//             .send({ pinned: pinStatus})
-//             .expect(200)
-
-//         const response = await api
-//             .get('/api/notes')
-
-//         expect(response.body[0].pinned).toBe(pinStatus)
-
-//         // note is unpinned
-
-//         const newPinStatus = false
-
-//         await api
-//             .put(`/api/notes/${allNotes.body[0].id}`)
-//             .set('Content-Type', 'application/json')
-//             .send({ pinned: newPinStatus})
-//             .expect(200)
-
-//         const newResponse = await api
-//             .get('/api/notes')
-
-//         expect(newResponse.body[0].pinned).toBe(newPinStatus)
-//     })
-
-//     test('tag is added to note', async () => {
-//         const allNotes = await api
-//             .get('/api/notes')
-
-//         const allTags = await api
-//             .get('/api/tags')
-
-//         const tagID = allTags.body[0].id
-
-//         await api
-//             .put(`/api/notes/${allNotes.body[0].id}`)
-//             .set('Content-Type', 'application/json')
-//             .send({tags: [tagID]})
-//             .expect(200)
-
-//         const response = await api
-//             .get('/api/notes')
-
-//         expect(response.body[0].tags.find((tag: tag) => 
-//             tag.id === tagID)
-//         ).toBeDefined()
-//     })
-
-//     test('removing tag removes associated reference', async () => {
-//         const allNotes = await api
-//             .get('/api/notes')
-
-//         const allTags = await api
-//             .get('/api/tags')
-
-//         const selectedNote = allNotes.body[0].id
-
-//         const tagID1 = allTags.body[0].id
-//         const tagID2 = allTags.body[1].id
-//         const tagID3 = allTags.body[2].id
-
-//         // adding tag1 and tag 2
-        
-//         const firstAction = [tagID1, tagID2]
-
-//         const firstActionResponse = await api
-//             .put(`/api/notes/${selectedNote}`)
-//             .set('Content-Type', 'application/json')
-//             .send({tags: firstAction})
-//             .expect(200)
-
-//         expect(firstActionResponse.body.tags.filter((tag: tag) => 
-//             firstAction.includes(tag)
-//         )).toHaveLength(2)
-
-//         // checking if note id is added to corresponding tag
-//         const tagPromiseArray = firstAction.map(async (tag) => {
-//             const response = await api
-//                 .get(`/api/tags/${tag}`)
-//             expect(response.body.notes.find((note: notes) => 
-//                 note.id === selectedNote)
-//             ).toBeDefined()
-//         })
-
-//         await Promise.all(tagPromiseArray)
-
-//         // adding tag3 and removing tag 2
-
-//         const secondAction = [tagID1, tagID3]
-
-//         const secondActionResponse = await api
-//             .put(`/api/notes/${selectedNote}`)
-//             .set('Content-Type', 'application/json')
-//             .send({tags: secondAction})
-//             .expect(200)
-
-//         expect(secondActionResponse.body.tags.filter((tag: tag) => 
-//             secondAction.includes(tag)
-//         )).toHaveLength(2)
-
-//         // checking if note id is added to new tag (tag3)
-//         const tagID3Response = await api
-//             .get(`/api/tags/${tagID3}`)
-//         expect(tagID3Response.body.notes.find((note: notes) => 
-//             note.id === selectedNote)
-//         ).toBeDefined()
-
-//         // checking if note id is removed from the removed tag (tag2)
-//         const tagID2Response = await api
-//             .get(`/api/tags/${tagID2}`)
-//         expect(tagID2Response.body.notes.find((note: notes) => 
 //             note.id === selectedNote)
 //         ).toBeUndefined()
 //     })

@@ -151,10 +151,13 @@ notesRouter.delete('/:id', async (request: Request, response: Response, next: Ne
 
 notesRouter.put('/:id', async (request: Request, response: Response, next: NextFunction) => {
     try {
+        const user = request.user
+        if(!user) return response.status(401).json('Authorization Error')
+
         const note = await Note.findById(request.params.id)
         
         if(!note) {
-            response.status(400).json({ error: 'note does not exist'})
+            response.status(404).json({ error: 'note does not exist'})
         } else {
             const newTagsID = request.body.tags
     
@@ -201,7 +204,7 @@ notesRouter.put('/:id', async (request: Request, response: Response, next: NextF
                 )
             }
 
-            return response.json(updatedNote)
+            return response.status(200).json(updatedNote)
         }
     } catch(error) {
         next(error)

@@ -39,6 +39,7 @@ export interface notebook {
 export interface user {
     username: string,
     name: string,
+    _id?: Types.ObjectId,
     passwordHash: string,
     id?: string,
     notebooks?: notebook[]

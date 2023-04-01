@@ -9,17 +9,8 @@ import jwt, { JwtPayload } from 'jsonwebtoken'
 const notebooksRouter = Router()
 
 notebooksRouter.get('/', async (request: Request, response: Response, next: NextFunction) => {
-    const token = request.token
-    if(token === null || token === undefined ) return response.status(401).json('authorization error')
-    
-    const decodedToken = jwt.verify(token, process.env.SECRET as string) as JwtPayload    
-    
-    if(!decodedToken.id) {
-        return response.status(401).json('Token invalid')
-    }
-
     try {
-        const user = await User.findById(decodedToken.id)
+        const user = request.user
 
         if(!user) return response.status(404).json('User not found')
 
@@ -38,18 +29,9 @@ notebooksRouter.get('/', async (request: Request, response: Response, next: Next
     
 })
 
-notebooksRouter.get('/:id', async (request: Request, response: Response, next: NextFunction) => {
-    const token = request.token
-    if(token === null || token === undefined ) return response.status(401).json('authorization error')
-    
-    const decodedToken = jwt.verify(token, process.env.SECRET as string) as JwtPayload    
-    
-    if(!decodedToken.id) {
-        return response.status(401).json('Token invalid')
-    }
-    
+notebooksRouter.get('/:id', async (request: Request, response: Response, next: NextFunction) => {  
     try {
-        const user = await User.findById(decodedToken.id)
+        const user = request.user
 
         if(!user) return response.status(404).json('User not found')
 
@@ -167,15 +149,6 @@ notebooksRouter.get('/search/:keyword', async (request: Request, response: Respo
 })
 
 notebooksRouter.post('/', async (request: Request, response: Response, next: NextFunction) => {
-    const token = request.token
-    if(token === null || token === undefined ) return response.status(401).json('authorization error')
-    
-    const decodedToken = jwt.verify(token, process.env.SECRET as string) as JwtPayload    
-    
-    if(!decodedToken.id) {
-        return response.status(401).json('Token invalid')
-    }
-    
     try {
         const { title } = request.body
         
@@ -186,7 +159,7 @@ notebooksRouter.post('/', async (request: Request, response: Response, next: Nex
             return response.status(400).json(`${title} already exists`)
         }
 
-        const user = await User.findById(decodedToken.id)
+        const user = request.user
 
         if(!user) return response.status(404).json('User not found')
 

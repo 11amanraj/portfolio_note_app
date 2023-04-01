@@ -6,9 +6,13 @@ import Tag from '../models/tag'
 
 notesRouter.get('/', async (request: Request, response: Response, next: NextFunction) => {
     try {
+        const user = request.user
+        if(!user) return response.status(401).json('Authorization Error')
+
         const notes = await Note
-            .find({})
+            .find({user: user._id})
             // .sort({ dateCreated: -1 }) 
+            .populate('user')
             .populate('notebook', { title: 1, id: 1 })
             .populate('tags', { name: 1 })
 
@@ -71,6 +75,11 @@ notesRouter.get('/:id', async (request: Request, response: Response, next: NextF
 
 notesRouter.post('/', async (request: Request, response: Response, next: NextFunction) => {
     try {
+        const user = request.user
+        if(!user) return response.status(401).json('Authorization Error')
+
+        if(!request.body.notebookID) return response.status(404).json('Notebook ID missing')
+
         const notebook = await Notebook.findById(request.body.notebookID)
 
         if (notebook === null) {
@@ -97,6 +106,7 @@ notesRouter.post('/', async (request: Request, response: Response, next: NextFun
                 title: title,
                 content: request.body.content,
                 author: request.body.author,
+                user: user._id,
                 pinned: false,
                 dateCreated: date,
                 stringDateCreated: dateString,

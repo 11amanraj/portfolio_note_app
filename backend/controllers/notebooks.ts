@@ -93,7 +93,13 @@ notebooksRouter.get('/:id', async (request: Request, response: Response, next: N
         
         const notebook = await Notebook
             .findOne({_id: new ObjectId(request.params.id), user: user._id})
-
+            .populate<{notes: notes}>('notes', 
+                {   title: 1, 
+                    author: 1, 
+                    id: 1, 
+                    stringDateCreated: 1, 
+                    pinned: 1})
+                    
         // add Tags later
 
         if(notebook === null) response.status(401).json('Not Authorized')

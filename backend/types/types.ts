@@ -5,6 +5,10 @@ export interface notes {
     title: string;
     content: string;
     author: string;
+    user?: {
+        type: Types.ObjectId,
+        ref: string
+    };
     pinned: boolean;
     dateCreated: Date;
     dateModified: Date;

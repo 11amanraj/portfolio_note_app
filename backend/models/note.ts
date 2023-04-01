@@ -10,6 +10,10 @@ const noteSchema = new Schema<notes>({
     dateModified: Date,
     stringDateCreated: String,
     stringDateModified: String,
+    user: {
+        type: Schema.Types.ObjectId,
+        ref: 'User'
+    },
     notebook: {
         type: Schema.Types.ObjectId,
         ref: 'Notebook'

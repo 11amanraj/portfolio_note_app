@@ -2,9 +2,9 @@ POST http://localhost:8000/api/users
 content-type: application/json
 
 {
-    "username": "JDoe",
-    "name": "John Doe",
-    "password": "welcome"
+    "username": "anon",
+    "name": "Anonymous",
+    "password": "qwerty"
 }
 
 ####

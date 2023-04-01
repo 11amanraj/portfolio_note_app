@@ -49,7 +49,6 @@ const userExtractor = (request, response, next) => __awaiter(void 0, void 0, voi
         const token = request.token;
         if (token === null || token === undefined)
             return response.status(401).json('authorization error');
-        console.log(token);
         const decodedToken = jsonwebtoken_1.default.verify(token, process.env.SECRET);
         if (!decodedToken.id) {
             return response.status(401).json('Token invalid');

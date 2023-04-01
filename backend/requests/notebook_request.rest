@@ -16,7 +16,7 @@ content-type: application/json
 
 ####
 GET http://localhost:8000/api/notebooks
-Authorization: Bearer JhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkpEb2UiLCJpZCI6IjY0MjcyMmMzNzJlZTg5YzVhM2RlYTNiMSIsImlhdCI6MTY4MDM1MjE3MH0.dMF4cVs8Rt8Ckb4oXGlY4ZOZX30FxJraHw7JKO_ulkw
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkpEb2UiLCJpZCI6IjY0MjcyMmMzNzJlZTg5YzVhM2RlYTNiMSIsImlhdCI6MTY4MDM1MjE3MH0.dMF4cVs8Rt8Ckb4oXGlY4ZOZX30FxJraHw7JKO_ulkw
 
 #####
 GET http://localhost:8000/api/notebooks/64282443419538d5cc7cf117

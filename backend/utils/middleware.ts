@@ -43,7 +43,6 @@ const userExtractor = async (request: Request, response: Response, next: NextFun
         
         if(token === null || token === undefined ) return response.status(401).json('authorization error')
         
-        console.log(token)
         const decodedToken = jwt.verify(token, process.env.SECRET as string) as JwtPayload    
         
         if(!decodedToken.id) {

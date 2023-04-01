@@ -24,6 +24,7 @@ mongoose.connect(config.MONGO_URL)
 app.use(cors())
 app.use(express.json())
 app.use(middleware.requestLogger)
+app.use(middleware.tokenExtractor)
 
 app.use('/api/notes', notesRouter)
 app.use('/api/notebooks', notebooksRouter)

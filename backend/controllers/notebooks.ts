@@ -144,25 +144,15 @@ notebooksRouter.get('/search/:keyword', async (request: Request, response: Respo
 })
 
 notebooksRouter.post('/', async (request: Request, response: Response, next: NextFunction) => {
-    let token
-    const authHeader = request.get('authorization')
+    const token = request.token
+    if(token === null || token === undefined ) return response.status(401).json('authorization error')
     
-    if(!authHeader) {
-        return response.status(400).json('authorization header missing')
-    } else if (authHeader.startsWith('Bearer ')){
-        token = authHeader.substring(7, authHeader.length)
-    } else {
-        console.log(authHeader)
-        return response.status(400).json('incorrect token format')
-    }
-
-    const verifiedToken = jwt.verify(token, process.env.SECRET as string) as JwtPayload    
+    const decodedToken = jwt.verify(token, process.env.SECRET as string) as JwtPayload    
     
-    if(!verifiedToken.id) {
+    if(!decodedToken.id) {
         return response.status(401).json('Token invalid')
     }
-    // if (!decodedToken.id) {    return response.status(401).json({ error: 'token invalid' })  }  const user = await User.findById(decodedToken.id)
-
+    
     try {
         const { title } = request.body
         
@@ -173,7 +163,7 @@ notebooksRouter.post('/', async (request: Request, response: Response, next: Nex
             return response.status(400).json(`${title} already exists`)
         }
 
-        const user = await User.findById(verifiedToken.id)
+        const user = await User.findById(decodedToken.id)
 
         if(!user) return response.status(404).json('User not found')
 
@@ -192,11 +182,6 @@ notebooksRouter.post('/', async (request: Request, response: Response, next: Nex
             next(error)
         }
     }
-    
-    // if(existingNotebook.length > 0) {
-    //     return response.status(400).json(`${request.body.title} already exists`)
-    // } else {
-    // }    
 })
 
 notebooksRouter.put('/:id', async (request: Request, response: Response, next: NextFunction) => {

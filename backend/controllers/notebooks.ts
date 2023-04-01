@@ -157,17 +157,16 @@ notebooksRouter.get('/search/:keyword', async (request: Request, response: Respo
 notebooksRouter.post('/', async (request: Request, response: Response, next: NextFunction) => {
     try {
         const { title } = request.body
-        
         if(!title) return response.status(400).json('Title missing')
         
-        const existingNotebook = await Notebook.findOne({title: title})
-        if(existingNotebook !== null ) {
-            return response.status(400).json(`${title} already exists`)
-        }
-
+        
         const user = request.user
-
         if(!user) return response.status(404).json('User not found')
+        
+        const existingNotebook = await Notebook.findOne({title: title, user: user._id})
+        if(existingNotebook !== null ) {
+            return response.status(409).json(`${title} already exists`)
+        }
 
         const newNotebook = {
             title: title,

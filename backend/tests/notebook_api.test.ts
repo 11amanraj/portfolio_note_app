@@ -159,7 +159,47 @@ describe('POST request', () => {
             .post('/api/notebooks')
             .send(newNotebook)
             .set({Authorization: token})
-            .expect(400)
+            .expect(409)
+    })
+
+    test('two user can create notebooks with same name', async () => {
+        // creating second user
+        const password = 'qwerty'
+        const passwordHash = await bcrypt.hash(password, 10)
+
+        const user = new User({
+            username: 'anon',
+            name: 'Anonymous',
+            passwordHash: passwordHash,
+            notebooks: []
+        })
+    
+        await user.save()
+    
+        // logging in second user
+        const response = await api
+            .post('/api/login')
+            .send({username: 'anon', password: password})
+
+        const secondToken = `Bearer ${response.body.token}`
+
+        // saving a notebook for first user with same name
+        const newNotebook = {
+            title: 'First Notebook'
+        }
+        
+        await api
+            .post('/api/notebooks')
+            .send(newNotebook)
+            .set({Authorization: token})
+            .expect(409)
+
+        // saving a notebook for second user with same name
+        await api
+            .post('/api/notebooks')
+            .send({ title: 'First Notebook' })
+            .set({Authorization: secondToken})
+            .expect(201)
     })
 })
 

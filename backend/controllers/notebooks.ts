@@ -12,7 +12,7 @@ notebooksRouter.get('/', async (request: Request, response: Response, next: Next
     try {
         const user = request.user
 
-        if(!user) return response.status(404).json('User not found')
+        if(!user) return response.status(401).json('Authorization Error')
 
         const notebook = await Notebook
             .find({user: user._id})

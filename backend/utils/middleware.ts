@@ -26,13 +26,20 @@ const errorHandler = (error: any, request: Request, response: Response, next: Ne
 const tokenExtractor = (request: Request, response: Response, next: NextFunction) => {
     const authHeader = request.get('authorization')
 
-    if(!authHeader) {
-        request.token = null
-    } else if (authHeader.startsWith('Bearer ')){
+    if(authHeader && authHeader.startsWith('Bearer ')) {
         request.token = authHeader.substring(7, authHeader.length)
-    } else {
+    } else if(authHeader && !authHeader.startsWith('Bearer ')) {
         request.token = null
     }
+
+    // if(!authHeader) {
+    //     // return
+    //     // request.token = null
+    // } else if (authHeader.startsWith('Bearer ')){
+    //     request.token = authHeader.substring(7, authHeader.length)
+    // } else {
+    //     request.token = null
+    // }
     
     next()
 }
@@ -40,16 +47,19 @@ const tokenExtractor = (request: Request, response: Response, next: NextFunction
 const userExtractor = async (request: Request, response: Response, next: NextFunction) => {
     try {
         const token = request.token
+
+        if(token === null) return response.status(401).json('authorization error')
         
-        if(token === null || token === undefined ) return response.status(401).json('authorization error')
+        // if(token === null || token === undefined ) return response.status(401).json('authorization error')
+        if(token) {
+            const decodedToken = jwt.verify(token, process.env.SECRET as string) as JwtPayload    
+            
+            if(!decodedToken.id) {
+                return response.status(401).json('Token invalid')
+            }
         
-        const decodedToken = jwt.verify(token, process.env.SECRET as string) as JwtPayload    
-        
-        if(!decodedToken.id) {
-            return response.status(401).json('Token invalid')
+            request.user = await User.findById(decodedToken.id)
         }
-    
-        request.user = await User.findById(decodedToken.id)
     } catch(error: any) {
         if(error.name === 'JsonWebTokenError') {
             return response.status(401).json('invalid token')

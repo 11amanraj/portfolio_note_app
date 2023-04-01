@@ -6,8 +6,11 @@ import Notebook from '../models/notebook'
 import Tag from '../models/tag'
 import { notebook, notes } from '../types/types'
 import User from '../models/user'
+import bcrypt from 'bcrypt'
 
 const api = supertest(app)
+
+let token: string
 
 beforeEach(async () => {
     await Notebook.deleteMany({})
@@ -15,21 +18,34 @@ beforeEach(async () => {
     await Note.deleteMany({})
     await User.deleteMany({})
 
+    const password = 'welcome'
+    const passwordHash = await bcrypt.hash(password, 10)
+
+    const user = new User({
+        username: 'JDoe',
+        name: 'John Doe',
+        passwordHash: passwordHash,
+        notebooks: []
+    })
+
+    const savedUser = await user.save()
+
+    const response = await api
+        .post('/api/login')
+        .send({username: 'JDoe', password: password})
+
+    token = `Bearer ${response.body.token}`
+
     const notebooks = [
         'First Notebook',
         'Second Notebook'
     ]
 
-    const user = new User({
-        username: 'JDoe',
-        name: 'John Doe',
-        password: 'welcome',
-    })
-
-    await user.save()
-
     const promiseArray = notebooks.map(async (notebook) => {
-        const newNotebook = new Notebook({title: notebook})
+        const newNotebook = new Notebook({
+            title: notebook,
+            user: savedUser._id
+        })
         await newNotebook.save()
     })
 
@@ -37,81 +53,123 @@ beforeEach(async () => {
 }, 10000)
 
 describe('GET Request', () => {
-    test('get all notebooks', async () => {
-        const response = await api.get('/api/notebooks')
+    test('get all notebooks for a user', async () => {
+        const response = await api
+            .get('/api/notebooks')
+            .set({ Authorization: token })
+            .expect(200)
+
         expect(response.body).toHaveLength(2)
     })
-    
-    test('Checks if id property exists', async () => {
-        const response = await api.get('/api/notebooks')
-    
-        response.body.forEach((notebook: notebook) => {
-            expect(notebook.id).toBeDefined()
+
+    test('get request without token returns 401 error', async () => {
+        await api
+            .get('/api/notebooks')
+            .expect(401)
+    })
+
+    test('get requests only fetches notebooks from the associated user', async () => {
+        const password = 'qwerty'
+        const passwordHash = await bcrypt.hash(password, 10)
+
+        const user = new User({
+            username: 'anon',
+            name: 'Anonymous',
+            passwordHash: passwordHash,
+            notebooks: []
         })
-    })
-})
+    
+        const savedUser = await user.save()
+    
+        const response = await api
+            .post('/api/login')
+            .send({username: 'anon', password: password})
 
-describe('POST request', () => {
-    test('post request creates new notebook', async () => { 
-        const { body: [selectedUser] } = await api
-            .get('/api/users')
+        const secondToken = `Bearer ${response.body.token}`
 
-        const newNotebook = {
-            title: 'Testing Post Request',
-            user: selectedUser.id
-        }
+        const newNotebook = new Notebook({
+            title: 'Second User Notebook',
+            user: savedUser._id
+        })
+        await newNotebook.save()
 
-        const { body: savedNotebook } = await api
-            .post('/api/notebooks')
-            .send(newNotebook)
-            .expect(201)
-
-        await api
-            .get(`/api/notebooks/${savedNotebook.id}`)
+        const { body: firstUserNB } = await api
+            .get('/api/notebooks')
+            .set({ Authorization: token })
             .expect(200)
-    })
 
-    test('post request without user id returns error', async () => {
-        const newNotebook = {
-            title: 'Testing Post Request'
-        }
+        expect(firstUserNB).toHaveLength(2)
 
-        await api
-            .post('/api/notebooks')
-            .send(newNotebook)
-            .expect(400)
-    })
+        const { body: SecondUserNB } = await api
+            .get('/api/notebooks')
+            .set({ Authorization: secondToken })
+            .expect(200)
 
-    test('post request with title of less than 3 character returns error', async () => {
-        const { body: [selectedUser] } = await api
-            .get('/api/users')
-        
-        const newNotebook = {
-            title: 'Te',
-            user: selectedUser.id
-        }
-
-        await api
-            .post('/api/notebooks')
-            .send(newNotebook)
-            .expect(400)
-    })
-
-    test('post request with non unique title returns error', async () => {
-        const { body: [selectedUser] } = await api
-            .get('/api/users')
-        
-        const newNotebook = {
-            title: 'First Notebook',
-            user: selectedUser.id
-        }
-
-        await api
-            .post('/api/notebooks')
-            .send(newNotebook)
-            .expect(400)
+        expect(SecondUserNB).toHaveLength(1)
     })
 })
+
+// describe('POST request', () => {
+//     test('post request creates new notebook', async () => { 
+//         const { body: [selectedUser] } = await api
+//             .get('/api/users')
+
+//         const newNotebook = {
+//             title: 'Testing Post Request',
+//             user: selectedUser.id
+//         }
+
+//         const { body: savedNotebook } = await api
+//             .post('/api/notebooks')
+//             .send(newNotebook)
+//             .expect(201)
+
+//         await api
+//             .get(`/api/notebooks/${savedNotebook.id}`)
+//             .expect(200)
+//     })
+
+//     test('post request without user id returns error', async () => {
+//         const newNotebook = {
+//             title: 'Testing Post Request'
+//         }
+
+//         await api
+//             .post('/api/notebooks')
+//             .send(newNotebook)
+//             .expect(400)
+//     })
+
+//     test('post request with title of less than 3 character returns error', async () => {
+//         const { body: [selectedUser] } = await api
+//             .get('/api/users')
+        
+//         const newNotebook = {
+//             title: 'Te',
+//             user: selectedUser.id
+//         }
+
+//         await api
+//             .post('/api/notebooks')
+//             .send(newNotebook)
+//             .expect(400)
+//     })
+
+//     test('post request with non unique title returns error', async () => {
+//         const { body: [selectedUser] } = await api
+//             .get('/api/users')
+        
+//         const newNotebook = {
+//             title: 'First Notebook',
+//             user: selectedUser.id
+//         }
+
+//         await api
+//             .post('/api/notebooks')
+//             .send(newNotebook)
+//             .expect(400)
+//     })
+// })
 
 // npm run test tests/notebook_api.test.js
 

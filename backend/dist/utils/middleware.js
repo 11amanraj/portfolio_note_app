@@ -33,27 +33,35 @@ const errorHandler = (error, request, response, next) => {
 };
 const tokenExtractor = (request, response, next) => {
     const authHeader = request.get('authorization');
-    if (!authHeader) {
-        request.token = null;
-    }
-    else if (authHeader.startsWith('Bearer ')) {
+    if (authHeader && authHeader.startsWith('Bearer ')) {
         request.token = authHeader.substring(7, authHeader.length);
     }
-    else {
+    else if (authHeader && !authHeader.startsWith('Bearer ')) {
         request.token = null;
     }
+    // if(!authHeader) {
+    //     // return
+    //     // request.token = null
+    // } else if (authHeader.startsWith('Bearer ')){
+    //     request.token = authHeader.substring(7, authHeader.length)
+    // } else {
+    //     request.token = null
+    // }
     next();
 };
 const userExtractor = (request, response, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const token = request.token;
-        if (token === null || token === undefined)
+        if (token === null)
             return response.status(401).json('authorization error');
-        const decodedToken = jsonwebtoken_1.default.verify(token, process.env.SECRET);
-        if (!decodedToken.id) {
-            return response.status(401).json('Token invalid');
+        // if(token === null || token === undefined ) return response.status(401).json('authorization error')
+        if (token) {
+            const decodedToken = jsonwebtoken_1.default.verify(token, process.env.SECRET);
+            if (!decodedToken.id) {
+                return response.status(401).json('Token invalid');
+            }
+            request.user = yield user_1.default.findById(decodedToken.id);
         }
-        request.user = yield user_1.default.findById(decodedToken.id);
     }
     catch (error) {
         if (error.name === 'JsonWebTokenError') {

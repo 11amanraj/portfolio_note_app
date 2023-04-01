@@ -41,7 +41,7 @@ beforeEach(async () => {
 
     const promiseArray = tagList.map(async (tag) => {
         const newTag = new Tag({
-            name: tag,
+            title: tag,
             user: savedUser._id
         })
         await newTag.save() 
@@ -112,7 +112,7 @@ describe('GET request', () => {
 describe('POST request', () => {
     test('post request creates new tag', async () => { 
         const newTag = {
-            name: 'Testing Post Request'
+            title: 'Testing Post Request'
         }
 
         const { body: savedTag } = await api
@@ -136,7 +136,7 @@ describe('POST request', () => {
 
     test('post request without token returns 401 error', async () => {
         const newTag = {
-            name: 'Testing Post Request'
+            title: 'Testing Post Request'
         }
 
         await api
@@ -156,33 +156,33 @@ describe('POST request', () => {
     })
 
     test('new tag is always created without spaces', async () => {
-        const tagName ='New Tag  '
-        const noSpaceName = 'NewTag'
+        const tagTitle ='New Tag  '
+        const noSpaceTitle = 'NewTag'
         
         const response = await api
             .post('/api/tags')
-            .send({name: tagName})
+            .send({ title: tagTitle })
             .set({Authorization: token})
             .expect(201)
 
-        expect(response.body.name).toBe(noSpaceName)
+        expect(response.body.title).toBe(noSpaceTitle)
     })
 
     test('if tag name already exists in database (case insensitive) then it returns error 409', async () => {
-        const tagName ='newTag'
-        const tagNameInsensitive = 'NewTag'
+        const tagTitle ='newTag'
+        const tagTitleInsensitive = 'NewTag'
         
         // created first tag
         await api
             .post('/api/tags')
-            .send({name: tagName})
+            .send({ title: tagTitle })
             .set({Authorization: token})
             .expect(201)
 
-        // trying to create second tag with same name
+        // trying to create second tag with same title
         await api
             .post('/api/tags')
-            .send({name: tagNameInsensitive})
+            .send({ title: tagTitleInsensitive })
             .set({Authorization: token})
             .expect(409)
 
@@ -209,7 +209,7 @@ describe('POST request', () => {
         // trying to create tag for second user with same name
         await api
             .post('/api/tags')
-            .send({name: tagNameInsensitive})
+            .send({title: tagTitleInsensitive})
             .set({Authorization: secondToken})
             .expect(201)
     })

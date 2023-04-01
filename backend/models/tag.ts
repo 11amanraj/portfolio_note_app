@@ -1,17 +1,8 @@
-import { Schema, model, Types, PopulatedDoc } from 'mongoose'
-import { notes } from '../types/types'
-
-interface tag {
-    name: string,
-    notes: PopulatedDoc<Document & Types.ObjectId[]>,
-    user?: {
-        type: Schema.Types.ObjectId,
-        ref: string
-    }
-}
+import { Schema, model } from 'mongoose'
+import { tag } from '../types/types'
 
 const tagSchema = new Schema<tag>({
-    name: String,
+    title: String,
     user: {
         type: Schema.Types.ObjectId,
         ref: 'User'

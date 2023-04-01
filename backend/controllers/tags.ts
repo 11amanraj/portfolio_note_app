@@ -28,7 +28,8 @@ tagsRouter.get('/:id', async (request: Request, response: Response, next: NextFu
 
         const tag = await Tag.findById(request.params.id)
             .populate(
-                {   path: 'notes',
+                {   
+                    path: 'notes',
                     select: 'title id tags',
                     populate: {
                         path: 'tags',
@@ -48,14 +49,14 @@ tagsRouter.get('/:id', async (request: Request, response: Response, next: NextFu
 
 tagsRouter.post('/', async (request: Request, response: Response, next: NextFunction) => {
     try {
-        const { name } = request.body
-        if(!name) return response.status(400).json('Name missing')
+        const { title } = request.body
+        if(!title) return response.status(400).json('Title missing')
         
         const user = request.user
         if(!user) return response.status(401).json('Authorization Error')
 
         const duplicateTag = await Tag.findOne({ 
-            name: { $regex: request.body.name, $options: 'i' },
+            title: { $regex: title, $options: 'i' },
             user: user._id 
         })
         
@@ -64,7 +65,7 @@ tagsRouter.post('/', async (request: Request, response: Response, next: NextFunc
         }
         
         const tag = new Tag({
-            name: request.body.name.replace(/\s/g, ''),
+            title: title.replace(/\s/g, ''),
             user: user._id
         })
 
@@ -78,14 +79,14 @@ tagsRouter.post('/', async (request: Request, response: Response, next: NextFunc
 tagsRouter.put('/:id', async (request: Request, response: Response, next: NextFunction) => {
     try {
         const { id } = request.params
-        const { name } = request.body
+        const { title } = request.body
 
-        if(!name) response.status(400).json('Incomplete request! Please add Name')
+        if(!title) response.status(400).json('Incomplete request! Please add Name')
 
         const duplicateTag = await Tag
             .findOne({ $and: [
                 { _id: {$ne: new ObjectId(id)} },
-                { name: { $regex: name, $options: 'i' }}
+                { title: { $regex: title, $options: 'i' }}
             ]})
 
         if(duplicateTag !== null) {
@@ -93,7 +94,7 @@ tagsRouter.put('/:id', async (request: Request, response: Response, next: NextFu
         }
 
         const updatedTag = await Tag
-            .findByIdAndUpdate(id, { name: name.replace(/\s/g, '') }, { new: true })
+            .findByIdAndUpdate(id, { title: title.replace(/\s/g, '') }, { new: true })
 
         if(updatedTag === null) response.status(400).json('Tag does not exist')
 

@@ -28,8 +28,12 @@ export interface notes {
 }
 
 export interface tag {
-    name: string,
-    id: string
+    title: string,
+    notes: PopulatedDoc<Document & Types.ObjectId[]>,
+    user: {
+        type: Types.ObjectId,
+        ref: string
+    }
 }
 
 export interface notebook {

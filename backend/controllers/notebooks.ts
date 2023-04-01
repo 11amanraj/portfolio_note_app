@@ -8,27 +8,28 @@ import User from '../models/user'
 import jwt, { JwtPayload } from 'jsonwebtoken'
 const notebooksRouter = Router()
 
-const getToken = (request: Request) => {
-    const auth = request.get('authorization')
-    if(auth && auth.startsWith('Bearer ')) {
-        return auth.replace('Bearer ', '')
-    }
-    return null 
-}
-
-interface token extends JwtPayload {
-    username: string,
-    id: string
-}
-
 notebooksRouter.get('/', async (request: Request, response: Response, next: NextFunction) => {
+    const token = request.token
+    if(token === null || token === undefined ) return response.status(401).json('authorization error')
+    
+    const decodedToken = jwt.verify(token, process.env.SECRET as string) as JwtPayload    
+    
+    if(!decodedToken.id) {
+        return response.status(401).json('Token invalid')
+    }
+
     try {
+        const user = await User.findById(decodedToken.id)
+
+        if(!user) return response.status(404).json('User not found')
+
         const notebook = await Notebook
-            .find({})
+            .find({user: user._id})
             .populate<{notes: notes}>({
                 path: 'notes',
                 options: { sort: { title: 1} }
             })
+
             
         response.json(notebook)
     } catch (error: any) {
@@ -38,62 +39,84 @@ notebooksRouter.get('/', async (request: Request, response: Response, next: Next
 })
 
 notebooksRouter.get('/:id', async (request: Request, response: Response, next: NextFunction) => {
-    try {
-        const tags = await Note.
-            aggregate(
-                [
-                    {
-                        $match:
-                        {
-                            notebook: new ObjectId(request.params.id)
-                        },
-                    },
-                    {
-                        $unwind: { path: '$tags' },
-                    },
-                    {
-                        $group:  { _id: '$tags' }
-                    },
-                    {   $lookup:
-                        {
-                            from: 'tags',
-                            localField: '_id',
-                            foreignField: '_id',
-                            as: 'tag',
-                        },
-                    },
-                    {   $set:
-                        {
-                            tag: {
-                                $arrayElemAt: ['$tag', 0],
-                            },
-                        },
-                    },
-                    {   $replaceRoot:
-                        {
-                            newRoot: '$tag',
-                        },
-                    },
-                    { 
-                        $addFields: { id: { $toString: '$_id' } }
-                    },
-                    {
-                        $unset: ['_id', 'notes', '__v']
-                    }
-                ]
-            )
-
-        const updatedNotebook = await Notebook
-            .findByIdAndUpdate(request.params.id, {tags: tags})
-            .populate('user')
-            .populate<{notes: notes}>('notes', 
-                {   title: 1, 
-                    author: 1, 
-                    id: 1, 
-                    stringDateCreated: 1, 
-                    pinned: 1})
+    const token = request.token
+    if(token === null || token === undefined ) return response.status(401).json('authorization error')
     
-        response.json(updatedNotebook)
+    const decodedToken = jwt.verify(token, process.env.SECRET as string) as JwtPayload    
+    
+    if(!decodedToken.id) {
+        return response.status(401).json('Token invalid')
+    }
+    
+    try {
+        const user = await User.findById(decodedToken.id)
+
+        if(!user) return response.status(404).json('User not found')
+
+        // const tags = await Note.
+        //     aggregate(
+        //         [
+        //             {
+        //                 $match:
+        //                 {
+        //                     notebook: new ObjectId(request.params.id)
+        //                 },
+        //             },
+        //             {
+        //                 $unwind: { path: '$tags' },
+        //             },
+        //             {
+        //                 $group:  { _id: '$tags' }
+        //             },
+        //             {   $lookup:
+        //                 {
+        //                     from: 'tags',
+        //                     localField: '_id',
+        //                     foreignField: '_id',
+        //                     as: 'tag',
+        //                 },
+        //             },
+        //             {   $set:
+        //                 {
+        //                     tag: {
+        //                         $arrayElemAt: ['$tag', 0],
+        //                     },
+        //                 },
+        //             },
+        //             {   $replaceRoot:
+        //                 {
+        //                     newRoot: '$tag',
+        //                 },
+        //             },
+        //             { 
+        //                 $addFields: { id: { $toString: '$_id' } }
+        //             },
+        //             {
+        //                 $unset: ['_id', 'notes', '__v']
+        //             }
+        //         ]
+        //     )
+
+        // const updatedNotebook = await Notebook
+        //     .findByIdAndUpdate(request.params.id, {tags: tags})
+        //     .populate('user')
+        //     .populate<{notes: notes}>('notes', 
+        //         {   title: 1, 
+        //             author: 1, 
+        //             id: 1, 
+        //             stringDateCreated: 1, 
+        //             pinned: 1})
+    
+        // response.json(updatedNotebook)
+        
+        const notebook = await Notebook
+            .findOne({_id: new ObjectId(request.params.id), user: user._id})
+
+        // add Tags later
+
+        if(notebook === null) response.status(401).json('Not Authorized')
+        
+        response.status(200).json(notebook)
 
     } catch(error: any) {
         if (error.name === 'CastError') {

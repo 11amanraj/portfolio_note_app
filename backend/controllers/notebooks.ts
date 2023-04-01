@@ -11,7 +11,6 @@ const notebooksRouter = Router()
 notebooksRouter.get('/', async (request: Request, response: Response, next: NextFunction) => {
     try {
         const user = request.user
-
         if(!user) return response.status(401).json('Authorization Error')
 
         const notebook = await Notebook
@@ -158,7 +157,6 @@ notebooksRouter.post('/', async (request: Request, response: Response, next: Nex
     try {
         const { title } = request.body
         if(!title) return response.status(400).json('Title missing')
-        
         
         const user = request.user
         if(!user) return response.status(404).json('User not found')

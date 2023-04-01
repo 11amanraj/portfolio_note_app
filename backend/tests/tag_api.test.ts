@@ -109,49 +109,111 @@ describe('GET request', () => {
     })
 })
 
-// describe('POST request', () => {
-//     test('creating new tag', async () => {
-//         const tagName ='newTag'
+describe('POST request', () => {
+    test('post request creates new tag', async () => { 
+        const newTag = {
+            name: 'Testing Post Request'
+        }
+
+        const { body: savedTag } = await api
+            .post('/api/tags')
+            .send(newTag)
+            .set({Authorization: token})
+            .expect(201)
+
+        await api
+            .get(`/api/tags/${savedTag.id}`)
+            .set({Authorization: token})
+            .expect(200)
+
+        const response = await api
+            .get('/api/tags')
+            .set({ Authorization: token })
+            .expect(200)
+
+        expect(response.body).toHaveLength(4)
+    })
+
+    test('post request without token returns 401 error', async () => {
+        const newTag = {
+            name: 'Testing Post Request'
+        }
+
+        await api
+            .post('/api/tags')
+            .send(newTag)
+            .expect(401)
+    })
+
+    test('post request without name returns 400 error', async () => {
+        const newTag = {}
+
+        await api
+            .post('/api/tags')
+            .send(newTag)
+            .set({Authorization: token})
+            .expect(400)
+    })
+
+    test('new tag is always created without spaces', async () => {
+        const tagName ='New Tag  '
+        const noSpaceName = 'NewTag'
         
-//         await api
-//             .post('/api/tags')
-//             .send({name: tagName})
-//             .expect(201)
+        const response = await api
+            .post('/api/tags')
+            .send({name: tagName})
+            .set({Authorization: token})
+            .expect(201)
 
-//         const response = await api
-//             .get('/api/tags')
+        expect(response.body.name).toBe(noSpaceName)
+    })
 
-//         expect(response.body.find((tag: tag) => tag.name === tagName))
-//             .toBeDefined()
-//     })
-
-//     test('new tag is always created without spaces', async () => {
-//         const tagName ='New Tag  '
-//         const noSpaceName = 'NewTag'
+    test('if tag name already exists in database (case insensitive) then it returns error 409', async () => {
+        const tagName ='newTag'
+        const tagNameInsensitive = 'NewTag'
         
-//         const response = await api
-//             .post('/api/tags')
-//             .send({name: tagName})
-//             .expect(201)
+        // created first tag
+        await api
+            .post('/api/tags')
+            .send({name: tagName})
+            .set({Authorization: token})
+            .expect(201)
 
-//         expect(response.body.name).toBe(noSpaceName)
-//     })
+        // trying to create second tag with same name
+        await api
+            .post('/api/tags')
+            .send({name: tagNameInsensitive})
+            .set({Authorization: token})
+            .expect(409)
 
-//     test('if tag name already exists in database (case insensitive) then it returns error 400', async () => {
-//         const tagName ='newTag'
-//         const tagNameInsensitive = 'NewTag'
-        
-//         await api
-//             .post('/api/tags')
-//             .send({name: tagName})
-//             .expect(201)
+        // creating new user
+        const password = 'qwerty'
+        const passwordHash = await bcrypt.hash(password, 10)
 
-//         await api
-//             .post('/api/tags')
-//             .send({name: tagNameInsensitive})
-//             .expect(400)
-//     })
-// })
+        const user = new User({
+            username: 'anon',
+            name: 'Anonymous',
+            passwordHash: passwordHash,
+            notebooks: []
+        })
+    
+        await user.save()
+    
+        // logging in the new user
+        const response = await api
+            .post('/api/login')
+            .send({username: 'anon', password: password})
+
+        const secondToken = `Bearer ${response.body.token}`
+
+        // trying to create tag for second user with same name
+        await api
+            .post('/api/tags')
+            .send({name: tagNameInsensitive})
+            .set({Authorization: secondToken})
+            .expect(201)
+    })
+})
 
 // describe('PUT request', () => {
 //     test('put requests changes title and returns updated notebook', async () => {

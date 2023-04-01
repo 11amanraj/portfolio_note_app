@@ -25,7 +25,7 @@ tagsRouter.get('/:id', async (request: Request, response: Response, next: NextFu
     try {
         const user = request.user
         if(!user) return response.status(401).json('Authorization Error')
-        
+
         const tag = await Tag.findById(request.params.id)
             .populate(
                 {   path: 'notes',
@@ -48,16 +48,28 @@ tagsRouter.get('/:id', async (request: Request, response: Response, next: NextFu
 
 tagsRouter.post('/', async (request: Request, response: Response, next: NextFunction) => {
     try {
-        const duplicateTag = await Tag.findOne({ name: { $regex: request.body.name, $options: 'i' } })
+        const { name } = request.body
+        if(!name) return response.status(400).json('Name missing')
+        
+        const user = request.user
+        if(!user) return response.status(401).json('Authorization Error')
+
+        const duplicateTag = await Tag.findOne({ 
+            name: { $regex: request.body.name, $options: 'i' },
+            user: user._id 
+        })
         
         if(duplicateTag !== null) {
-            return response.status(400).json('tag already exists')
+            return response.status(409).json('tag already exists')
         }
         
-        const tag = new Tag({name: request.body.name.replace(/\s/g, '')})
+        const tag = new Tag({
+            name: request.body.name.replace(/\s/g, ''),
+            user: user._id
+        })
+
         const savedTag = await tag.save()
         return response.status(201).json(savedTag)
-
     } catch(error: any) {
         next(error)
     }

@@ -52,9 +52,9 @@ const tokenExtractor = (request, response, next) => {
 const userExtractor = (request, response, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const token = request.token;
-        if (token === null)
+        // if(token === null) return response.status(401).json('authorization error')
+        if (token === null || token === undefined)
             return response.status(401).json('authorization error');
-        // if(token === null || token === undefined ) return response.status(401).json('authorization error')
         if (token) {
             const decodedToken = jsonwebtoken_1.default.verify(token, process.env.SECRET);
             if (!decodedToken.id) {

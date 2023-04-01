@@ -109,67 +109,59 @@ describe('GET Request', () => {
     })
 })
 
-// describe('POST request', () => {
-//     test('post request creates new notebook', async () => { 
-//         const { body: [selectedUser] } = await api
-//             .get('/api/users')
+describe('POST request', () => {
+    test('post request creates new notebook', async () => { 
+        const newNotebook = {
+            title: 'Testing Post Request'
+        }
 
-//         const newNotebook = {
-//             title: 'Testing Post Request',
-//             user: selectedUser.id
-//         }
+        const { body: savedNotebook } = await api
+            .post('/api/notebooks')
+            .send(newNotebook)
+            .set({Authorization: token})
+            .expect(201)
 
-//         const { body: savedNotebook } = await api
-//             .post('/api/notebooks')
-//             .send(newNotebook)
-//             .expect(201)
+        await api
+            .get(`/api/notebooks/${savedNotebook.id}`)
+            .set({Authorization: token})
+            .expect(200)
+    })
 
-//         await api
-//             .get(`/api/notebooks/${savedNotebook.id}`)
-//             .expect(200)
-//     })
+    test('post request without token returns 401 error', async () => {
+        const newNotebook = {
+            title: 'Testing Post Request'
+        }
 
-//     test('post request without user id returns error', async () => {
-//         const newNotebook = {
-//             title: 'Testing Post Request'
-//         }
+        await api
+            .post('/api/notebooks')
+            .send(newNotebook)
+            .expect(401)
+    })
 
-//         await api
-//             .post('/api/notebooks')
-//             .send(newNotebook)
-//             .expect(400)
-//     })
+    test('post request with title of less than 3 character returns error', async () => {        
+        const newNotebook = {
+            title: 'Te'
+        }
 
-//     test('post request with title of less than 3 character returns error', async () => {
-//         const { body: [selectedUser] } = await api
-//             .get('/api/users')
-        
-//         const newNotebook = {
-//             title: 'Te',
-//             user: selectedUser.id
-//         }
+        await api
+            .post('/api/notebooks')
+            .send(newNotebook)
+            .set({Authorization: token})
+            .expect(400)
+    })
 
-//         await api
-//             .post('/api/notebooks')
-//             .send(newNotebook)
-//             .expect(400)
-//     })
+    test('post request with non unique title returns error', async () => {
+        const newNotebook = {
+            title: 'First Notebook'
+        }
 
-//     test('post request with non unique title returns error', async () => {
-//         const { body: [selectedUser] } = await api
-//             .get('/api/users')
-        
-//         const newNotebook = {
-//             title: 'First Notebook',
-//             user: selectedUser.id
-//         }
-
-//         await api
-//             .post('/api/notebooks')
-//             .send(newNotebook)
-//             .expect(400)
-//     })
-// })
+        await api
+            .post('/api/notebooks')
+            .send(newNotebook)
+            .set({Authorization: token})
+            .expect(400)
+    })
+})
 
 // npm run test tests/notebook_api.test.js
 

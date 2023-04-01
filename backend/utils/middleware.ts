@@ -48,9 +48,9 @@ const userExtractor = async (request: Request, response: Response, next: NextFun
     try {
         const token = request.token
 
-        if(token === null) return response.status(401).json('authorization error')
+        // if(token === null) return response.status(401).json('authorization error')
         
-        // if(token === null || token === undefined ) return response.status(401).json('authorization error')
+        if(token === null || token === undefined ) return response.status(401).json('authorization error')
         if(token) {
             const decodedToken = jwt.verify(token, process.env.SECRET as string) as JwtPayload    
             

@@ -9,6 +9,7 @@ import usersRouter from './controllers/users'
 import mongoose from 'mongoose'
 import logger from './utils/logger'
 import middleware from './utils/middleware'
+import loginRouter from './controllers/login'
 
 logger.info('connecting to', config.MONGO_URL)
 
@@ -28,9 +29,9 @@ app.use('/api/notes', notesRouter)
 app.use('/api/notebooks', notebooksRouter)
 app.use('/api/tags', tagsRouter)
 app.use('/api/users', usersRouter)
+app.use('/api/login', loginRouter)
 
 app.use(middleware.unknownEndpoint)
 app.use(middleware.errorHandler)
 
 export default app
-// module.exports = app

@@ -106,7 +106,6 @@ notesRouter.post('/', async (request: Request, response: Response, next: NextFun
             const note = new Note({
                 title: title,
                 content: request.body.content,
-                author: request.body.author,
                 user: user._id,
                 pinned: false,
                 dateCreated: date,

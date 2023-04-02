@@ -48,7 +48,6 @@ beforeEach(async () => {
         const newNote = new Note({
             title: note,
             content: '',
-            author: 'John Doe',
             notebookID: savedNewNotebook._id,
             user: savedUser._id
         })
@@ -117,7 +116,6 @@ describe('GET request', () => {
         const newNote = new Note({
             title: 'Test Note',
             content: '',
-            author: 'John Doe',
             notebookID: savedNewNotebook._id,
             user: savedUser._id
         })
@@ -151,7 +149,6 @@ describe('POST request', () => {
         const newNote = {
             title: 'New Note',
             content: '',
-            author: 'John Doe',
             notebookID: notebookID
         }
 
@@ -181,7 +178,6 @@ describe('POST request', () => {
         const newNote = {
             title: 'New Note',
             content: '',
-            author: 'John Doe',
             notebookID: notebookID
         }
 
@@ -195,7 +191,6 @@ describe('POST request', () => {
         const newNote = {
             title: 'New Note',
             content: '',
-            author: 'John Doe'
         }
 
         await api
@@ -396,7 +391,6 @@ describe('DELETE request', () => {
         const newNote = {
             title: 'New Note',
             content: '',
-            author: 'John Doe',
             notebookID: notebookID
         }
 
@@ -538,7 +532,6 @@ describe('DELETE request', () => {
         const newNote = {
             title: 'Testing DELETE Note',
             content: '',
-            author: 'John Doe',
             notebookID: selectedNotebook.id
         }
 

@@ -410,7 +410,6 @@ describe('DELETE request', () => {
             .send({
                 title: 'Testing DELETE',
                 content: '',
-                author: 'John Doe',
                 notebookID: selectedNotebook,
             })
             .set({ Authorization: token })

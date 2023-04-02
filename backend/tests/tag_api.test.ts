@@ -358,7 +358,6 @@ describe('DELETE request', () => {
         const newNote = new Note({
             title: 'First Note',
             content: '',
-            author: 'John Doe',
             user: savedUser._id
         })
         const selectedNote = await newNote.save()

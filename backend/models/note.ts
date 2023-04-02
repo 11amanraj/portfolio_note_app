@@ -4,7 +4,6 @@ import { notes } from '../types/types'
 const noteSchema = new Schema<notes>({
     title: String,
     content: String,
-    author: String,
     pinned: Boolean,
     dateCreated: Date,
     dateModified: Date,

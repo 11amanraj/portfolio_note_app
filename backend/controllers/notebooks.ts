@@ -2,10 +2,7 @@ import { Request, Response, NextFunction, Router } from 'express'
 import { ObjectId } from 'mongodb'
 import Notebook from '../models/notebook'
 import Note from '../models/note'
-import Tag from '../models/tag'
 import { notes } from '../types/types'
-import User from '../models/user'
-import user from '../models/user'
 const notebooksRouter = Router()
 
 notebooksRouter.get('/', async (request: Request, response: Response, next: NextFunction) => {
@@ -62,12 +59,9 @@ notebooksRouter.get('/:id', async (request: Request, response: Response, next: N
             .populate('user')
             .populate<{notes: notes}>('notes', 
                 {   title: 1, 
-                    author: 1, 
                     id: 1, 
                     stringDateCreated: 1, 
                     pinned: 1})
-
-        console.log(notebook)
                     
         // response.json(updatedNotebook)
         
@@ -124,7 +118,7 @@ notebooksRouter.get('/search/:keyword', async (request: Request, response: Respo
         const notebooks = await Notebook
             .find({title: new RegExp(request.params.keyword, 'i')})
             // .sort({ dateCreated: -1 }) 
-            .populate<{notes: notes}>('notes', {title: 1, author: 1, id: 1, dateCreated: 1, pinned: 1, dateModified: 1})
+            .populate<{notes: notes}>('notes', {title: 1, id: 1, dateCreated: 1, pinned: 1, dateModified: 1})
 
         response.json(notebooks)
     } catch(error) {

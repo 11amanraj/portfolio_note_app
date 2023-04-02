@@ -147,6 +147,7 @@ describe('GET Request', () => {
             .get(`/api/notebooks/${createdNotebook.id}`)
             .set({ Authorization: token })
             .expect(404)
+
     })
 })
 

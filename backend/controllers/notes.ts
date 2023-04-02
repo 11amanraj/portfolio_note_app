@@ -3,6 +3,7 @@ const notesRouter = Router()
 import Note from '../models/note'
 import Notebook from '../models/notebook'
 import Tag from '../models/tag'
+import { ObjectId } from 'mongodb'
 
 notesRouter.get('/', async (request: Request, response: Response, next: NextFunction) => {
     try {
@@ -134,6 +135,18 @@ notesRouter.post('/', async (request: Request, response: Response, next: NextFun
 
 notesRouter.delete('/:id', async (request: Request, response: Response, next: NextFunction) => {
     try {
+        const user = request.user
+        if(!user) return response.status(401).json('Authorization Error')
+
+        const note = await Note
+            .findOne({_id: new ObjectId(request.params.id), user: user._id})
+
+        if(note === null) return response.status(404).json('Note not found')
+
+        await Note.deleteOne({
+            user: user._id,
+            _id: new ObjectId(request.params.id)
+        })
         await Note.findByIdAndDelete(request.params.id)
         await Notebook.updateOne(
             { 'notes': request.params.id },

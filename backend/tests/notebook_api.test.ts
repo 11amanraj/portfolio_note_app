@@ -4,7 +4,7 @@ import app from '../app'
 import Note from '../models/note'
 import Notebook from '../models/notebook'
 import Tag from '../models/tag'
-import { notebook, notes } from '../types/types'
+import { notes } from '../types/types'
 import User from '../models/user'
 import bcrypt from 'bcrypt'
 
@@ -107,6 +107,47 @@ describe('GET Request', () => {
 
         expect(SecondUserNB).toHaveLength(1)
     })
+
+    test('get/:id requests only fetches notebook if token matches the associated user', async () => {
+        // creating new user
+        const password = 'qwerty'
+        const passwordHash = await bcrypt.hash(password, 10)
+
+        const user = new User({
+            username: 'anon',
+            name: 'Anonymous',
+            passwordHash: passwordHash,
+            notebooks: []
+        })
+    
+        const savedUser = await user.save()
+    
+        // logging in the new user
+        const response = await api
+            .post('/api/login')
+            .send({username: 'anon', password: password})
+
+        const secondToken = `Bearer ${response.body.token}`
+
+        // creating new Notebook
+        const newNotebook = new Notebook({
+            title: 'Very New Notebook',
+            user: savedUser._id
+        })
+        const createdNotebook = await newNotebook.save()
+
+        // fetching tag from creator token
+        await api
+            .get(`/api/notebooks/${createdNotebook.id}`)
+            .set({ Authorization: secondToken })
+            .expect(200)
+
+        // fetching tag from non-creator token
+        await api
+            .get(`/api/notebooks/${createdNotebook.id}`)
+            .set({ Authorization: token })
+            .expect(404)
+    })
 })
 
 describe('POST request', () => {
@@ -203,118 +244,215 @@ describe('POST request', () => {
     })
 })
 
-// npm run test tests/notebook_api.test.js
+describe('PUT request', () => {
+    test('put requests changes title and returns updated notebook', async () => {
+        const { body: [selectedNotebook] } = await api
+            .get('/api/notebooks')
+            .set({ Authorization: token })
 
-// describe('DELETE request', () => {
-//     test('delete request removes the notebook', async () => {
-//         const res = await api.get('/api/notebooks')
-//         const initialLength = res.body.length
-//         const notebookToBeDeleted = res.body[0]
-        
-//         await api
-//             .delete(`/api/notebooks/${notebookToBeDeleted.id}`)
-//             .expect(204)
+        const newTitle = 'not' + selectedNotebook.title
+
+        const { body: updatedNotebook } = await api
+            .put(`/api/notebooks/${selectedNotebook.id}`)
+            .send({title: newTitle})
+            .set({ Authorization: token })
+            .expect(201)
+
+        expect(updatedNotebook.title).toBe(newTitle)
+    })
+
+    test('put request with already similar title to another notebook returns error', async () => {
+        const { body: [selectedNotebook, differentNotebook] } = await api
+            .get('/api/notebooks')
+            .set({ Authorization: token })
+
+        const newTitle = differentNotebook.title
+
+        await api
+            .put(`/api/notebooks/${selectedNotebook.id}`)
+            .send({title: newTitle})
+            .set({ Authorization: token })
+            .expect(409)
+    })
+
+    test('put request two user can have same notebook title', async () => {
+        // creating second user
+        const password = 'qwerty'
+        const passwordHash = await bcrypt.hash(password, 10)
+
+        const user = new User({
+            username: 'anon',
+            name: 'Anonymous',
+            passwordHash: passwordHash,
+            notebooks: []
+        })
     
-//         const response = await api.get('/api/notebooks')
-//         expect(response.body.length).toBe(initialLength-1)
-//     })
-
-//     test('deleting notebook also removes associated notes and in turn their reference in tags', async () => {
-//         const res = await api.get('/api/notebooks')
-//         const selectedNotebook = res.body[0].id
-
-//         // creating new tag
-//         const { body: { id: selectedTag } } = await api
-//             .post('/api/tags')
-//             .send({name: 'newTag'})
-//             .expect(201)
-
-
-//         // adding new note to the notebook
-//         const { body: { id: selectedNote } } = await api
-//             .post('/api/notes')
-//             .send({
-//                 title: 'Testing DELETE',
-//                 content: '',
-//                 author: 'John Doe',
-//                 notebookID: selectedNotebook,
-//             })
-//             .expect(201)
-
-//         // adding tag to the note
-//         await api
-//             .put(`/api/notes/${selectedNote}`)
-//             .send({tags: [selectedTag]})
-//             .expect(200)
-
-//         // checking if note reference has been added to the tag
-//         const { body: { notes: notesBefore } } = await api
-//             .get(`/api/tags/${selectedTag}`)
-        
-//         expect(notesBefore.find((note: notes) => 
-//             note.id === selectedNote
-//         )).toBeDefined()
-
-//         // deleting notebook
-//         await api
-//             .delete(`/api/notebooks/${selectedNotebook}`)
-//             .expect(204)
+        await user.save()
     
-//         // checking if added note has been deleted
-//         await api
-//             .get(`/api/notes/${selectedNote}`)
-//             .expect(404)
+        // logging in second user
+        const response = await api
+            .post('/api/login')
+            .send({username: 'anon', password: password})
 
-//         // checking if note reference from tag has been removed
-//         const { body: { notes: notesAfter } } = await api
-//             .get(`/api/tags/${selectedTag}`)
+        const secondToken = `Bearer ${response.body.token}`
+
+        // selecting a notebook from first user
+        const { body: [selectedNotebook] } = await api
+            .get('/api/notebooks')
+            .set({ Authorization: token })
+
+        const newTitle = selectedNotebook.title
+
+        // creating a notebook for second user with new title 
+        const newNotebook = {
+            title: 'Very New Notebook'
+        }
+    
+        const { body: createdNotebook } = await api
+            .post('/api/notebooks')
+            .send(newNotebook)
+            .set({Authorization: secondToken})
+            .expect(201)
+
+        await api
+            .put(`/api/notebooks/${createdNotebook.id}`)
+            .send({title: newTitle})
+            .set({Authorization: secondToken})
+            .expect(201)
+        // put request to change createdNotebook title to newTitle
+    })
+
+    test('put request with title having less than 3 characters returns error', async() => {
+        const { body: [selectedNotebook] } = await api
+            .get('/api/notebooks')
+            .set({ Authorization: token })
+
+        const newTitle = 'to'
+
+        await api
+            .put(`/api/notebooks/${selectedNotebook.id}`)
+            .send({title: newTitle})
+            .set({ Authorization: token })
+            .expect(400)
+    })
+})
+
+describe('DELETE request', () => {
+    test('delete request removes the notebook', async () => {
+        const res = await api
+            .get('/api/notebooks')
+            .set({ Authorization: token })
+        const initialLength = res.body.length
+        const notebookToBeDeleted = res.body[0]
         
-//         expect(notesAfter.find((note: notes) => 
-//             note.id === selectedNote
-//         )).toBeUndefined()
-//     })
-// })
+        await api
+            .delete(`/api/notebooks/${notebookToBeDeleted.id}`)
+            .set({ Authorization: token })
+            .expect(204)
+    
+        const response = await api
+            .get('/api/notebooks')
+            .set({ Authorization: token })
+        expect(response.body.length).toBe(initialLength-1)
+    })
 
-// describe('PUT request', () => {
-//     test('put requests changes title and returns updated notebook', async () => {
-//         const { body: [selectedNotebook] } = await api
-//             .get('/api/notebooks')
+    test('only user who created the notebook can delete it', async () => {
+        // creating second user
+        const password = 'qwerty'
+        const passwordHash = await bcrypt.hash(password, 10)
 
-//         const newTitle = 'not' + selectedNotebook.title
+        const user = new User({
+            username: 'anon',
+            name: 'Anonymous',
+            passwordHash: passwordHash,
+            notebooks: []
+        })
+    
+        await user.save()
+    
+        // logging in second user
+        const response = await api
+            .post('/api/login')
+            .send({username: 'anon', password: password})
 
-//         const { body: updatedNotebook } = await api
-//             .put(`/api/notebooks/${selectedNotebook.id}`)
-//             .send({title: newTitle})
-//             .expect(201)
+        const secondToken = `Bearer ${response.body.token}`
 
-//         expect(updatedNotebook.title).toBe(newTitle)
-//     })
+        // selecting notebooks from first User
+        const { body: [selectedNotebook] } = await api
+            .get('/api/notebooks')
+            .set({ Authorization: token })
 
-//     test('put request with already similar title to another notebook returns error', async () => {
-//         const { body: [selectedNotebook, differentNotebook] } = await api
-//             .get('/api/notebooks')
+        // deleting selectedNotebook by second User
+        await api
+            .delete(`/api/notebooks/${selectedNotebook.id}`)
+            .set({ Authorization: secondToken })
+            .expect(404)
+    })
 
-//         const newTitle = differentNotebook.title
+    test('deleting notebook also removes associated notes and in turn their reference in tags', async () => {
+        const res = await api
+            .get('/api/notebooks')
+            .set({ Authorization: token })
+        const selectedNotebook = res.body[0].id
 
-//         await api
-//             .put(`/api/notebooks/${selectedNotebook.id}`)
-//             .send({title: newTitle})
-//             .expect(400)
-//     })
+        // creating new tag
+        const { body: { id: selectedTag } } = await api
+            .post('/api/tags')
+            .send({title: 'newTag'})
+            .set({ Authorization: token })
+            .expect(201)
 
-//     test('put request with title having less than 3 characters returns error', async() => {
-//         const { body: [selectedNotebook] } = await api
-//             .get('/api/notebooks')
 
-//         const newTitle = 'to'
+        // adding new note to the notebook
+        const { body: { id: selectedNote } } = await api
+            .post('/api/notes')
+            .send({
+                title: 'Testing DELETE',
+                content: '',
+                author: 'John Doe',
+                notebookID: selectedNotebook,
+            })
+            .set({ Authorization: token })
+            .expect(201)
 
-//         await api
-//             .put(`/api/notebooks/${selectedNotebook.id}`)
-//             .send({title: newTitle})
-//             .expect(400)
-//     })
-// })
+        // adding tag to the note
+        await api
+            .put(`/api/notes/${selectedNote}`)
+            .send({tags: [selectedTag]})
+            .set({ Authorization: token })
+            .expect(200)
 
+        // checking if note reference has been added to the tag
+        const { body: { notes: notesBefore } } = await api
+            .get(`/api/tags/${selectedTag}`)
+            .set({ Authorization: token })
+        
+        expect(notesBefore.find((note: notes) => 
+            note.id === selectedNote
+        )).toBeDefined()
+
+        // deleting notebook
+        await api
+            .delete(`/api/notebooks/${selectedNotebook}`)
+            .set({ Authorization: token })
+            .expect(204)
+    
+        // checking if added note has been deleted
+        await api
+            .get(`/api/notes/${selectedNote}`)
+            .set({ Authorization: token })
+            .expect(404)
+
+        // checking if note reference from tag has been removed
+        const { body: { notes: notesAfter } } = await api
+            .get(`/api/tags/${selectedTag}`)
+            .set({ Authorization: token })
+        
+        expect(notesAfter.find((note: notes) => 
+            note.id === selectedNote
+        )).toBeUndefined()
+    })
+})
 
 afterAll(() => {
     mongoose.connection.close()

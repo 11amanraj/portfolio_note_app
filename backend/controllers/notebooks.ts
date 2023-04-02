@@ -5,7 +5,7 @@ import Note from '../models/note'
 import Tag from '../models/tag'
 import { notes } from '../types/types'
 import User from '../models/user'
-import jwt, { JwtPayload } from 'jsonwebtoken'
+import user from '../models/user'
 const notebooksRouter = Router()
 
 notebooksRouter.get('/', async (request: Request, response: Response, next: NextFunction) => {
@@ -101,7 +101,7 @@ notebooksRouter.get('/:id', async (request: Request, response: Response, next: N
                     
         // add Tags later
 
-        if(notebook === null) response.status(401).json('Not Authorized')
+        if(notebook === null) response.status(404).json('Notebook Not Found')
         
         response.status(200).json(notebook)
 
@@ -185,6 +185,9 @@ notebooksRouter.post('/', async (request: Request, response: Response, next: Nex
 
 notebooksRouter.put('/:id', async (request: Request, response: Response, next: NextFunction) => {
     try {
+        const user = request.user
+        if(!user) return response.status(401).json('Authorization Error')
+
         const { id } = request.params
         const { title } = request.body
     
@@ -193,9 +196,10 @@ notebooksRouter.put('/:id', async (request: Request, response: Response, next: N
         const existingTitle = await Notebook.findOne({ $and: [
             { _id: {$ne: new ObjectId(id)} },
             { title: title },
+            { user: user._id }
         ]})
 
-        if(existingTitle !== null) response.status(400).json(`${title} already exists! Please choose another title`)
+        if(existingTitle !== null) response.status(409).json(`${title} already exists! Please choose another title`)
         
         const updatedNotebook = await Notebook
             .findByIdAndUpdate(id, { title: title }, { new: true, runValidators: true })
@@ -212,10 +216,17 @@ notebooksRouter.put('/:id', async (request: Request, response: Response, next: N
     }
 })
 
-
 notebooksRouter.delete('/:id', async (request: Request, response: Response, next: NextFunction) => {
     try {
-        const notebook = await Notebook.findById(request.params.id)
+        const user = request.user
+        if(!user) return response.status(401).json('Authorization Error')
+
+        const notebook = await Notebook
+            .findOne({_id: new ObjectId(request.params.id), user: user._id})
+
+        if(notebook === null) response.status(404).json('Notebook not found')
+
+        // const notebook = await Notebook.findById(request.params.id)
         
         if(notebook) {
             const notes = notebook.notes

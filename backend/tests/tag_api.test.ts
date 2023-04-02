@@ -109,7 +109,7 @@ describe('GET request', () => {
         expect(SecondUserTag).toHaveLength(1)
     })
 
-    test('get/:id requests only fetch tag if match the associated user', async () => {
+    test('get/:id requests only fetch tag token matches the associated user', async () => {
         // creating new user
         const password = 'qwerty'
         const passwordHash = await bcrypt.hash(password, 10)

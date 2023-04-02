@@ -4,8 +4,8 @@ import app from '../app'
 import Note from '../models/note'
 import Tag from '../models/tag'
 import Notebook from '../models/notebook'
-import { notes, tag } from '../types/types'
 import User from '../models/user'
+import { notes, tag } from '../types/types'
 import bcrypt from 'bcrypt'
 
 const api = supertest(app)

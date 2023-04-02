@@ -5,6 +5,7 @@ import Tag from '../models/tag'
 import { tag } from  '../types/types'
 import User from '../models/user'
 import bcrypt from 'bcrypt'
+import Note from '../models/note'
 
 const api = supertest(app)
 
@@ -106,6 +107,47 @@ describe('GET request', () => {
             .expect(200)
 
         expect(SecondUserTag).toHaveLength(1)
+    })
+
+    test('get/:id requests only fetch tag if match the associated user', async () => {
+        // creating new user
+        const password = 'qwerty'
+        const passwordHash = await bcrypt.hash(password, 10)
+
+        const user = new User({
+            username: 'anon',
+            name: 'Anonymous',
+            passwordHash: passwordHash,
+            notebooks: []
+        })
+    
+        const savedUser = await user.save()
+    
+        // logging in the new user
+        const response = await api
+            .post('/api/login')
+            .send({username: 'anon', password: password})
+
+        const secondToken = `Bearer ${response.body.token}`
+
+        // creating new Tag
+        const newTag = new Tag({
+            title: 'Second User Tag',
+            user: savedUser._id
+        })
+        const createdTag = await newTag.save()
+
+        // fetching tag from creator token
+        await api
+            .get(`/api/tags/${createdTag.id}`)
+            .set({ Authorization: secondToken })
+            .expect(200)
+
+        // fetching tag from non-creator token
+        await api
+            .get(`/api/tags/${createdTag.id}`)
+            .set({ Authorization: token })
+            .expect(404)
     })
 })
 
@@ -215,33 +257,141 @@ describe('POST request', () => {
     })
 })
 
-// describe('PUT request', () => {
-//     test('put requests changes title and returns updated notebook', async () => {
-//         const { body: [selectedTag] } = await api
-//             .get('/api/tags')
+describe('PUT request', () => {
+    test('put requests changes title and returns updated tag', async () => {
+        const { body: [selectedTag] } = await api
+            .get('/api/tags')
+            .set({Authorization: token})
 
-//         const newName = 'not' + selectedTag.name
+        const newTitle = 'not' + selectedTag.title
 
-//         const { body: updatedTag } = await api
-//             .put(`/api/tags/${selectedTag.id}`)
-//             .send({ name: newName })
-//             .expect(201)
+        const { body: updatedTag } = await api
+            .put(`/api/tags/${selectedTag.id}`)
+            .send({ title: newTitle })
+            .set({Authorization: token})
+            .expect(201)
 
-//         expect(updatedTag.name).toBe(newName)
-//     })
+        expect(updatedTag.title).toBe(newTitle)
+    })
 
-//     test('put request with similar title to another notebook returns error', async () => {
-//         const { body: [selectedTag, differentTag] } = await api
-//             .get('/api/tags')
+    test('put request with similar title to another tag returns error', async () => {
+        // selecting tag
+        const { body: [selectedTag, differentTag] } = await api
+            .get('/api/tags')
+            .set({Authorization: token})
 
-//         const newName = differentTag.name
+        const newTitle = differentTag.title
 
-//         await api
-//             .put(`/api/tags/${selectedTag.id}`)
-//             .send({ name: newName })
-//             .expect(400)
-//     })
-// })
+        // changing title
+        await api
+            .put(`/api/tags/${selectedTag.id}`)
+            .send({ title: newTitle })
+            .set({Authorization: token})
+            .expect(400)
+
+        // creating new user
+        const password = 'qwerty'
+        const passwordHash = await bcrypt.hash(password, 10)
+
+        const user = new User({
+            username: 'anon',
+            name: 'Anonymous',
+            passwordHash: passwordHash,
+            notebooks: []
+        })
+    
+        await user.save()
+    
+        // logging in the new user
+        const response = await api
+            .post('/api/login')
+            .send({username: 'anon', password: password})
+
+        const secondToken = `Bearer ${response.body.token}`
+
+        // creating new tag for second user with new name
+        const { body: createdTag } = await api
+            .post('/api/tags')
+            .send({title: 'new name'})
+            .set({Authorization: secondToken})
+            .expect(201)
+
+        // changing createdTag title to same title as first user's tag
+        await api
+            .put(`/api/tags/${createdTag.id}`)
+            .send({ title: newTitle })
+            .set({Authorization: secondToken})
+            .expect(201)
+    })
+})
+
+describe('DELETE request', () => {
+    test('deleting tag also removes reference in associated note', async () => {
+        // creating new user
+        const password = 'qwerty'
+        const passwordHash = await bcrypt.hash(password, 10)
+
+        const user = new User({
+            username: 'anon',
+            name: 'Anonymous',
+            passwordHash: passwordHash,
+            notebooks: []
+        })
+    
+        const savedUser = await user.save()
+    
+        // logging in the new user
+        const res = await api
+            .post('/api/login')
+            .send({username: 'anon', password: password})
+
+        const secondToken = `Bearer ${res.body.token}`
+
+        // creating tag for second user
+        const newTag = new Tag({
+            title: 'New Tag',
+            user: savedUser._id
+        })
+        const selectedTag = await newTag.save() 
+        
+        // creating new note with selectedTag
+        const newNote = new Note({
+            title: 'First Note',
+            content: '',
+            author: 'John Doe',
+            user: savedUser._id
+        })
+        const selectedNote = await newNote.save()
+
+        // adding selectedTag to the selectedNote
+        const { body: updatedNote } = await api
+            .put(`/api/notes/${selectedNote._id}`)
+            .set('Content-Type', 'application/json')
+            .send({tags: [selectedTag._id]})
+            .set({ Authorization: secondToken })
+            .expect(200)
+
+        expect(updatedNote.tags.find((tag: tag) => 
+            tag === selectedTag.id
+        )).toBeDefined()
+
+        // deleting the selectedTag
+        await api
+            .delete(`/api/tags/${selectedTag._id}`)
+            .set({ Authorization: secondToken })
+            .expect(204)
+
+        // checking if tag reference has been removed from associated note
+        const { body: returnedNote } = await api
+            .put(`/api/notes/${selectedNote._id.toString()}`)
+            .set({ Authorization: secondToken })
+            .expect(200)
+
+        expect(returnedNote.tags.find((tag: tag) => 
+            tag === selectedTag.id
+        )).toBeUndefined()
+    })
+})
 
 afterAll(() => {
     mongoose.connection.close()

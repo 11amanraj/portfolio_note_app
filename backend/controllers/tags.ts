@@ -26,7 +26,12 @@ tagsRouter.get('/:id', async (request: Request, response: Response, next: NextFu
         const user = request.user
         if(!user) return response.status(401).json('Authorization Error')
 
-        const tag = await Tag.findById(request.params.id)
+        const tag = await Tag
+            .findOne({
+                _id: new ObjectId(request.params.id),
+                user: user._id
+            })
+            .populate('user')
             .populate(
                 {   
                     path: 'notes',
@@ -37,6 +42,9 @@ tagsRouter.get('/:id', async (request: Request, response: Response, next: NextFu
                     }
                 }
             )
+
+        if(tag === null) return response.status(404).json('Tag not found')
+
         response.json(tag)
     } catch(error: any) {
         if(error.name === 'CastError') {
@@ -78,15 +86,19 @@ tagsRouter.post('/', async (request: Request, response: Response, next: NextFunc
 
 tagsRouter.put('/:id', async (request: Request, response: Response, next: NextFunction) => {
     try {
+        const user = request.user
+        if(!user) return response.status(401).json('Authorization Error')
+
         const { id } = request.params
         const { title } = request.body
 
-        if(!title) response.status(400).json('Incomplete request! Please add Name')
+        if(!title) response.status(400).json('Incomplete request! Please add Title')
 
         const duplicateTag = await Tag
             .findOne({ $and: [
                 { _id: {$ne: new ObjectId(id)} },
-                { title: { $regex: title, $options: 'i' }}
+                { title: { $regex: title, $options: 'i' }},
+                { user: user._id}
             ]})
 
         if(duplicateTag !== null) {
@@ -106,6 +118,9 @@ tagsRouter.put('/:id', async (request: Request, response: Response, next: NextFu
 
 tagsRouter.delete('/:id', async (request: Request, response: Response, next: NextFunction) => {
     try {
+        const user = request.user
+        if(!user) return response.status(401).json('Authorization Error')
+
         await Note.updateMany(
             { 'tags': request.params.id },
             { '$pull': { 'tags': request.params.id }}

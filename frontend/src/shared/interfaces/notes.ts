@@ -1,5 +1,5 @@
 export interface tag {
-    name: string,
+    title: string,
     id: string
 }
 

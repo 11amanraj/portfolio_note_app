@@ -10,10 +10,6 @@ const Home = () => {
     const dispatch = useAppDispatch()
     const user = useAppSelector(state => state.user)
 
-    const notebooks = useAppSelector(state => state.notebooks)
-
-    console.log(notebooks)
-
     const [loggedIn, setLoggedIn] = useState(false)
 
     const loginHandler = (user: user) => {
@@ -24,7 +20,7 @@ const Home = () => {
     if(loggedIn || user.username.length > 0) {
         return (
             <>
-                {/* <SideBar /> */}
+                <SideBar />
                 <HomePage />
             </>
         )

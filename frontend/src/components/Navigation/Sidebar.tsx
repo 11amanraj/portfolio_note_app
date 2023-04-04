@@ -8,10 +8,14 @@ import Filter from '../Operations/Filter';
 import { MessageContext } from '../../store/MessageContextProvider';
 import Message from '../UI/Message';
 import EveryTag from './EveryTag';
+import { useAppSelector } from '../../store/storeHooks';
 
 const SideBar = () => {
-    const { notebooks, loading, addNotebook } = useContext(NotebooksContext)
+    const { loading, addNotebook } = useContext(NotebooksContext)
     const {error, title, messageHandler, showMessage} = useContext(MessageContext)
+
+    const notebooks = useAppSelector(state => state.notebooks)
+
 
     // Add loading component here
 
@@ -21,7 +25,7 @@ const SideBar = () => {
             <Link to={'/'}><h2>TheNotesApp</h2></Link>
             <AddEntry addEntry={addNotebook}/>
             <Filter />
-            {notebooks && notebooks.map(notebook => (
+            {notebooks.map(notebook => (
                 <NotebookTitles key={notebook.id} notebook={notebook}/>
             ))}
             <EveryTag />

@@ -19,7 +19,7 @@ interface tagContext {
 const defaultValue: tagContext = {
     allTags: [
         {
-            name: '',
+            title: '',
             id: '',
             notes: [
                 {

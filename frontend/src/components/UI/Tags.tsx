@@ -33,7 +33,7 @@ const Tags: React.FC<{ tag: tag,
                 })
                 .catch(error => console.log(error))
         }
-    }, [showModal, tag])
+    }, [showModal, tag, url])
 
     const selectionHandler = () => {
         setShowModal(prev => !prev)
@@ -41,7 +41,6 @@ const Tags: React.FC<{ tag: tag,
  
     const modalView = () => {
         const tagDeleteHandler = () => {
-            console.log(tag.name) 
             axios
                 .delete(url)
                 .then(response => console.log(response))
@@ -50,7 +49,7 @@ const Tags: React.FC<{ tag: tag,
 
         return (
           <div className={styles.modal}>
-            <h3>{tag.name}</h3>
+            <h3>{tag.title}</h3>
             <button onClick={tagDeleteHandler}>Delete Tag</button>
             <div>
                 {tagDetail && tagDetail.notes && tagDetail.notes.map(note => <p>{note.title}</p>)}
@@ -65,7 +64,7 @@ const Tags: React.FC<{ tag: tag,
             className={styles.container}
         >
             <p className={`${styles.title} ${active ? styles.active : ''}`}>
-                {tag.name}
+                {tag.title}
             </p>
             {showModal && <Modal>{modalView()}</Modal>}
             {/* {showModal && <TagModal>{modalView()}</TagModal>} */}

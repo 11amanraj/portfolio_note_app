@@ -61,7 +61,7 @@ const TagSection: React.FC<{
                         />
                         {
                             existingTags && tags && inactiveTags(existingTags, tags)
-                                .filter(tag => tag.name.includes(input))
+                                .filter(tag => tag.title.includes(input))
                                 .map(tag => <Tags onSelect={() => onSelect(tag, editing)}
                                     assignMode={editing} 
                                     active={false} 

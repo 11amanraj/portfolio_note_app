@@ -4,6 +4,7 @@ import { tag } from '../../shared/interfaces/notes';
 import axios from 'axios';
 import { useContext, useEffect, useState } from 'react';
 import { TagContext } from '../../store/TagsContextProvider';
+import { useAppSelector } from '../../store/storeHooks';
 
 const TagSection: React.FC<{
         onSelect: (tag: tag, editing: boolean) => void , 
@@ -12,14 +13,16 @@ const TagSection: React.FC<{
         tags: tag[] | undefined
     }> = ({onSelect, onRemove, editing, tags}) => {
     const [input, setInput] = useState('')
-    const [existingTags, setExistingTags] = useState<tag[] | null>(null)
+    // const [existingTags, setExistingTags] = useState<tag[] | null>(null)
     const [showAllTags, setShowAllTags] = useState(false)
 
     const { allTags } = useContext(TagContext)
 
-    useEffect(() => {
-        allTags && setExistingTags([...allTags])
-    }, [allTags])
+    // useEffect(() => {
+    //     allTags && setExistingTags([...allTags])
+    // }, [allTags])
+
+    const existingTags = useAppSelector(state => state.tags)
     
     const editMode = () => {
         const inactiveTags = (biggerArray: tag[], smallerArray: tag[]) => {
@@ -41,7 +44,7 @@ const TagSection: React.FC<{
                         })
                     if(existingTags) {
                         const newTags = [...existingTags, response.data]
-                        setExistingTags(newTags)
+                        // setExistingTags(newTags)
                     }
                 } catch (error) {
                     console.log(error)

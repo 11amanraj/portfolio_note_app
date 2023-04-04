@@ -41,10 +41,20 @@ const getAll = async (token: string) => {
     return response.data
 }
 
+const getOne = async (url: string, token: string) => {
+    const response = await axios.get(url, {
+        headers: {
+            Authorization: token
+        }
+    })
+    return response.data
+}
+
 const noteService = {
     getAll,
     createNew,
-    deleteOne
+    deleteOne,
+    getOne
 }
 
 export default noteService

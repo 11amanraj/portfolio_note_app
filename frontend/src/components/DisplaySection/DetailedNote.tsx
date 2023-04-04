@@ -8,6 +8,8 @@ import LoadingButton from "../UI/LoadingButton";
 import Loading from "../UI/Loading";
 import TagSection from "../Tags/TagSection";
 import styles from './DetailedNote.module.css'
+import { useAppSelector } from "../../store/storeHooks";
+import noteService from "../../services/noteService";
 
 const DetailedNote: React.FC<{id: string | undefined}> = ({id}) => {
     const [note, setNote] = useState<note>({
@@ -27,6 +29,8 @@ const DetailedNote: React.FC<{id: string | undefined}> = ({id}) => {
     const [loading, setLoading] = useState(false)
     const [fetchLoading, setFetchLoading] = useState(true)
     const [selectedTags, setSelectedTags] = useState<tag[]>([])
+
+    const user = useAppSelector(state => state.user)
 
     const editToggler = () => {
         if(editNote) {
@@ -51,15 +55,17 @@ const DetailedNote: React.FC<{id: string | undefined}> = ({id}) => {
 
         setFetchLoading(true)
 
-        axios
-            .get(`http://localhost:8000/api/notes/${id}`)
-            .then(response => {
-                setFetchLoading(false)
-                setNote(response.data)
-                setValue(response.data.content)
-                setSelectedTags(response.data.tags)
-            })
-    }, [id, location])
+        const fetchNote = async () => {
+            const url = `http://localhost:8000/api/notes/${id}`
+            const note = await noteService.getOne(url, user.token)
+            setNote(note)
+            setFetchLoading(false)
+            setValue(note.content)
+            setSelectedTags(note.tags)
+        }
+
+        fetchNote()
+    }, [id, location, user.token])
 
     const selectTagHandler = (newTag: tag, editing: boolean) => {
         if(editing) {

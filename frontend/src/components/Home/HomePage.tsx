@@ -7,22 +7,23 @@ import { NotebooksContext } from '../../store/NotebooksContextProvider';
 import { useInView } from 'react-intersection-observer';
 
 const HomePage = () => {
-    const importantUrl = 'http://localhost:8000/api/notes/important'
+    // const importantUrl = 'http://localhost:8000/api/notes/important'
 
-    const [renderItem, setRenderItem] = useState<number>(0)
-    const { notebooks } =  useContext(NotebooksContext)
+    // const [renderItem, setRenderItem] = useState<number>(0)
+    // const { notebooks } =  useContext(NotebooksContext)
 
-    const [ref, inView] = useInView({triggerOnce: true})
+    // const [ref, inView] = useInView({triggerOnce: true})
 
-    useEffect(() => {
-        if(inView) {
-            setRenderItem(prev => prev + 1)
-        }
-    }, [inView])
+    // useEffect(() => {
+    //     if(inView) {
+    //         setRenderItem(prev => prev + 1)
+    //     }
+    // }, [inView])
 
     return (
         <section className={styles.container}>
-            <Search />
+            Working
+            {/* <Search />
             <NotesCollection
                 description={{title: 'Important Notes'}}  
                 renderComponent={true} 
@@ -49,7 +50,7 @@ const HomePage = () => {
                                 url={`http://localhost:8000/api/notebooks/${notebook.id}`} 
                             />
                 }
-            })}
+            })} */}
         </section> 
      );
 }

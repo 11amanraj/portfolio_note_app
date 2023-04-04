@@ -7,6 +7,7 @@ import Tags from '../UI/Tags';
 import { useNavigate } from 'react-router-dom';
 import { MessageContext } from '../../store/MessageContextProvider'
 import { NotebooksContext } from '../../store/NotebooksContextProvider';
+import { useSelector } from 'react-redux'
 
 const NotesCollection: React.FC<{type: string, 
         url: string, 
@@ -30,6 +31,8 @@ const NotesCollection: React.FC<{type: string,
     const { messageHandler } = useContext(MessageContext)
     const { rerenderComponent } = useContext(NotebooksContext)
 
+    const user = useSelector((state: any) => state.user)
+
     useEffect(() => {
         if(description) {
             setTitle(description.title)
@@ -40,7 +43,11 @@ const NotesCollection: React.FC<{type: string,
         if(renderComponent) {
             setLoading(true)
             axios
-                .get(url)
+                .get(url, {
+                    headers: {
+                      'Authorization': user.token
+                    }
+                  })
                 .then(response => {
                     if(type === CollectionType.NOTEBOOK) {
                         setTags(response.data.tags)

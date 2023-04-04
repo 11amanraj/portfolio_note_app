@@ -16,7 +16,6 @@ const NotesCollection: React.FC<{type: string,
     const [notes, setNotes] = useState<note[]>([{
         title: '',
         content: '',
-        author: '',
         id: '',
         dateCreated: new Date(0),
         dateModified: new Date(0),

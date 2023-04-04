@@ -6,7 +6,6 @@ export interface tag {
 export interface note {
     title: string;
     content: string;
-    author: string;
     id: string;
     pinned: boolean;
     dateCreated: Date;
@@ -40,17 +39,3 @@ export enum CollectionType {
     IMPORTANT = 'important',
     TAG = 'tag'
 }
-
-// export enum TypeofSelection {
-//     NOTE = 'note',
-//     NOTEBOOK = 'notebook',
-//     WELCOME = 'welcome',
-//     CREATENOTE = 'create'
-// }
-
-// export interface selection {
-//     type: TypeofSelection,
-//     selected: string | null,
-//     lastNotebook: string | null,
-//     onSelect: (type: TypeofSelection ,id: string) => void
-// }

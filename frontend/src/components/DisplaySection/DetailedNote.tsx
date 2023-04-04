@@ -13,7 +13,6 @@ const DetailedNote: React.FC<{id: string | undefined}> = ({id}) => {
     const [note, setNote] = useState<note>({
         title: '',
         content: '',
-        author: '',
         id: '',
         dateCreated: new Date(0),
         dateModified: new Date(0),

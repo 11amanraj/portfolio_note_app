@@ -9,7 +9,6 @@ const SingleNote: React.FC<{id: string}> = ({id}) => {
     const [note, setNote] = useState<note>({
         title: '',
         content: '',
-        author: '',
         id: '',
         dateCreated: new Date(0),
         dateModified: new Date(0),

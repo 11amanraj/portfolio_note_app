@@ -9,8 +9,6 @@ const EveryTag = () => {
     const { allTags, loading } = useContext(TagContext)
     const tags = useAppSelector(state => state.tags)
 
-    console.log(tags)
-
     return ( 
         <section className={styles.container}>
             {tags.map(tag => (

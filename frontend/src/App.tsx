@@ -10,6 +10,7 @@ import TagContextProvider from './store/TagsContextProvider';
 import { useAppDispatch } from './store/storeHooks';
 import { fetchAllTags } from './reducers/tagsReducer';
 import { setUser } from './reducers/userReducer'
+import { fetchAllNotebooks } from './reducers/notebooksReducer';
 
 function App() {
   const dispatch = useAppDispatch()
@@ -19,7 +20,8 @@ function App() {
     if (loggedUserJSON) {
         const loggedUser = JSON.parse(loggedUserJSON)
         dispatch(setUser(loggedUser))
-        dispatch(fetchAllTags(loggedUser.token))   
+        dispatch(fetchAllTags(loggedUser.token))
+        dispatch(fetchAllNotebooks(loggedUser.token)) 
     }
   }, [dispatch])
 

@@ -1,6 +1,6 @@
 POST http://localhost:8000/api/notebooks
 content-type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkpEb2UiLCJpZCI6IjY0MjcyMmMzNzJlZTg5YzVhM2RlYTNiMSIsImlhdCI6MTY4MDM1MjE3MH0.dMF4cVs8Rt8Ckb4oXGlY4ZOZX30FxJraHw7JKO_ulkw
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFub24iLCJpZCI6IjY0MjgzODNlOGUxN2Y1OWQxNDgyY2NjYiIsImlhdCI6MTY4MDYyMjM5N30.M6UrLx_8GReRKml7i8Z3N03HZuA4bgp3O8e0G7i1bJQ
 
 {
     "title": "Very New Notebook"
@@ -9,6 +9,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkpEb
 ####
 PUT http://localhost:8000/api/notebooks/6426c4ec23998dbed4521a44
 content-type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFub24iLCJpZCI6IjY0MjgzODNlOGUxN2Y1OWQxNDgyY2NjYiIsImlhdCI6MTY4MDYyMjM5N30.M6UrLx_8GReRKml7i8Z3N03HZuA4bgp3O8e0G7i1bJQ
 
 {
     "title": "Testing Notebook"
@@ -16,7 +17,7 @@ content-type: application/json
 
 ####
 GET http://localhost:8000/api/notebooks
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkpEb2UiLCJpZCI6IjY0MjcyMmMzNzJlZTg5YzVhM2RlYTNiMSIsImlhdCI6MTY4MDM1MjE3MH0.dMF4cVs8Rt8Ckb4oXGlY4ZOZX30FxJraHw7JKO_ulkw
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFub24iLCJpZCI6IjY0MjgzODNlOGUxN2Y1OWQxNDgyY2NjYiIsImlhdCI6MTY4MDYyMjM5N30.M6UrLx_8GReRKml7i8Z3N03HZuA4bgp3O8e0G7i1bJQ
 
 #####
 GET http://localhost:8000/api/notebooks/64297825f8fe6523185dac42

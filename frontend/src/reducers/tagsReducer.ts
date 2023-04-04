@@ -18,7 +18,6 @@ const tagsReducer = createSlice({
 export const fetchAllTags = (token: string): AppThunk => {
     return async dispatch => {
         const tags = await tagService.getAll(token) 
-        console.log(tags)
         dispatch(setTags(tags))  
     }
 }

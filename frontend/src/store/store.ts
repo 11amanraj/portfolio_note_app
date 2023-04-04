@@ -1,11 +1,13 @@
 import { AnyAction, ThunkAction, configureStore } from "@reduxjs/toolkit";
 import userReducer from "../reducers/userReducer";
 import tagsReducer from "../reducers/tagsReducer";
+import notebooksReducer from "../reducers/notebooksReducer";
 
 const store = configureStore({
     reducer: {
         user: userReducer,
-        tags: tagsReducer
+        tags: tagsReducer,
+        notebooks: notebooksReducer
     }
 })
 

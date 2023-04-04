@@ -39,3 +39,10 @@ export enum CollectionType {
     IMPORTANT = 'important',
     TAG = 'tag'
 }
+
+export interface user {
+    id?: string,
+    token: string,
+    username: string,
+    name: string
+}

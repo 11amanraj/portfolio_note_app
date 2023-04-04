@@ -1,10 +1,26 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
+import { setUser } from '../reducers/userReducer'
 import axios from 'axios'
 
 const Login = () => {
+    const dispatch = useDispatch()
+    const user = useSelector((state: any) => state.user)
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
     const [error, setError] = useState('')
+
+    useEffect(() => {
+        if(user === null) {
+            const loggedUserJSON = window.localStorage.getItem('loggedNoteappUser')    
+            if (loggedUserJSON) {
+                const loggedUser = JSON.parse(loggedUserJSON)
+                dispatch(setUser(loggedUser))         
+            }
+        }
+    }, [user, dispatch])
+
+    console.log(user)
 
     const submitHandler = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
@@ -14,7 +30,13 @@ const Login = () => {
                     username: username,
                     password: password
                 })
-            console.log(response.data)
+            const user = {
+                id: response.data.id,
+                username: response.data.username,
+                name: response.data.name,
+                token: `Bearer ${response.data.token}`
+            }
+            window.localStorage.setItem('loggedNoteappUser', JSON.stringify(user)) 
             setError('')
         } catch(error: any) {
             if(error.response.status === 401) {

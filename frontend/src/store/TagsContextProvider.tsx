@@ -40,12 +40,12 @@ const TagContextProvider: React.FC<{children: ReactNode}> = ({children}) => {
 
     useEffect(() => {
         setLoading(true)
-        axios
-            .get('http://localhost:8000/api/tags')
-            .then(response => {
-                setAllTags(response.data)
-                setLoading(false)
-            }).catch(error => console.log(error))
+        // axios
+        //     .get('http://localhost:8000/api/tags')
+        //     .then(response => {
+        //         setAllTags(response.data)
+        //         setLoading(false)
+        //     }).catch(error => console.log(error))
     }, [])
 
     return ( 

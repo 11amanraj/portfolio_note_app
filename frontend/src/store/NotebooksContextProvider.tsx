@@ -38,13 +38,13 @@ const NotebooksContextProvider = ({children}: {children: React.ReactNode}) => {
 
     useEffect(() => {
         setLoading(true)
-        axios
-            .get('http://localhost:8000/api/notebooks')
-            .then(response => {
-                setNotebooks(response.data)
-                setLoading(false)
-            })
-            .catch(error => console.log(error.message))
+        // axios
+        //     .get('http://localhost:8000/api/notebooks')
+        //     .then(response => {
+        //         setNotebooks(response.data)
+        //         setLoading(false)
+        //     })
+        //     .catch(error => console.log(error.message))
     }, [lastID])
 
     const addNotebookHandler = async (title: string) => {

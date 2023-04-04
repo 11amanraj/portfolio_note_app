@@ -1,9 +1,9 @@
 import { useContext, useState, useRef, useEffect } from 'react'
-import NotesCollection from '../components/NotesGallery/NotesCollection';
-import Search from '../components/Operations/Search';
-import { CollectionType } from '../shared/interfaces/notes';
-import styles from './Style.module.css'
-import { NotebooksContext } from '../store/NotebooksContextProvider';
+import NotesCollection from '../NotesGallery/NotesCollection';
+import Search from '../Operations/Search';
+import { CollectionType } from '../../shared/interfaces/notes';
+import styles from './HomePage.module.css'
+import { NotebooksContext } from '../../store/NotebooksContextProvider';
 import { useInView } from 'react-intersection-observer';
 
 const HomePage = () => {

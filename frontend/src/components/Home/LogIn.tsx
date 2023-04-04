@@ -1,26 +1,11 @@
-import { useState, useEffect } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
-import { setUser } from '../reducers/userReducer'
+import { useState } from 'react'
 import axios from 'axios'
+import { user } from '../../shared/interfaces/notes'
 
-const Login = () => {
-    const dispatch = useDispatch()
-    const user = useSelector((state: any) => state.user)
+const LogIn: React.FC<{onLogin: (user: user) => void}> = ({onLogin}) => {
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
     const [error, setError] = useState('')
-
-    useEffect(() => {
-        if(user === null) {
-            const loggedUserJSON = window.localStorage.getItem('loggedNoteappUser')    
-            if (loggedUserJSON) {
-                const loggedUser = JSON.parse(loggedUserJSON)
-                dispatch(setUser(loggedUser))         
-            }
-        }
-    }, [user, dispatch])
-
-    console.log(user)
 
     const submitHandler = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
@@ -36,6 +21,7 @@ const Login = () => {
                 name: response.data.name,
                 token: `Bearer ${response.data.token}`
             }
+            onLogin(user)
             window.localStorage.setItem('loggedNoteappUser', JSON.stringify(user)) 
             setError('')
         } catch(error: any) {
@@ -70,7 +56,4 @@ const Login = () => {
      );
 }
  
-export default Login;
-<div>
-
-</div>
+export default LogIn;

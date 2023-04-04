@@ -4,7 +4,8 @@ import { tag } from '../../shared/interfaces/notes';
 import axios from 'axios';
 import { useContext, useEffect, useState } from 'react';
 import { TagContext } from '../../store/TagsContextProvider';
-import { useAppSelector } from '../../store/storeHooks';
+import { useAppDispatch, useAppSelector } from '../../store/storeHooks';
+import { addNewTag } from '../../reducers/tagsReducer';
 
 const TagSection: React.FC<{
         onSelect: (tag: tag, editing: boolean) => void , 
@@ -23,6 +24,8 @@ const TagSection: React.FC<{
     // }, [allTags])
 
     const existingTags = useAppSelector(state => state.tags)
+    const user = useAppSelector(state => state.user)
+    const dispatch = useAppDispatch()
     
     const editMode = () => {
         const inactiveTags = (biggerArray: tag[], smallerArray: tag[]) => {
@@ -37,18 +40,19 @@ const TagSection: React.FC<{
 
         const handleKeyDown = async (e: React.KeyboardEvent<HTMLInputElement>) => {
             if (e.key === 'Enter') {
-                try {
-                    const response = await axios
-                        .post('http://localhost:8000/api/tags', {
-                            name: e.currentTarget.value
-                        })
-                    if(existingTags) {
-                        const newTags = [...existingTags, response.data]
-                        // setExistingTags(newTags)
-                    }
-                } catch (error) {
-                    console.log(error)
-                }
+                const response = await dispatch(addNewTag(e.currentTarget.value, user.token))
+                // try {
+                //     // const response = await axios
+                //     //     .post('http://localhost:8000/api/tags', {
+                //     //         name: e.currentTarget.value
+                //     //     })
+                //     // if(existingTags) {
+                //     //     const newTags = [...existingTags, response.data]
+                //         // setExistingTags(newTags)
+                //     }
+                // } catch (error) {
+                //     console.log(error)
+                // }
             }
           }
 

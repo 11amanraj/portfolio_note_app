@@ -111,7 +111,7 @@ const NotesCollection: React.FC<{type: string,
                             Add Note
                         </div>
                     </div>}
-                {notes.length > 0 && notes.map(note => <SingleNote key={note.id} id={note.id}/>)}
+                {notes.length > 0 && notes.map(note => <SingleNote note={note} key={note.id} id={note.id}/>)}
             </div>
         </section>
      );

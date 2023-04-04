@@ -8,6 +8,8 @@ import { NotebooksContext } from '../../store/NotebooksContextProvider'
 import AddEntry from '../Operations/AddEntry'
 import axios from 'axios'
 import { MessageContext } from '../../store/MessageContextProvider'
+import { useAppDispatch, useAppSelector } from '../../store/storeHooks'
+import { deleteOneNotebook } from '../../reducers/notebooksReducer'
 
 const NotebookTitles: React.FC<{notebook: notebook}> = ({notebook}) => {
     const [isActive, setIsActive] = useState(false)
@@ -27,8 +29,14 @@ const NotebookTitles: React.FC<{notebook: notebook}> = ({notebook}) => {
         }
     }, [location, notebook])
 
-    const deleteHandler = (id: string) => {
-        deleteNotebook(id)
+    const user = useAppSelector(state => state.user)
+    const dispatch = useAppDispatch()
+
+    const deleteHandler = async (id: string) => {
+        const response = await dispatch(deleteOneNotebook(id, user.token))
+        return response
+        // deleteNotebook(id)
+        // navigate('/')
         // rerenderComponent(true)
     }
 

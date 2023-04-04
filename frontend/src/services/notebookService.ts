@@ -17,6 +17,19 @@ const createNew = async (title: string, token: string) => {
     }
 }
 
+const deleteOne = async (id: string, token: string) => {
+    try {
+        const response = await axios.delete(`${url}/${id}`, {
+            headers: {
+                Authorization: token
+            }
+        })
+        return response.data
+    } catch(error: any) {
+        return Promise.reject(error.response)
+    }
+}
+
 const getAll = async (token: string) => {
     const response = await axios.get(url, {
         headers: {
@@ -28,7 +41,8 @@ const getAll = async (token: string) => {
 
 const notebookService = {
     getAll,
-    createNew
+    createNew,
+    deleteOne
 }
 
 export default notebookService

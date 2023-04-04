@@ -21,15 +21,13 @@ const AddEntry: React.FC<{addEntry: (title: string) => void}> = ({addEntry}) => 
         // add better type check later
         if(inputRef.current) {
             const response: any = await addEntry(inputRef.current?.value)
-            
-            if(response as dispatchReturn) {
-                if(response.status === 200) {
-                    inputRef.current.value = ''
-                    console.log('correct')
-                } else {
-                    console.log(response.data)
-                    inputRef.current.focus()
-                }
+
+            if(response.status === 200) {
+                inputRef.current.value = ''
+                console.log('correct')
+            } else {
+                console.log(response.data)
+                inputRef.current.focus()
             }
         }
     }

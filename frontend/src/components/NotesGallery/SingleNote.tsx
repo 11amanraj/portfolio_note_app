@@ -5,7 +5,7 @@ import axios from 'axios';
 import { useState, useEffect } from 'react';
 import Loading from '../UI/Loading';
 
-const SingleNote: React.FC<{id: string}> = ({id}) => {
+const SingleNote: React.FC<{id: string, note: note}> = ({id}) => {
     const [note, setNote] = useState<note>({
         title: '',
         content: '',
@@ -18,16 +18,16 @@ const SingleNote: React.FC<{id: string}> = ({id}) => {
     })
     const [loading, setLoading] = useState(false)
 
-    useEffect(() => {
-        setLoading(true)
-        axios
-            .get(`http://localhost:8000/api/notes/${id}`)
-            .then(response => {
-                setNote(response.data)
-                setLoading(false)
-            })
-            .catch(error => console.log(error))
-    }, [id])
+    // useEffect(() => {
+    //     setLoading(true)
+    //     axios
+    //         .get(`http://localhost:8000/api/notes/${id}`)
+    //         .then(response => {
+    //             setNote(response.data)
+    //             setLoading(false)
+    //         })
+    //         .catch(error => console.log(error))
+    // }, [id])
 
     const pinNoteHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
         // improve this function

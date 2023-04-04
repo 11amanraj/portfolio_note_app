@@ -3,12 +3,17 @@ const notesRouter = Router()
 import Note from '../models/note'
 import Notebook from '../models/notebook'
 import Tag from '../models/tag'
+import { ObjectId } from 'mongodb'
 
 notesRouter.get('/', async (request: Request, response: Response, next: NextFunction) => {
     try {
+        const user = request.user
+        if(!user) return response.status(401).json('Authorization Error')
+
         const notes = await Note
-            .find({})
+            .find({user: user._id})
             // .sort({ dateCreated: -1 }) 
+            .populate('user')
             .populate('notebook', { title: 1, id: 1 })
             .populate('tags', { name: 1 })
 
@@ -71,6 +76,11 @@ notesRouter.get('/:id', async (request: Request, response: Response, next: NextF
 
 notesRouter.post('/', async (request: Request, response: Response, next: NextFunction) => {
     try {
+        const user = request.user
+        if(!user) return response.status(401).json('Authorization Error')
+
+        if(!request.body.notebookID) return response.status(404).json('Notebook ID missing')
+
         const notebook = await Notebook.findById(request.body.notebookID)
 
         if (notebook === null) {
@@ -96,7 +106,7 @@ notesRouter.post('/', async (request: Request, response: Response, next: NextFun
             const note = new Note({
                 title: title,
                 content: request.body.content,
-                author: request.body.author,
+                user: user._id,
                 pinned: false,
                 dateCreated: date,
                 stringDateCreated: dateString,
@@ -124,6 +134,18 @@ notesRouter.post('/', async (request: Request, response: Response, next: NextFun
 
 notesRouter.delete('/:id', async (request: Request, response: Response, next: NextFunction) => {
     try {
+        const user = request.user
+        if(!user) return response.status(401).json('Authorization Error')
+
+        const note = await Note
+            .findOne({_id: new ObjectId(request.params.id), user: user._id})
+
+        if(note === null) return response.status(404).json('Note not found')
+
+        await Note.deleteOne({
+            user: user._id,
+            _id: new ObjectId(request.params.id)
+        })
         await Note.findByIdAndDelete(request.params.id)
         await Notebook.updateOne(
             { 'notes': request.params.id },
@@ -141,10 +163,13 @@ notesRouter.delete('/:id', async (request: Request, response: Response, next: Ne
 
 notesRouter.put('/:id', async (request: Request, response: Response, next: NextFunction) => {
     try {
+        const user = request.user
+        if(!user) return response.status(401).json('Authorization Error')
+
         const note = await Note.findById(request.params.id)
         
         if(!note) {
-            response.status(400).json({ error: 'note does not exist'})
+            response.status(404).json({ error: 'note does not exist'})
         } else {
             const newTagsID = request.body.tags
     
@@ -191,7 +216,7 @@ notesRouter.put('/:id', async (request: Request, response: Response, next: NextF
                 )
             }
 
-            return response.json(updatedNote)
+            return response.status(200).json(updatedNote)
         }
     } catch(error) {
         next(error)

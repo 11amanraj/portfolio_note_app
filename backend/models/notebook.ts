@@ -22,7 +22,11 @@ const notebookSchema = new Schema<notebook>({
                 type: String
             }
         }
-    ]
+    ],
+    user: {
+        type: Schema.Types.ObjectId,
+        ref: 'User'
+    }
 })
 
 notebookSchema.set('toJSON', {

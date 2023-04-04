@@ -1,0 +1,24 @@
+### Wrong User
+POST http://localhost:8000/api/login
+content-type: application/json
+
+{
+    "username": "Jane",
+    "password": "welcome"
+}
+
+##### Correct User
+POST http://localhost:8000/api/login
+content-type: application/json
+
+{
+    "username": "anon",
+    "password": "qwerty"
+}
+
+
+# {
+#     "username": "anon",
+#     "name": "Anonymous",
+#     "password": "qwerty"
+# }

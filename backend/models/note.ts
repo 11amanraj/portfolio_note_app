@@ -4,12 +4,15 @@ import { notes } from '../types/types'
 const noteSchema = new Schema<notes>({
     title: String,
     content: String,
-    author: String,
     pinned: Boolean,
     dateCreated: Date,
     dateModified: Date,
     stringDateCreated: String,
     stringDateModified: String,
+    user: {
+        type: Schema.Types.ObjectId,
+        ref: 'User'
+    },
     notebook: {
         type: Schema.Types.ObjectId,
         ref: 'Notebook'

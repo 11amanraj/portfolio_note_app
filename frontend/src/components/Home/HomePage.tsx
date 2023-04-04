@@ -1,12 +1,31 @@
 import { useContext, useState, useRef, useEffect } from 'react'
 import NotesCollection from '../NotesGallery/NotesCollection';
 import Search from '../Operations/Search';
-import { CollectionType } from '../../shared/interfaces/notes';
+import { CollectionType, note } from '../../shared/interfaces/notes';
 import styles from './HomePage.module.css'
 import { NotebooksContext } from '../../store/NotebooksContextProvider';
 import { useInView } from 'react-intersection-observer';
+import noteService from '../../services/noteService';
+import { useAppSelector } from '../../store/storeHooks';
+import Loading from '../UI/Loading';
+import SingleNote from '../NotesGallery/SingleNote';
 
 const HomePage = () => {
+    const [loading, setLoading] = useState(true)
+    const [notes, setNotes] = useState<note[]>([])
+
+    const user = useAppSelector(state => state.user)
+
+    useEffect(() => {
+        setLoading(true)
+        const fetchAllNotes = async (token: string) => {
+            const fetchedNotes = await noteService.getAll(token)
+            setNotes(fetchedNotes)
+        }
+        fetchAllNotes(user.token)
+        setLoading(false)
+    }, [user.token])
+    
     // const importantUrl = 'http://localhost:8000/api/notes/important'
 
     // const [renderItem, setRenderItem] = useState<number>(0)
@@ -20,39 +39,17 @@ const HomePage = () => {
     //     }
     // }, [inView])
 
-    return (
-        <section className={styles.container}>
-            Working
-            {/* <Search />
-            <NotesCollection
-                description={{title: 'Important Notes'}}  
-                renderComponent={true} 
-                type={CollectionType.IMPORTANT} 
-                url={importantUrl} 
-            />
-            {notebooks && notebooks.length > 0 && notebooks.map((notebook, i) => {
-                if(renderItem === i) {
-                    return <div key={notebook.id} ref={ref} >
-                                <NotesCollection
-                                    key={notebook.id}
-                                    renderComponent={i < renderItem-1}
-                                    description={{title: notebook.title}} 
-                                    type={CollectionType.NOTEBOOK}
-                                    url={`http://localhost:8000/api/notebooks/${notebook.id}`}
-                                />
-                            </div>
-                } else {
-                    return  <NotesCollection
-                                key={notebook.id}
-                                renderComponent={i < renderItem}
-                                description={{title: notebook.title}} 
-                                type={CollectionType.NOTEBOOK}
-                                url={`http://localhost:8000/api/notebooks/${notebook.id}`} 
-                            />
-                }
-            })} */}
-        </section> 
-     );
+    if(loading) {
+        return (
+            <Loading />
+        )
+    } else {
+        return (
+            <section className={styles.container}>
+                {notes.map(note => <SingleNote key={note.id} note={note} id={note.id} />)}
+            </section>
+        )
+    }
 }
  
 export default HomePage;

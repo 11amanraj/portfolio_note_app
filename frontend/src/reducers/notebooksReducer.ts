@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { AppThunk } from '../store/store'
-import { notebook } from '../shared/interfaces/notes'
+import { notebook, note } from '../shared/interfaces/notes'
 import notebookService from '../services/notebookService'
 
 const initialState: notebook[] = []
@@ -12,10 +12,20 @@ const notebooksReducer = createSlice({
     initialState,
     reducers: {
         addNotebook: (state, action: PayloadAction<notebook>) => {
-            return [...state, action.payload]
+            return state.concat(action.payload)
         },
         removeNotebook: (state, action: PayloadAction<string>) => {
             return state.filter(notebook => notebook.id !== action.payload)
+        },
+        addOneNote: (state, action: PayloadAction<{notebookID: string, note: note}>) => {
+            const selectedNotebook = state.find(notebook => notebook.id === action.payload.notebookID)
+            if(selectedNotebook) {
+                const notes = selectedNotebook.notes.concat(action.payload.note)
+                return state.map(notebook => notebook.id === action.payload.notebookID 
+                    ? {...selectedNotebook, notes: notes}
+                    : notebook 
+                )
+            } else return state
         },
         setNotebooks: (state, action: PayloadAction<notebook[]>) => {
             return action.payload
@@ -58,5 +68,5 @@ export const addNewNotebook = (title: string, token: string): AppThunk => {
     }
 }
 
-export const { setNotebooks, addNotebook, removeNotebook } = notebooksReducer.actions
+export const { setNotebooks, addNotebook, removeNotebook, addOneNote } = notebooksReducer.actions
 export default notebooksReducer.reducer

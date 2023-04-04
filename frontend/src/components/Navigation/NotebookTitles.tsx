@@ -9,14 +9,14 @@ import AddEntry from '../Operations/AddEntry'
 import axios from 'axios'
 import { MessageContext } from '../../store/MessageContextProvider'
 import { useAppDispatch, useAppSelector } from '../../store/storeHooks'
-import { deleteOneNotebook } from '../../reducers/notebooksReducer'
+import { addOneNote, deleteOneNotebook } from '../../reducers/notebooksReducer'
+import noteService from '../../services/noteService'
 
 const NotebookTitles: React.FC<{notebook: notebook}> = ({notebook}) => {
     const [isActive, setIsActive] = useState(false)
     const location = useLocation()
     const navigate = useNavigate()
 
-    const { deleteNotebook, rerenderComponent } = useContext(NotebooksContext)
     const { messageHandler } = useContext(MessageContext)
 
     useEffect(() => {
@@ -43,23 +43,16 @@ const NotebookTitles: React.FC<{notebook: notebook}> = ({notebook}) => {
     const newNoteHandler = async (title: string) => {
         const newNote = {
             title: title,
-            content: '',
-            author: "John Doe",
             notebookID: notebook.id
         }
-        
-        axios
-            .post('http://localhost:8000/api/notes', newNote)
-            .then(response => {
-                rerenderComponent(true)
-                messageHandler(false, `${response.data.title} added !`)
-                navigate(`/notebook/${notebook.id}/note/${response.data.id}`, {state:{edit: true}})
-            })
-            .catch(error => console.log(error))
+
+        const savedNote = await noteService.createNew(newNote,user.token)
+        dispatch(addOneNote({notebookID: notebook.id,note: savedNote}))
+        messageHandler(false, `${savedNote.title} added !`)
+        navigate(`/notebook/${notebook.id}/note/${savedNote.id}`, {state:{edit: true}})
 
         return true
     }
-
     
     return (
         <div className={`${styles.container} ${isActive ? styles.active : ''}`}>

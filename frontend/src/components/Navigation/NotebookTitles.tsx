@@ -4,10 +4,8 @@ import { notebook } from '../../shared/interfaces/notes'
 import NotesTitle from './NotesTitle'
 import { useEffect, useState, useContext } from 'react'
 import DeleteEntry from '../Operations/DeleteEntry'
-import { NotebooksContext } from '../../store/NotebooksContextProvider'
 import AddEntry from '../Operations/AddEntry'
 import axios from 'axios'
-import { MessageContext } from '../../store/MessageContextProvider'
 import { useAppDispatch, useAppSelector } from '../../store/storeHooks'
 import { addOneNote, deleteOneNotebook } from '../../reducers/notebooksReducer'
 import noteService from '../../services/noteService'
@@ -16,8 +14,6 @@ const NotebookTitles: React.FC<{notebook: notebook}> = ({notebook}) => {
     const [isActive, setIsActive] = useState(false)
     const location = useLocation()
     const navigate = useNavigate()
-
-    const { messageHandler } = useContext(MessageContext)
 
     useEffect(() => {
         const urlArray = location.pathname.split('/')
@@ -48,7 +44,7 @@ const NotebookTitles: React.FC<{notebook: notebook}> = ({notebook}) => {
 
         const savedNote = await noteService.createNew(newNote,user.token)
         dispatch(addOneNote({notebookID: notebook.id,note: savedNote}))
-        messageHandler(false, `${savedNote.title} added !`)
+        // messageHandler(false, `${savedNote.title} added !`)
         navigate(`/notebook/${notebook.id}/note/${savedNote.id}`, {state:{edit: true}})
 
         return true

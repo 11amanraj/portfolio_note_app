@@ -1,12 +1,10 @@
 import styles from './NotesCollection.module.css'
 import SingleNote from './SingleNote';
 import axios from 'axios';
-import { useEffect, useState, useContext } from 'react';
+import { useEffect, useState } from 'react';
 import { CollectionType, note, tag } from '../../shared/interfaces/notes';
 import Tags from '../UI/Tags';
 import { useNavigate } from 'react-router-dom';
-import { MessageContext } from '../../store/MessageContextProvider'
-import { NotebooksContext } from '../../store/NotebooksContextProvider';
 import { useSelector } from 'react-redux'
 
 const NotesCollection: React.FC<{type: string, 
@@ -28,8 +26,6 @@ const NotesCollection: React.FC<{type: string,
     const [tags, setTags] = useState<tag[]>([])
     const [loading, setLoading] = useState(false)
     const navigate = useNavigate()
-    const { messageHandler } = useContext(MessageContext)
-    const { rerenderComponent } = useContext(NotebooksContext)
 
     const user = useSelector((state: any) => state.user)
 
@@ -39,29 +35,29 @@ const NotesCollection: React.FC<{type: string,
         }
     }, [description])
 
-    useEffect(() => {
-        if(renderComponent) {
-            setLoading(true)
-            axios
-                .get(url, {
-                    headers: {
-                      'Authorization': user.token
-                    }
-                  })
-                .then(response => {
-                    if(type === CollectionType.NOTEBOOK) {
-                        setTags(response.data.tags)
-                        setTitle(response.data.title)
-                        setNotes(response.data.notes)
-                        // setLink(`/notebook/${response.data.id}/note/`)
-                    } else if (type === CollectionType.IMPORTANT) {
-                        setTitle('Important Notes')
-                        setNotes(response.data)
-                    }
-                    setLoading(false)
-                })
-        }
-    }, [type, url, renderComponent])
+    // useEffect(() => {
+    //     if(renderComponent) {
+    //         setLoading(true)
+    //         axios
+    //             .get(url, {
+    //                 headers: {
+    //                   'Authorization': user.token
+    //                 }
+    //               })
+    //             .then(response => {
+    //                 if(type === CollectionType.NOTEBOOK) {
+    //                     setTags(response.data.tags)
+    //                     setTitle(response.data.title)
+    //                     setNotes(response.data.notes)
+    //                     // setLink(`/notebook/${response.data.id}/note/`)
+    //                 } else if (type === CollectionType.IMPORTANT) {
+    //                     setTitle('Important Notes')
+    //                     setNotes(response.data)
+    //                 }
+    //                 setLoading(false)
+    //             })
+    //     }
+    // }, [type, url])
 
     const addNoteHandler = () => {
         const notebookId = url.split('/')[5]
@@ -76,8 +72,8 @@ const NotesCollection: React.FC<{type: string,
         axios
             .post('http://localhost:8000/api/notes', newNote)
             .then(response => {
-                rerenderComponent(true)
-                messageHandler(false , `${response.data.title} added !`)
+                // rerenderComponent(true)
+                // messageHandler(false , `${response.data.title} added !`)
                 navigate(`/notebook/${notebookId}/note/${response.data.id}`, {state:{edit: true}})
             })
             .catch(error => console.log(error))

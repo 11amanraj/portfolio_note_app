@@ -3,7 +3,6 @@ import NotesCollection from '../NotesGallery/NotesCollection';
 import Search from '../Operations/Search';
 import { CollectionType, note } from '../../shared/interfaces/notes';
 import styles from './HomePage.module.css'
-import { NotebooksContext } from '../../store/NotebooksContextProvider';
 import { useInView } from 'react-intersection-observer';
 import noteService from '../../services/noteService';
 import { useAppDispatch, useAppSelector } from '../../store/storeHooks';

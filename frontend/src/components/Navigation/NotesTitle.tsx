@@ -4,10 +4,8 @@ import DeleteEntry from '../Operations/DeleteEntry';
 import styles from './NotesTitle.module.css'
 import axios from 'axios';
 import { useContext } from 'react'
-import { NotebooksContext } from '../../store/NotebooksContextProvider';
 
 const NotesTitle: React.FC<{note: note}> = ({note}) => {
-    const { rerenderComponent } = useContext(NotebooksContext)
     const navigate = useNavigate()
 
     const deleteHandler = (id: string) => {
@@ -15,7 +13,6 @@ const NotesTitle: React.FC<{note: note}> = ({note}) => {
         axios
             .delete(`http://localhost:8000/api/notes/${id}`)
             .then(response => {
-                rerenderComponent(true)
                 navigate(`/notebook/${note.notebook}`)
             })
             .catch(error => console.log(error))

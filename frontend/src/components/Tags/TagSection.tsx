@@ -3,7 +3,6 @@ import Tags from '../UI/Tags';
 import { tag } from '../../shared/interfaces/notes';
 import axios from 'axios';
 import { useContext, useEffect, useState } from 'react';
-import { TagContext } from '../../store/TagsContextProvider';
 import { useAppDispatch, useAppSelector } from '../../store/storeHooks';
 import { addNewTag } from '../../reducers/tagsReducer';
 
@@ -16,8 +15,6 @@ const TagSection: React.FC<{
     const [input, setInput] = useState('')
     // const [existingTags, setExistingTags] = useState<tag[] | null>(null)
     const [showAllTags, setShowAllTags] = useState(false)
-
-    const { allTags } = useContext(TagContext)
 
     // useEffect(() => {
     //     allTags && setExistingTags([...allTags])

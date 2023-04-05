@@ -1,12 +1,9 @@
-import { useContext } from 'react';
-import { TagContext } from '../../store/TagsContextProvider';
 import Loading from '../UI/Loading';
 import Tags from '../UI/Tags';
 import styles from './EveryTag.module.css'
 import { useAppSelector } from '../../store/storeHooks';
 
 const EveryTag = () => {
-    const { allTags, loading } = useContext(TagContext)
     const tags = useAppSelector(state => state.tags)
 
     return ( 

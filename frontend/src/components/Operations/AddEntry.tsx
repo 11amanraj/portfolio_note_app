@@ -1,6 +1,5 @@
 import styles from './AddEntry.module.css'
 import { useContext, useRef } from 'react'
-import { MessageContext } from '../../store/MessageContextProvider'
 
 interface dispatchReturn {
     status: string,

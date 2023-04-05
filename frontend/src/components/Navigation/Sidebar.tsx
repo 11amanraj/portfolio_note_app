@@ -2,19 +2,14 @@ import { useContext } from 'react';
 import styles from './Sidebar.module.css'
 import NotebookTitles from './NotebookTitles';
 import { Link } from 'react-router-dom';
-import { NotebooksContext } from '../../store/NotebooksContextProvider';
 import AddEntry from '../Operations/AddEntry';
 import Filter from '../Operations/Filter';
-import { MessageContext } from '../../store/MessageContextProvider';
 import Message from '../UI/Message';
 import EveryTag from './EveryTag';
 import { useAppDispatch, useAppSelector } from '../../store/storeHooks';
 import { addNewNotebook } from '../../reducers/notebooksReducer';
 
 const SideBar = () => {
-    const { loading, addNotebook } = useContext(NotebooksContext)
-    const {error, title, messageHandler, showMessage} = useContext(MessageContext)
-
     const notebooks = useAppSelector(state => state.notebooks)
     const user = useAppSelector(state => state.user)
     const dispatch = useAppDispatch()

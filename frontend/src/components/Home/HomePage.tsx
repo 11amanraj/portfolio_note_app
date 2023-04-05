@@ -6,9 +6,10 @@ import styles from './HomePage.module.css'
 import { NotebooksContext } from '../../store/NotebooksContextProvider';
 import { useInView } from 'react-intersection-observer';
 import noteService from '../../services/noteService';
-import { useAppSelector } from '../../store/storeHooks';
+import { useAppDispatch, useAppSelector } from '../../store/storeHooks';
 import Loading from '../UI/Loading';
 import SingleNote from '../NotesGallery/SingleNote';
+import { addOneNotification } from '../../reducers/notificationReducer';
 
 const HomePage = () => {
     const [loading, setLoading] = useState(true)
@@ -39,15 +40,30 @@ const HomePage = () => {
     //     }
     // }, [inView])
 
+    const dispatch = useAppDispatch()
+
+    const messageHandler = () => {
+        const id = Math.random().toString()
+        const notification = {
+            message: 'Working',
+            error: false,
+            id: id
+        }
+        dispatch(addOneNotification(notification))
+    }
+
     if(loading) {
         return (
             <Loading />
         )
     } else {
         return (
-            <section className={styles.container}>
-                {notes.map(note => <SingleNote key={note.id} note={note} id={note.id} />)}
-            </section>
+            <>
+                <section className={styles.container}>
+                    {notes.map(note => <SingleNote key={note.id} note={note} id={note.id} />)}
+                </section>
+                <button onClick={messageHandler}>send message</button>
+            </>
         )
     }
 }

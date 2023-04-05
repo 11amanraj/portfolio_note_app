@@ -29,7 +29,7 @@ const SideBar = () => {
 
     return ( 
         <nav className={styles.container}>
-            {showMessage && <Message error={error} message={title}/>}
+            {/* {showMessage && <Message error={error} message={title}/>} */}
             <Link to={'/'}><h2>TheNotesApp</h2></Link>
             <AddEntry addEntry={saveNotebook}/>
             <Filter />

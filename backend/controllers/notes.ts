@@ -60,7 +60,7 @@ notesRouter.get('/important', async (request: Request, response: Response, next:
 notesRouter.get('/:id', async (request: Request, response: Response, next: NextFunction) => {
     try {
         const note = await Note.findById(request.params.id)
-            .populate('tags', { name: 1 })
+            .populate('tags', { title: 1 })
 
         if(note === null) return response.status(404).json({message:'Note was not found'})
 

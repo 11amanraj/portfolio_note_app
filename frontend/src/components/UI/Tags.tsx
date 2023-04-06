@@ -5,6 +5,7 @@ import styles from './Tags.module.css'
 import axios from 'axios'
 import Modal from './Modal'
 import { note } from '../../shared/interfaces/notes'
+import { useAppSelector } from '../../store/storeHooks'
 
 interface tagDetail extends tag {
     notes: note[]
@@ -20,12 +21,20 @@ const Tags: React.FC<{ tag: tag,
     const [showModal, setShowModal] = useState(false)
 
     const url = `http://localhost:8000/api/tags/${tag.id}`
+    const user = useAppSelector(state => state.user)
+
+    // useEffect(() => {
+    // })
 
     useEffect(() => {
         if(showModal) {
             setLoading(true)
             axios
-                .get(url)
+                .get(url, {
+                    headers: {
+                        Authorization: user.token
+                    }
+                })
                 .then(response => {
                     setTagDetail(response.data)
                     setLoading(false)
@@ -34,6 +43,8 @@ const Tags: React.FC<{ tag: tag,
                 .catch(error => console.log(error))
         }
     }, [showModal, tag, url])
+
+    // console.log(tag)
 
     const selectionHandler = () => {
         setShowModal(prev => !prev)

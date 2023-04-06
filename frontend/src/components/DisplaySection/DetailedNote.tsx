@@ -37,27 +37,29 @@ const DetailedNote: React.FC<{id: string | undefined}> = ({id}) => {
     useEffect(() => {
         // sets editNote to false when changing route
 
-        if(location.state === null) {
-            setEditNote(false)
-        } else {
-            if(location.state.edit) {
-                setEditNote(true)
+        if(user.token && user.token?.length > 0) {
+            if(location.state === null) {
+                setEditNote(false)
+            } else {
+                if(location.state.edit) {
+                    setEditNote(true)
+                }
             }
+    
+            setFetchLoading(true)
+    
+            const fetchNote = async () => {
+                const url = `http://localhost:8000/api/notes/${id}`
+                const note = await noteService.getOne(url, user.token)
+                setNote(note)
+                setFetchLoading(false)
+                setValue(note.content)
+                setSelectedTags(note.tags)
+            }
+    
+            fetchNote()
         }
-
-        setFetchLoading(true)
-
-        const fetchNote = async () => {
-            const url = `http://localhost:8000/api/notes/${id}`
-            const note = await noteService.getOne(url, user.token)
-            setNote(note)
-            setFetchLoading(false)
-            setValue(note.content)
-            setSelectedTags(note.tags)
-        }
-
-        fetchNote()
-    }, [id, location, user.token])
+    }, [id, location, user])
 
     const editToggler = () => {
         if(editNote) {

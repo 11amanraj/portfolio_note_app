@@ -13,7 +13,6 @@ import Message from './components/UI/Message';
 function App() {
   const dispatch = useAppDispatch()
   const notification = useAppSelector(state => state.notification)
-  console.log(notification)
   
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedNoteappUser')    

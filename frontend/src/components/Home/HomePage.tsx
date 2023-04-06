@@ -39,17 +39,19 @@ const HomePage = () => {
     //     }
     // }, [inView])
 
-    const dispatch = useAppDispatch()
+    // const dispatch = useAppDispatch()
 
-    const messageHandler = () => {
-        const id = Math.random().toString()
-        const notification = {
-            message: 'Working',
-            error: false,
-            id: id
-        }
-        dispatch(addOneNotification(notification))
-    }
+    // const messageHandler = () => {
+    //     const id = Math.random().toString()
+    //     const notification = {
+    //         message: 'Working',
+    //         error: false,
+    //         id: id
+    //     }
+    //     dispatch(addOneNotification(notification))
+    // }
+
+    // console.log(notes)
 
     if(loading) {
         return (
@@ -57,12 +59,14 @@ const HomePage = () => {
         )
     } else {
         return (
-            <>
-                <section className={styles.container}>
-                    {notes.map(note => <SingleNote key={note.id} note={note} id={note.id} />)}
-                </section>
-                <button onClick={messageHandler}>send message</button>
-            </>
+            <section className={styles.container}>
+                {notes.map(note => 
+                    <SingleNote 
+                        key={note.id} 
+                        note={note} 
+                        id={note.id} 
+                    />)}
+            </section>
         )
     }
 }

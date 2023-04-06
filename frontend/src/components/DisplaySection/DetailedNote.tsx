@@ -23,7 +23,6 @@ const DetailedNote: React.FC<{id: string | undefined}> = ({id}) => {
         pinned: false,
         tags: []
     })
-    
     const [editNote, setEditNote] = useState(false)
     const [value, setValue] = useState('')
     const [loading, setLoading] = useState(false)
@@ -79,9 +78,6 @@ const DetailedNote: React.FC<{id: string | undefined}> = ({id}) => {
             } else {
                 setSelectedTags(prev => [...prev, newTag])
             }
-        } else {
-            // add popup later
-            console.log(newTag)
         }
     }
 

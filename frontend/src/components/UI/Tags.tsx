@@ -5,7 +5,10 @@ import styles from './Tags.module.css'
 import axios from 'axios'
 import Modal from './Modal'
 import { note } from '../../shared/interfaces/notes'
-import { useAppSelector } from '../../store/storeHooks'
+import { useAppDispatch, useAppSelector } from '../../store/storeHooks'
+import tagService from '../../services/tagService'
+import { addOneNotification } from '../../reducers/notificationReducer'
+import { deleteOneTag } from '../../reducers/tagsReducer'
 
 interface tagDetail extends tag {
     notes: note[]
@@ -22,29 +25,35 @@ const Tags: React.FC<{ tag: tag,
 
     const url = `http://localhost:8000/api/tags/${tag.id}`
     const user = useAppSelector(state => state.user)
-
-    // useEffect(() => {
-    // })
+    const dispatch = useAppDispatch()
 
     useEffect(() => {
         if(showModal) {
             setLoading(true)
-            axios
-                .get(url, {
-                    headers: {
-                        Authorization: user.token
-                    }
-                })
-                .then(response => {
-                    setTagDetail(response.data)
+            const fetchTagDetail = async () => {
+                try {
+                    const tag = await tagService.getOne(url, user.token)
                     setLoading(false)
-                    console.log(response.data)
-                })
-                .catch(error => console.log(error))
+                    setTagDetail(tag)
+                } catch(error) {
+                    console.log(error)
+                }
+            }
+            fetchTagDetail()
+            // axios
+            //     .get(url, {
+            //         headers: {
+            //             Authorization: user.token
+            //         }
+            //     })
+            //     .then(response => {
+            //         setTagDetail(response.data)
+            //         setLoading(false)
+            //         console.log(response.data)
+            //     })
+            //     .catch(error => console.log(error))
         }
-    }, [showModal, tag, url])
-
-    // console.log(tag)
+    }, [showModal, tag, url, user])
 
     const selectionHandler = () => {
         setShowModal(prev => !prev)
@@ -52,10 +61,27 @@ const Tags: React.FC<{ tag: tag,
  
     const modalView = () => {
         const tagDeleteHandler = () => {
-            axios
-                .delete(url)
-                .then(response => console.log(response))
-                .catch(error => console.log(error))
+            dispatch(deleteOneTag(tag, user.token))
+            // const response = await tagService.deleteOne(url, user.token)
+            // if(response.status === 204) {
+            //     const id = Math.random().toString()
+            //     dispatch(addOneNotification({
+            //         error: false,
+            //         message: `${tag.title} deleted`,
+            //         id: id
+            //     }))
+            // } else {
+            //     const id = Math.random().toString()
+            //     dispatch(addOneNotification({
+            //         error: true,
+            //         message: `${response.data}`,
+            //         id: id
+            //     }))
+            // }
+            // axios
+            //     .delete(url)
+            //     .then(response => console.log(response))
+            //     .catch(error => console.log(error))
         }
 
         return (

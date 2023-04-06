@@ -26,9 +26,33 @@ const getAll = async (token: string) => {
     return response.data
 }
 
+const getOne = async (url: string, token: string) => {
+    const response = await axios.get(url, {
+        headers: {
+            Authorization: token
+        }
+    })
+    return response.data
+}
+
+const deleteOne = async (id: string, token: string) => {
+    try {
+        const response = await axios.delete(`${url}/${id}`, {
+            headers: {
+                Authorization: token
+            }
+        })
+        return response
+    } catch(error: any) {
+        return Promise.reject(error.response)
+    }
+}
+
 const tagService = {
     getAll,
-    createNew
+    createNew,
+    getOne,
+    deleteOne
 }
 
 export default tagService

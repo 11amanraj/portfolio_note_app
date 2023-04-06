@@ -1,4 +1,3 @@
-import axios from "axios";
 import { useState, useEffect } from 'react'
 import { note, tag } from "../../shared/interfaces/notes";
 import ReactQuill from 'react-quill';
@@ -8,8 +7,9 @@ import LoadingButton from "../UI/LoadingButton";
 import Loading from "../UI/Loading";
 import TagSection from "../Tags/TagSection";
 import styles from './DetailedNote.module.css'
-import { useAppSelector } from "../../store/storeHooks";
+import { useAppDispatch, useAppSelector } from "../../store/storeHooks";
 import noteService from "../../services/noteService";
+import { updateOneNote } from "../../reducers/notebooksReducer";
 
 const DetailedNote: React.FC<{id: string | undefined}> = ({id}) => {
     const [note, setNote] = useState<note>({
@@ -31,15 +31,7 @@ const DetailedNote: React.FC<{id: string | undefined}> = ({id}) => {
     const [selectedTags, setSelectedTags] = useState<tag[]>([])
 
     const user = useAppSelector(state => state.user)
-
-    const editToggler = () => {
-        if(editNote) {
-            setValue(note.content)
-            note.tags && setSelectedTags(note.tags)
-        }
-        setEditNote(prev => !prev)
-    }
-
+    const dispatch = useAppDispatch()
     const location = useLocation()
 
     useEffect(() => {
@@ -67,6 +59,14 @@ const DetailedNote: React.FC<{id: string | undefined}> = ({id}) => {
         fetchNote()
     }, [id, location, user.token])
 
+    const editToggler = () => {
+        if(editNote) {
+            setValue(note.content)
+            note.tags && setSelectedTags(note.tags)
+        }
+        setEditNote(prev => !prev)
+    }
+
     const selectTagHandler = (newTag: tag, editing: boolean) => {
         if(editing) {
             // check if active or inactive tag
@@ -83,26 +83,29 @@ const DetailedNote: React.FC<{id: string | undefined}> = ({id}) => {
         }
     }
 
-    const removeNoteHandler = (tag: tag) => {
-        console.log(selectedTags.map(eachTag => eachTag.id).includes(tag.id))
-        // const newTags = selectedTags.filter(selTag => selTag.id !== tag.id)
-        // setSelectedTags([...newTags])
+    const removeTagHandler = (tag: tag) => {
+        const newTags = selectedTags.filter(setTag => setTag.id !== tag.id)
+        setSelectedTags([...newTags])
     }
 
-    const saveNoteHandler = () => {
-        const tagID = selectedTags.map(tag => tag.id) 
-        console.log(tagID)
-
-        setLoading(true)
-        axios
-            .put(`http://localhost:8000/api/notes/${id}`, {
-                content: value, tags: tagID
-            })
-            .then(response => {
-                setLoading(false)
-                console.log(response)
-                setEditNote(false)
-            })
+    const saveNoteHandler = async () => {
+        try {
+            const tagID = selectedTags.map(tag => tag.id) 
+    
+            const noteChanges = {
+                content: value,
+                tags: tagID,
+                id: note.id
+            }
+    
+            setLoading(true)
+            const savedNote = await noteService.editOne(noteChanges, user.token)
+            dispatch(updateOneNote(savedNote))
+            setLoading(false)
+            setEditNote(false)
+        } catch(error) {
+            console.log(error)
+        }
     }
 
     const editing = () => {
@@ -115,7 +118,7 @@ const DetailedNote: React.FC<{id: string | undefined}> = ({id}) => {
               [{ color: [] }, { background: [] }],
               // [{ script: 'sub' }, { script: 'super' }],
               [{ align: [] }],
-              ["link", "blockquote", "emoji"],
+              ["link"],
               ["clean"],
             ],
             clipboard: {
@@ -136,14 +139,14 @@ const DetailedNote: React.FC<{id: string | undefined}> = ({id}) => {
         "list",
         "bullet",
         "indent",
-        "link",
-        "mention",
-        "emoji",
+        // "link",
+        // "mention",
+        // "emoji",
         ];
 
         return (
             <div>
-                <TagSection onRemove={removeNoteHandler} onSelect={selectTagHandler} tags={selectedTags} editing={true} />
+                <TagSection onRemove={removeTagHandler} onSelect={selectTagHandler} tags={selectedTags} editing={true} />
                 <LoadingButton onSave={saveNoteHandler} loading={loading}/>
                 <ReactQuill theme='snow' modules={modules} formats={formats} readOnly={false} value={value} onChange={setValue} />
             </div>

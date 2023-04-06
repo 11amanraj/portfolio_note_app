@@ -27,6 +27,20 @@ const notebooksReducer = createSlice({
                 )
             } else return state
         },
+        updateOneNote: (state, action: PayloadAction<note>) => {
+            const selectedNotebook = state.find(notebook => notebook.id === action.payload.notebook)
+            if(selectedNotebook) {
+                const notes = selectedNotebook.notes.map(note => 
+                    note.id === action.payload.id 
+                        ? action.payload 
+                        : note
+                )
+                return state.map(notebook => notebook.id === action.payload.notebook
+                    ? {...selectedNotebook, notes: notes}
+                    : notebook 
+                )
+            } else return state
+        },
         setNotebooks: (state, action: PayloadAction<notebook[]>) => {
             return action.payload
         }
@@ -68,5 +82,5 @@ export const addNewNotebook = (title: string, token: string): AppThunk => {
     }
 }
 
-export const { setNotebooks, addNotebook, removeNotebook, addOneNote } = notebooksReducer.actions
+export const { setNotebooks, addNotebook, removeNotebook, addOneNote, updateOneNote } = notebooksReducer.actions
 export default notebooksReducer.reducer

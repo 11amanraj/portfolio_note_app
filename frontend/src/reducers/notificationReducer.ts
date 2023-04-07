@@ -22,8 +22,14 @@ const notificationReducer = createSlice({
     }
 })
 
-export const addOneNotification = (notification: notification): AppThunk => {
+export const addOneNotification = ({message, error}: {message: string, error: boolean}): AppThunk => {
     return async dispatch => {
+        const id = Math.random().toString()
+        const notification = {
+            message: message,
+            error: error,
+            id: id
+        }
         dispatch(addNotification(notification))
         setTimeout(() => {
             dispatch(removeNotification(notification.id))

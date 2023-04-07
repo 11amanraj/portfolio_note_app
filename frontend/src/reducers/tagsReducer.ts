@@ -37,11 +37,16 @@ export const addNewTag = (title: string, token: string): AppThunk => {
         try {
             const savedTag = await tagService.createNew(title, token)
             dispatch(addTag(savedTag))
-            return {
-                status: 200,
-            }
+            dispatch(addOneNotification({
+                error: false,
+                message: `${title} added`
+            }))
+            // return status code if promise successful
         } catch(error: any) {
-            return error
+            dispatch(addOneNotification({
+                error: true,
+                message: `${error.data}`
+            }))
         }
     }
 }
@@ -53,18 +58,14 @@ export const updateOneTag = (tag: tag, title: string, token: string): AppThunk =
             
             // dispatch(updateTag(updatedTag))
 
-            const notificationID = Math.random().toString()
             dispatch(addOneNotification({
                 error: false,
-                message: `${tag.title} deleted`,
-                id: notificationID
+                message: `${tag.title} deleted`
             }))
         } catch(error: any) {
-            const notificationID = Math.random().toString()
             dispatch(addOneNotification({
                 error: true,
-                message: `${error.data}`,
-                id: notificationID
+                message: `${error.data}`
             }))
 
         }
@@ -77,20 +78,15 @@ export const deleteOneTag = (tag: tag, token: string): AppThunk => {
             await tagService.deleteOne(tag.id, token)
             dispatch(deleteTag(tag.id))
 
-            const notificationID = Math.random().toString()
             dispatch(addOneNotification({
                 error: false,
-                message: `${tag.title} deleted`,
-                id: notificationID
+                message: `${tag.title} deleted`
             }))
         } catch(error: any) {
-            const notificationID = Math.random().toString()
             dispatch(addOneNotification({
                 error: true,
-                message: `${error.data}`,
-                id: notificationID
+                message: `${error.data}`
             }))
-
         }
     } 
 }

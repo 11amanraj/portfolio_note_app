@@ -32,7 +32,8 @@ const TagSection: React.FC<{
 
         const handleKeyDown = async (e: React.KeyboardEvent<HTMLInputElement>) => {
             if (e.key === 'Enter') {
-                const response = await dispatch(addNewTag(e.currentTarget.value, user.token))
+                dispatch(addNewTag(e.currentTarget.value, user.token))
+                setInput('')
                 // try {
                 //     // const response = await axios
                 //     //     .post('http://localhost:8000/api/tags', {
@@ -53,7 +54,9 @@ const TagSection: React.FC<{
                 <button onClick={() => setShowAllTags(prev => !prev)}>Add New Tag</button>
                 {showAllTags && 
                     <div className={styles.editing}>
-                        <input type='text' 
+                        <input 
+                            type='text'
+                            value={input} 
                             onChange={changeHandler} 
                             onKeyDown={handleKeyDown} 
                             placeholder='Add Tag'

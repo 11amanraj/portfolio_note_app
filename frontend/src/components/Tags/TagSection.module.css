@@ -7,6 +7,7 @@
     max-height: 600px;
     overflow-y: scroll;
     animation: expand 2s linear forwards;
+    outline: 1px solid red;
 }
 
 @keyframes expand {

@@ -1,8 +1,7 @@
 import styles from './TagSection.module.css'
 import Tags from '../UI/Tags';
 import { tag } from '../../shared/interfaces/notes';
-import axios from 'axios';
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../store/storeHooks';
 import { addNewTag } from '../../reducers/tagsReducer';
 
@@ -13,14 +12,10 @@ const TagSection: React.FC<{
         tags: tag[] | undefined
     }> = ({onSelect, onRemove, editing, tags}) => {
     const [input, setInput] = useState('')
-    // const [existingTags, setExistingTags] = useState<tag[] | null>(null)
     const [showAllTags, setShowAllTags] = useState(false)
 
-    // useEffect(() => {
-    //     allTags && setExistingTags([...allTags])
-    // }, [allTags])
-
-    const existingTags = useAppSelector(state => state.tags)
+    // all tags present in the database for the user
+    const allTags = useAppSelector(state => state.tags)
     const user = useAppSelector(state => state.user)
     const dispatch = useAppDispatch()
     
@@ -64,7 +59,7 @@ const TagSection: React.FC<{
                             placeholder='Add Tag'
                         />
                         {
-                            existingTags && tags && inactiveTags(existingTags, tags)
+                            allTags && tags && inactiveTags(allTags, tags)
                                 .filter(tag => tag.title.includes(input))
                                 .map(tag => <Tags onSelect={() => onSelect(tag, editing)}
                                     assignMode={editing} 

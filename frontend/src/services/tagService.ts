@@ -35,6 +35,20 @@ const getOne = async (url: string, token: string) => {
     return response.data
 }
 
+const updateOne = async (id: string, title: string, token: string) => {
+    try {
+        const tagObject = { title: title }
+        const response = await axios.put(`${url}/${id}`, tagObject, {
+            headers: {
+                Authorization: token
+            }
+        })
+        return response
+    } catch(error: any) {
+        return Promise.reject(error.response)
+    }
+}
+
 const deleteOne = async (id: string, token: string) => {
     try {
         const response = await axios.delete(`${url}/${id}`, {
@@ -52,6 +66,7 @@ const tagService = {
     getAll,
     createNew,
     getOne,
+    updateOne,
     deleteOne
 }
 

@@ -24,18 +24,23 @@ const DetailedNote: React.FC<{id: string | undefined}> = ({id}) => {
         tags: []
     })
     const [editNote, setEditNote] = useState(false)
-    const [value, setValue] = useState('')
-    const [loading, setLoading] = useState(false)
-    const [fetchLoading, setFetchLoading] = useState(true)
     const [selectedTags, setSelectedTags] = useState<tag[]>([])
+
+    // loading state for save note button
+    const [buttonLoading, setButtonLoading] = useState(false)
+
+    // loading state for fetching note
+    const [fetchLoading, setFetchLoading] = useState(true)
+    
+    // react quill value
+    const [value, setValue] = useState('')
 
     const user = useAppSelector(state => state.user)
     const dispatch = useAppDispatch()
     const location = useLocation()
 
     useEffect(() => {
-        // sets editNote to false when changing route
-
+        // sets editNote to false when changing route        
         if(user.token && user.token?.length > 0) {
             if(location.state === null) {
                 setEditNote(false)
@@ -44,10 +49,9 @@ const DetailedNote: React.FC<{id: string | undefined}> = ({id}) => {
                     setEditNote(true)
                 }
             }
-    
-            setFetchLoading(true)
-    
+            
             const fetchNote = async () => {
+                setFetchLoading(true)
                 const url = `http://localhost:8000/api/notes/${id}`
                 const note = await noteService.getOne(url, user.token)
                 setNote(note)
@@ -62,6 +66,7 @@ const DetailedNote: React.FC<{id: string | undefined}> = ({id}) => {
 
     const editToggler = () => {
         if(editNote) {
+            // console.log(selectedTags)
             setValue(note.content)
             note.tags && setSelectedTags(note.tags)
         }
@@ -96,10 +101,11 @@ const DetailedNote: React.FC<{id: string | undefined}> = ({id}) => {
                 id: note.id
             }
     
-            setLoading(true)
+            setButtonLoading(true)
             const savedNote = await noteService.editOne(noteChanges, user.token)
             dispatch(updateOneNote(savedNote))
-            setLoading(false)
+            setNote(savedNote)
+            setButtonLoading(false)
             setEditNote(false)
         } catch(error) {
             console.log(error)
@@ -113,9 +119,9 @@ const DetailedNote: React.FC<{id: string | undefined}> = ({id}) => {
           
               [{ list: "ordered" }, { list: "bullet" }],
               ["bold", "italic", "underline"],
-              [{ color: [] }, { background: [] }],
+            //   [{ color: [] }, { background: [] }],
               // [{ script: 'sub' }, { script: 'super' }],
-              [{ align: [] }],
+            //   [{ align: [] }],
               ["link"],
               ["clean"],
             ],
@@ -145,7 +151,7 @@ const DetailedNote: React.FC<{id: string | undefined}> = ({id}) => {
         return (
             <div>
                 <TagSection onRemove={removeTagHandler} onSelect={selectTagHandler} tags={selectedTags} editing={true} />
-                <LoadingButton onSave={saveNoteHandler} loading={loading}/>
+                <LoadingButton onSave={saveNoteHandler} loading={buttonLoading}/>
                 <ReactQuill theme='snow' modules={modules} formats={formats} readOnly={false} value={value} onChange={setValue} />
             </div>
         )

@@ -16,6 +16,9 @@ const tagsReducer = createSlice({
         addTag: (state, action: PayloadAction<tag[]>) => {
             return state.concat(action.payload)
         },
+        updateTag: (state, action: PayloadAction<tag>) => {
+            return state
+        },
         deleteTag: (state, action: PayloadAction<string>) => {
             return state.filter(tag => tag.id !== action.payload)
         }
@@ -43,6 +46,31 @@ export const addNewTag = (title: string, token: string): AppThunk => {
     }
 }
 
+export const updateOneTag = (tag: tag, title: string, token: string): AppThunk => {
+    return async dispatch => {
+        try {
+            const updatedTag = await tagService.updateOne(tag.id, title, token)
+            
+            // dispatch(updateTag(updatedTag))
+
+            const notificationID = Math.random().toString()
+            dispatch(addOneNotification({
+                error: false,
+                message: `${tag.title} deleted`,
+                id: notificationID
+            }))
+        } catch(error: any) {
+            const notificationID = Math.random().toString()
+            dispatch(addOneNotification({
+                error: true,
+                message: `${error.data}`,
+                id: notificationID
+            }))
+
+        }
+    } 
+}
+
 export const deleteOneTag = (tag: tag, token: string): AppThunk => {
     return async dispatch => {
         try {
@@ -67,5 +95,5 @@ export const deleteOneTag = (tag: tag, token: string): AppThunk => {
     } 
 }
 
-export const { setTags, addTag, deleteTag } = tagsReducer.actions
+export const { setTags, addTag, updateTag, deleteTag } = tagsReducer.actions
 export default tagsReducer.reducer

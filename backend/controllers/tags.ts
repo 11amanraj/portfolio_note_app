@@ -31,7 +31,6 @@ tagsRouter.get('/:id', async (request: Request, response: Response, next: NextFu
                 _id: new ObjectId(request.params.id),
                 user: user._id
             })
-            .populate('user')
             .populate(
                 {   
                     path: 'notes',
@@ -42,6 +41,8 @@ tagsRouter.get('/:id', async (request: Request, response: Response, next: NextFu
                     }
                 }
             )
+
+        // console.log(tag)
 
         if(tag === null) return response.status(404).json('Tag not found')
 

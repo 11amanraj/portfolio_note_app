@@ -1,5 +1,5 @@
 import Loading from '../UI/Loading';
-import Tags from '../UI/Tags';
+import Tags from '../Tags/Tags';
 import styles from './EveryTag.module.css'
 import { useAppSelector } from '../../store/storeHooks';
 

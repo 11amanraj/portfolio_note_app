@@ -3,7 +3,7 @@ import SingleNote from './SingleNote';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { CollectionType, note, tag } from '../../shared/interfaces/notes';
-import Tags from '../UI/Tags';
+import Tags from '../Tags/Tags';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux'
 

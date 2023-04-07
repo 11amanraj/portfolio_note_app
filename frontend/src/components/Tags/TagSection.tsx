@@ -1,5 +1,5 @@
 import styles from './TagSection.module.css'
-import Tags from '../UI/Tags';
+import Tags from '../Tags/Tags';
 import { tag } from '../../shared/interfaces/notes';
 import { useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../store/storeHooks';
@@ -34,18 +34,6 @@ const TagSection: React.FC<{
             if (e.key === 'Enter') {
                 dispatch(addNewTag(e.currentTarget.value, user.token))
                 setInput('')
-                // try {
-                //     // const response = await axios
-                //     //     .post('http://localhost:8000/api/tags', {
-                //     //         name: e.currentTarget.value
-                //     //     })
-                //     // if(existingTags) {
-                //     //     const newTags = [...existingTags, response.data]
-                //         // setExistingTags(newTags)
-                //     }
-                // } catch (error) {
-                //     console.log(error)
-                // }
             }
           }
 

@@ -1,6 +1,7 @@
 export interface tag {
     title: string,
-    id: string
+    id: string,
+    notes?: note[]
 }
 
 export interface note {

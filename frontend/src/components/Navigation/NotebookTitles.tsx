@@ -44,7 +44,6 @@ const NotebookTitles: React.FC<{notebook: notebook}> = ({notebook}) => {
 
         const savedNote = await noteService.createNew(newNote,user.token)
         dispatch(addOneNote({notebookID: notebook.id,note: savedNote}))
-        // messageHandler(false, `${savedNote.title} added !`)
         navigate(`/notebook/${notebook.id}/note/${savedNote.id}`, {state:{edit: true}})
 
         return true

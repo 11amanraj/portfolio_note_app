@@ -64,8 +64,6 @@ const Tags: React.FC<{ tag: tag,
         )
     }
 
-    console.log(showModal)
-
     return (
         <span 
             onClick={onSelect && assignMode ? onSelect : showModalHandler} 

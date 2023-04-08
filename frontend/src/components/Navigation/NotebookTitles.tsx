@@ -4,18 +4,16 @@ import { notebook } from '../../shared/interfaces/notes'
 import NotesTitle from './NotesTitle'
 import { useEffect, useState, useContext } from 'react'
 import DeleteEntry from '../Operations/DeleteEntry'
-import { NotebooksContext } from '../../store/NotebooksContextProvider'
 import AddEntry from '../Operations/AddEntry'
 import axios from 'axios'
-import { MessageContext } from '../../store/MessageContextProvider'
+import { useAppDispatch, useAppSelector } from '../../store/storeHooks'
+import { addOneNote, deleteOneNotebook } from '../../reducers/notebooksReducer'
+import noteService from '../../services/noteService'
 
 const NotebookTitles: React.FC<{notebook: notebook}> = ({notebook}) => {
     const [isActive, setIsActive] = useState(false)
     const location = useLocation()
     const navigate = useNavigate()
-
-    const { deleteNotebook, rerenderComponent } = useContext(NotebooksContext)
-    const { messageHandler } = useContext(MessageContext)
 
     useEffect(() => {
         const urlArray = location.pathname.split('/')
@@ -27,36 +25,42 @@ const NotebookTitles: React.FC<{notebook: notebook}> = ({notebook}) => {
         }
     }, [location, notebook])
 
-    const deleteHandler = (id: string) => {
-        deleteNotebook(id)
+    const user = useAppSelector(state => state.user)
+    const dispatch = useAppDispatch()
+
+    const deleteHandler = async (id: string) => {
+        const response = await dispatch(deleteOneNotebook(id, user.token))
+        return response
+        // deleteNotebook(id)
+        // navigate('/')
         // rerenderComponent(true)
     }
 
     const newNoteHandler = async (title: string) => {
         const newNote = {
             title: title,
-            content: '',
-            author: "John Doe",
             notebookID: notebook.id
         }
-        
-        axios
-            .post('http://localhost:8000/api/notes', newNote)
-            .then(response => {
-                rerenderComponent(true)
-                messageHandler(false, `${response.data.title} added !`)
-                navigate(`/notebook/${notebook.id}/note/${response.data.id}`, {state:{edit: true}})
-            })
-            .catch(error => console.log(error))
+
+        const savedNote = await noteService.createNew(newNote,user.token)
+        dispatch(addOneNote({notebookID: notebook.id,note: savedNote}))
+        // messageHandler(false, `${savedNote.title} added !`)
+        navigate(`/notebook/${notebook.id}/note/${savedNote.id}`, {state:{edit: true}})
 
         return true
     }
-
     
     return (
         <div className={`${styles.container} ${isActive ? styles.active : ''}`}>
             <Link className={isActive ? styles.active : ''} to={`/notebook/${notebook.id}`}>
-                <p className={styles.title}>{notebook.title}<DeleteEntry header={`Delete Notebook - ${notebook.title} ?`} onDelete={deleteHandler} id={notebook.id}/></p>
+                <p className={styles.title}>
+                    {notebook.title}
+                    <DeleteEntry 
+                        header={`Delete Notebook - ${notebook.title} ?`} 
+                        onDelete={deleteHandler} 
+                        id={notebook.id}
+                    />
+                </p>
             </Link>
             {isActive && <div className={styles.notes}>
                     <AddEntry addEntry={newNoteHandler}/>

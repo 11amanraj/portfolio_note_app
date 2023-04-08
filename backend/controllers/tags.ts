@@ -31,7 +31,6 @@ tagsRouter.get('/:id', async (request: Request, response: Response, next: NextFu
                 _id: new ObjectId(request.params.id),
                 user: user._id
             })
-            .populate('user')
             .populate(
                 {   
                     path: 'notes',
@@ -42,6 +41,8 @@ tagsRouter.get('/:id', async (request: Request, response: Response, next: NextFu
                     }
                 }
             )
+
+        // console.log(tag)
 
         if(tag === null) return response.status(404).json('Tag not found')
 
@@ -125,7 +126,9 @@ tagsRouter.delete('/:id', async (request: Request, response: Response, next: Nex
             { 'tags': request.params.id },
             { '$pull': { 'tags': request.params.id }}
         )
-        await Tag.findByIdAndDelete(request.params.id)
+        const deletedTag = await Tag.findByIdAndDelete(request.params.id)
+
+        if(deletedTag === null) return response.status(404).json('Tag not found')
 
         return response.status(204).end()
     } catch(error) {

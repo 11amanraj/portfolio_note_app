@@ -1,12 +1,12 @@
 export interface tag {
-    name: string,
-    id: string
+    title: string,
+    id: string,
+    notes?: note[]
 }
 
 export interface note {
     title: string;
     content: string;
-    author: string;
     id: string;
     pinned: boolean;
     dateCreated: Date;
@@ -41,16 +41,9 @@ export enum CollectionType {
     TAG = 'tag'
 }
 
-// export enum TypeofSelection {
-//     NOTE = 'note',
-//     NOTEBOOK = 'notebook',
-//     WELCOME = 'welcome',
-//     CREATENOTE = 'create'
-// }
-
-// export interface selection {
-//     type: TypeofSelection,
-//     selected: string | null,
-//     lastNotebook: string | null,
-//     onSelect: (type: TypeofSelection ,id: string) => void
-// }
+export interface user {
+    id?: string,
+    token: string,
+    username: string,
+    name: string
+}

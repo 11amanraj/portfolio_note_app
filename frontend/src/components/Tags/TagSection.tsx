@@ -1,9 +1,9 @@
 import styles from './TagSection.module.css'
-import Tags from '../UI/Tags';
+import Tags from '../Tags/Tags';
 import { tag } from '../../shared/interfaces/notes';
-import axios from 'axios';
-import { useContext, useEffect, useState } from 'react';
-import { TagContext } from '../../store/TagsContextProvider';
+import { useEffect, useState } from 'react';
+import { useAppDispatch, useAppSelector } from '../../store/storeHooks';
+import { addNewTag } from '../../reducers/tagsReducer';
 
 const TagSection: React.FC<{
         onSelect: (tag: tag, editing: boolean) => void , 
@@ -12,14 +12,12 @@ const TagSection: React.FC<{
         tags: tag[] | undefined
     }> = ({onSelect, onRemove, editing, tags}) => {
     const [input, setInput] = useState('')
-    const [existingTags, setExistingTags] = useState<tag[] | null>(null)
     const [showAllTags, setShowAllTags] = useState(false)
 
-    const { allTags } = useContext(TagContext)
-
-    useEffect(() => {
-        allTags && setExistingTags([...allTags])
-    }, [allTags])
+    // all tags present in the database for the user
+    const allTags = useAppSelector(state => state.tags)
+    const user = useAppSelector(state => state.user)
+    const dispatch = useAppDispatch()
     
     const editMode = () => {
         const inactiveTags = (biggerArray: tag[], smallerArray: tag[]) => {
@@ -34,18 +32,8 @@ const TagSection: React.FC<{
 
         const handleKeyDown = async (e: React.KeyboardEvent<HTMLInputElement>) => {
             if (e.key === 'Enter') {
-                try {
-                    const response = await axios
-                        .post('http://localhost:8000/api/tags', {
-                            name: e.currentTarget.value
-                        })
-                    if(existingTags) {
-                        const newTags = [...existingTags, response.data]
-                        setExistingTags(newTags)
-                    }
-                } catch (error) {
-                    console.log(error)
-                }
+                dispatch(addNewTag(e.currentTarget.value, user.token))
+                setInput('')
             }
           }
 
@@ -54,14 +42,16 @@ const TagSection: React.FC<{
                 <button onClick={() => setShowAllTags(prev => !prev)}>Add New Tag</button>
                 {showAllTags && 
                     <div className={styles.editing}>
-                        <input type='text' 
+                        <input 
+                            type='text'
+                            value={input} 
                             onChange={changeHandler} 
                             onKeyDown={handleKeyDown} 
                             placeholder='Add Tag'
                         />
                         {
-                            existingTags && tags && inactiveTags(existingTags, tags)
-                                .filter(tag => tag.name.includes(input))
+                            allTags && tags && inactiveTags(allTags, tags)
+                                .filter(tag => tag.title.includes(input))
                                 .map(tag => <Tags onSelect={() => onSelect(tag, editing)}
                                     assignMode={editing} 
                                     active={false} 

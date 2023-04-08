@@ -1,4 +1,3 @@
-import axios from "axios";
 import { useState, useEffect } from 'react'
 import { note, tag } from "../../shared/interfaces/notes";
 import ReactQuill from 'react-quill';
@@ -8,12 +7,14 @@ import LoadingButton from "../UI/LoadingButton";
 import Loading from "../UI/Loading";
 import TagSection from "../Tags/TagSection";
 import styles from './DetailedNote.module.css'
+import { useAppDispatch, useAppSelector } from "../../store/storeHooks";
+import noteService from "../../services/noteService";
+import { updateOneNote } from "../../reducers/notebooksReducer";
 
 const DetailedNote: React.FC<{id: string | undefined}> = ({id}) => {
     const [note, setNote] = useState<note>({
         title: '',
         content: '',
-        author: '',
         id: '',
         dateCreated: new Date(0),
         dateModified: new Date(0),
@@ -22,45 +23,55 @@ const DetailedNote: React.FC<{id: string | undefined}> = ({id}) => {
         pinned: false,
         tags: []
     })
-    
     const [editNote, setEditNote] = useState(false)
-    const [value, setValue] = useState('')
-    const [loading, setLoading] = useState(false)
-    const [fetchLoading, setFetchLoading] = useState(true)
     const [selectedTags, setSelectedTags] = useState<tag[]>([])
+
+    // loading state for save note button
+    const [buttonLoading, setButtonLoading] = useState(false)
+
+    // loading state for fetching note
+    const [fetchLoading, setFetchLoading] = useState(true)
+    
+    // react quill value
+    const [value, setValue] = useState('')
+
+    const user = useAppSelector(state => state.user)
+    const dispatch = useAppDispatch()
+    const location = useLocation()
+
+    useEffect(() => {
+        // sets editNote to false when changing route        
+        if(user.token && user.token?.length > 0) {
+            if(location.state === null) {
+                setEditNote(false)
+            } else {
+                if(location.state.edit) {
+                    setEditNote(true)
+                }
+            }
+            
+            const fetchNote = async () => {
+                setFetchLoading(true)
+                const url = `http://localhost:8000/api/notes/${id}`
+                const note = await noteService.getOne(url, user.token)
+                setNote(note)
+                setFetchLoading(false)
+                setValue(note.content)
+                setSelectedTags(note.tags)
+            }
+    
+            fetchNote()
+        }
+    }, [id, location, user])
 
     const editToggler = () => {
         if(editNote) {
+            // console.log(selectedTags)
             setValue(note.content)
             note.tags && setSelectedTags(note.tags)
         }
         setEditNote(prev => !prev)
     }
-
-    const location = useLocation()
-
-    useEffect(() => {
-        // sets editNote to false when changing route
-
-        if(location.state === null) {
-            setEditNote(false)
-        } else {
-            if(location.state.edit) {
-                setEditNote(true)
-            }
-        }
-
-        setFetchLoading(true)
-
-        axios
-            .get(`http://localhost:8000/api/notes/${id}`)
-            .then(response => {
-                setFetchLoading(false)
-                setNote(response.data)
-                setValue(response.data.content)
-                setSelectedTags(response.data.tags)
-            })
-    }, [id, location])
 
     const selectTagHandler = (newTag: tag, editing: boolean) => {
         if(editing) {
@@ -72,32 +83,33 @@ const DetailedNote: React.FC<{id: string | undefined}> = ({id}) => {
             } else {
                 setSelectedTags(prev => [...prev, newTag])
             }
-        } else {
-            // add popup later
-            console.log(newTag)
         }
     }
 
-    const removeNoteHandler = (tag: tag) => {
-        console.log(selectedTags.map(eachTag => eachTag.id).includes(tag.id))
-        // const newTags = selectedTags.filter(selTag => selTag.id !== tag.id)
-        // setSelectedTags([...newTags])
+    const removeTagHandler = (tag: tag) => {
+        const newTags = selectedTags.filter(setTag => setTag.id !== tag.id)
+        setSelectedTags([...newTags])
     }
 
-    const saveNoteHandler = () => {
-        const tagID = selectedTags.map(tag => tag.id) 
-        console.log(tagID)
-
-        setLoading(true)
-        axios
-            .put(`http://localhost:8000/api/notes/${id}`, {
-                content: value, tags: tagID
-            })
-            .then(response => {
-                setLoading(false)
-                console.log(response)
-                setEditNote(false)
-            })
+    const saveNoteHandler = async () => {
+        try {
+            const tagID = selectedTags.map(tag => tag.id) 
+    
+            const noteChanges = {
+                content: value,
+                tags: tagID,
+                id: note.id
+            }
+    
+            setButtonLoading(true)
+            const savedNote = await noteService.editOne(noteChanges, user.token)
+            dispatch(updateOneNote(savedNote))
+            setNote(savedNote)
+            setButtonLoading(false)
+            setEditNote(false)
+        } catch(error) {
+            console.log(error)
+        }
     }
 
     const editing = () => {
@@ -107,10 +119,10 @@ const DetailedNote: React.FC<{id: string | undefined}> = ({id}) => {
           
               [{ list: "ordered" }, { list: "bullet" }],
               ["bold", "italic", "underline"],
-              [{ color: [] }, { background: [] }],
+            //   [{ color: [] }, { background: [] }],
               // [{ script: 'sub' }, { script: 'super' }],
-              [{ align: [] }],
-              ["link", "blockquote", "emoji"],
+            //   [{ align: [] }],
+              ["link"],
               ["clean"],
             ],
             clipboard: {
@@ -131,15 +143,15 @@ const DetailedNote: React.FC<{id: string | undefined}> = ({id}) => {
         "list",
         "bullet",
         "indent",
-        "link",
-        "mention",
-        "emoji",
+        // "link",
+        // "mention",
+        // "emoji",
         ];
 
         return (
             <div>
-                <TagSection onRemove={removeNoteHandler} onSelect={selectTagHandler} tags={selectedTags} editing={true} />
-                <LoadingButton onSave={saveNoteHandler} loading={loading}/>
+                <TagSection onRemove={removeTagHandler} onSelect={selectTagHandler} tags={selectedTags} editing={true} />
+                <LoadingButton onSave={saveNoteHandler} loading={buttonLoading}/>
                 <ReactQuill theme='snow' modules={modules} formats={formats} readOnly={false} value={value} onChange={setValue} />
             </div>
         )

@@ -65,3 +65,7 @@
 .create:hover {
     background-color: rgb(78, 24, 129);
 }
+
+.accordion li {
+    list-style: none;
+}

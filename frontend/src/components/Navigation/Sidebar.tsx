@@ -8,6 +8,7 @@ import Message from '../UI/Message';
 import EveryTag from './EveryTag';
 import { useAppDispatch, useAppSelector } from '../../store/storeHooks';
 import { addNewNotebook } from '../../reducers/notebooksReducer';
+import NotebookAccordion from './NotebookAccordion';
 
 const SideBar = () => {
     const notebooks = useAppSelector(state => state.notebooks)
@@ -139,14 +140,18 @@ const SideBar = () => {
     return ( 
         <nav className={styles.container}>
             {/* {showMessage && <Message error={error} message={title}/>} */}
-            <Link to={'/'}><h2>TheNotesApp</h2></Link>
+            {/* <Link to={'/'}><h2>TheNotesApp</h2></Link>
             <AddEntry addEntry={saveNotebook}/>
-            <Filter />
-            <div id='notebookAccordion' className={styles.accordion}>
+            <Filter /> */}
+            <div id='notebookAccordion'>
                 {notebooks.map(notebook => (
                     <NotebookTitles key={notebook.id} notebook={notebook}/>
                 ))}
             </div>
+            <ul className={styles.accordion}>
+                <NotebookAccordion />
+                <NotebookAccordion />
+            </ul>
             {/* <EveryTag /> */}
         </nav>
      );

@@ -13,7 +13,8 @@ const Tags: React.FC<{ tag: tag,
 
     const [showModal, setShowModal] = useState(false)
     const [notes, setNotes] = useState<note[]>([])
-
+    const [editTag, setEditTag] = useState(false)
+ 
     const user = useAppSelector(state => state.user)
     const dispatch = useAppDispatch()
     const allTags = useAppSelector(state => state.tags)
@@ -25,8 +26,14 @@ const Tags: React.FC<{ tag: tag,
         }
     }, [showModal, allTags, tag])
 
-    const selectionHandler = () => {
-        setShowModal(prev => !prev)
+    const showModalHandler = () => {
+        setShowModal(true)
+    }
+
+    const closeModalHandler = () => {
+        setShowModal(true)
+        // setShowModal(prev => !prev)
+        // setShowModal(false)
     }
  
     const modalView = () => {
@@ -34,20 +41,34 @@ const Tags: React.FC<{ tag: tag,
             dispatch(deleteOneTag(tag, user.token))
         }
 
+        const editTagHandler = () => {
+            setEditTag(true)
+        }
+
         return (
           <div className={styles.modal}>
-            <h3>{tag.title}</h3>
+            {!editTag 
+                ? (<h3>{tag.title}</h3>) 
+                : (<form>
+                    <input />
+                    <button>save tag</button>
+                </form>)
+            }
             <button onClick={tagDeleteHandler}>Delete Tag</button>
+            <button onClick={editTagHandler}>Edit Title</button>
             <div>
                 {notes.map(note => <p key={note.id}>{note.title}</p>)}
             </div>
+            <button onClick={closeModalHandler}>Close Modal</button>
           </div>  
         )
     }
 
+    console.log(showModal)
+
     return (
         <span 
-            onClick={onSelect && assignMode ? onSelect : selectionHandler} 
+            onClick={onSelect && assignMode ? onSelect : showModalHandler} 
             className={styles.container}
         >
             <p className={`${styles.title} ${active ? styles.active : ''}`}>

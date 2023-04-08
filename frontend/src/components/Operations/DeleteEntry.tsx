@@ -2,7 +2,12 @@ import { useState } from "react"
 import Modal from "../UI/Modal"
 import { useNavigate } from "react-router-dom"
 
-const DeleteEntry: React.FC<{onDelete: (id: string) => void, id: string, header: string}> = ({onDelete, id, header}) => {
+const DeleteEntry: React.FC<{
+    onDelete: (id: string) => void, 
+    id: string, 
+    header: string}
+> = ({onDelete, id, header}) => {
+    
     const navigate = useNavigate()
     const [showModal, setShowModal] = useState(false)
 
@@ -10,7 +15,7 @@ const DeleteEntry: React.FC<{onDelete: (id: string) => void, id: string, header:
         const response: any  = await onDelete(id)
 
         if(response.status === 200) {
-            setShowModal(false)
+            setShowModal(false)  
             navigate('/')
         }
     }
@@ -21,11 +26,11 @@ const DeleteEntry: React.FC<{onDelete: (id: string) => void, id: string, header:
     }
 
     const modalText = (
-        <>
-            <h4>{header} </h4>
+        <div>
+            <h4>{header}</h4>
             <button onClick={deleteHandler}>Delete</button>
             <button onClick={() => setShowModal(false)}>Cancel</button>
-        </>
+        </div>
     )
 
     return (

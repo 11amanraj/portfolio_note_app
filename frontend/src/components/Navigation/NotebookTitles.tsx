@@ -53,7 +53,14 @@ const NotebookTitles: React.FC<{notebook: notebook}> = ({notebook}) => {
     return (
         <div className={`${styles.container} ${isActive ? styles.active : ''}`}>
             <Link className={isActive ? styles.active : ''} to={`/notebook/${notebook.id}`}>
-                <p className={styles.title}>{notebook.title}<DeleteEntry header={`Delete Notebook - ${notebook.title} ?`} onDelete={deleteHandler} id={notebook.id}/></p>
+                <p className={styles.title}>
+                    {notebook.title}
+                    <DeleteEntry 
+                        header={`Delete Notebook - ${notebook.title} ?`} 
+                        onDelete={deleteHandler} 
+                        id={notebook.id}
+                    />
+                </p>
             </Link>
             {isActive && <div className={styles.notes}>
                     <AddEntry addEntry={newNoteHandler}/>

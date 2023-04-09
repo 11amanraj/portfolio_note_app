@@ -7,7 +7,7 @@ interface notification {
     id: string
 }
 
-const MessageOverlay: React.FC<{error: boolean, message: string, notification?: notification[]}> = ({error, message, notification}) => {
+const MessageOverlay: React.FC<{notification: notification[]}> = ({notification}) => {
     return (
         <div className={styles.container}>
             {notification && notification.map(notification => (
@@ -22,14 +22,17 @@ const MessageOverlay: React.FC<{error: boolean, message: string, notification?: 
     )
 }
 
-const Message: React.FC<{error: boolean, message: string, notification: notification[]}> = ({error, message, notification}) => {
+const Message: React.FC<{notification: notification[]}> = ({notification}) => {
     const overlayRootEl = document.querySelector('#overlay-root');
-    console.log(message)
 
     return (
         overlayRootEl 
         ? <>
-            {ReactDOM.createPortal( <MessageOverlay notification={notification} error={error} message={message}/>, overlayRootEl)}
+                {ReactDOM.createPortal( 
+                    <MessageOverlay notification={notification}/>, 
+                    overlayRootEl
+                )}
+            {/* {ReactDOM.createPortal( <MessageOverlay notification={notification} error={error} message={message}/>, overlayRootEl)} */}
         </>
         : null
      );

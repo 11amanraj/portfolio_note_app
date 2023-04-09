@@ -1,4 +1,3 @@
-import SideBar from './components/Navigation/Sidebar';
 import { useEffect } from 'react'
 import { Route, Routes } from 'react-router-dom';
 import Home from './pages/Home';
@@ -26,19 +25,12 @@ function App() {
 
   return (
     <>
-      {notification.length > 0 && <Message notification={notification} error={notification[0].error} message={notification[0].message} />}
-      {/* <Message error={false} message='agsh hfajs' />
-      <Message error={false} message='agsh hfajs' /> */}
-      <div style={{display: "flex"}}>
-            {/* <SideBar /> */}
-        <Routes>
-          {/* <Route path='/login' element={<Login />} />
-          <Route path='/home' element={<HomePage />}/> */}
-          <Route path='/' element={<Home/>}/>
-          <Route path='/notebook/:id' element={<Notebook />}/>
-          <Route path='/notebook/:id/note/:noteid' element={<Note />}/>
-        </Routes>
-      </div>
+      {notification.length > 0 && <Message notification={notification} />}
+      <Routes>
+        <Route path='/' element={<Home/>}/>
+        <Route path='/notebook/:id' element={<Notebook />}/>
+        <Route path='/notebook/:id/note/:noteid' element={<Note />}/>
+      </Routes>
     </>
   )
 }

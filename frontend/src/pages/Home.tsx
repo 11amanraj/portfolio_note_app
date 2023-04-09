@@ -5,6 +5,7 @@ import HomePage from '../components/Home/HomePage';
 import SideBar from '../components/Navigation/Sidebar';
 import { user } from '../shared/interfaces/notes';
 import { useAppDispatch, useAppSelector } from '../store/storeHooks';
+import EachPage from './EachPage';
 
 const Home = () => {
     const dispatch = useAppDispatch()
@@ -19,10 +20,9 @@ const Home = () => {
 
     if(loggedIn || user.username.length > 0) {
         return (
-            <>
-                <SideBar />
+            <EachPage>
                 <HomePage />
-            </>
+            </EachPage>
         )
     } else {
         return <LogIn onLogin={loginHandler} />

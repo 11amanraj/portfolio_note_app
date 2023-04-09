@@ -19,7 +19,7 @@ const SideBar = () => {
         const result = await dispatch(addNewNotebook(title, user.token))
         return result
     }
-
+ 
 
     // Add loading component here
 

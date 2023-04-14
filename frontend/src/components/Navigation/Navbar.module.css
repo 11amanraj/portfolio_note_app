@@ -1,0 +1,88 @@
+.container {
+    /* min-height: 80px; */
+    background-color: black;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 16px;
+    gap: 8px;
+    position: sticky;
+    top: 0;
+    /* height: 120px; */
+}
+
+.container.scroll {
+    /* height: 120px; */
+    /* animation: on-scroll 2s linear infinite forwards; */
+    display: block;
+    /* flex-direction: row; */
+    gap: 16px;
+}
+
+.container.scroll h1 {
+    color: red;
+    display: inline-block;
+}
+
+.container.scroll button {
+    /* display: inline-block; */
+    flex: 1;
+}
+
+.container.scroll input {
+    /* display: inline-block; */
+    flex: 1;
+}
+
+.container.scroll .dropdown {
+    display: none;
+}
+
+.container h1 {
+    align-self: center;
+    margin: 0;
+    padding: 0;
+    color: white;
+}
+
+.container input {
+    font-size: 16px;
+    padding: 8px;
+}
+
+.dropdown {
+    display: flex;
+    gap: 8px;
+}
+
+.dropdown > ul {
+    border: 1px solid white;
+    padding: 8px;
+    width: 50%;
+}
+
+@keyframes on-scroll {
+    from {
+        /* flex-direction: column; */
+        height: 120px;
+        background-color: black;
+    } to {
+        /* flex-direction: row; */
+        height: 40px;
+        background-color: green;
+    }
+    0% {
+        height: 120px;
+        background-color: black;
+        flex-direction: column;
+    }
+    80% {
+        height: 40px;
+        background-color: green;
+        flex-direction: column;
+    }
+    100% {
+        flex-direction: row;
+    }
+}

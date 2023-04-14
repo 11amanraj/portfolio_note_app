@@ -1,14 +1,38 @@
-.container {
+.list {
+    background-color: white;
+    color: black;
+    position: absolute;
+}
+
+.header {
+    border: 1px solid white;
+    margin: 16px 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.item {
+
+}
+
+.selected {
+    
+}
+
+
+/* .container {
     min-width: 300px;
-    position: relative;
+    position: relative; */
     /* display: flex;
     flex-direction: column;
     gap: 8px; */
-}
+/* }
 
 .container * {
     margin: 0;
-}
+} */
 
 /* .input {
     margin: 0;
@@ -24,7 +48,7 @@
     border: 2px solid blue;
 } */
 
-.dynamic {
+/* .dynamic {
     margin-top: 16px;
     display: flex;
     flex-direction: column;
@@ -60,4 +84,4 @@
 
 .add:hover {
     color: green;
-}
+} */

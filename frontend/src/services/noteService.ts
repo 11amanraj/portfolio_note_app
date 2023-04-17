@@ -5,7 +5,8 @@ const url = 'http://localhost:8000/api/notes'
 interface updateNote {
     content?: string,
     tags?: string[],
-    id: string
+    id: string,
+    pinned?: boolean
 }
 
 const createNew = async ({title, notebookID }: {title: string, notebookID: string}, token: string) => {

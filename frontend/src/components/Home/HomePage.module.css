@@ -1,0 +1,12 @@
+.pin {
+    background-color: #2e2e2e;
+    border-radius: 8px;
+    color: white;
+    margin: 16px;
+    padding: 24px;
+    display: flex;
+}
+
+.pin > div {
+    width: 180px;
+}

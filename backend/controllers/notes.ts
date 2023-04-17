@@ -228,6 +228,8 @@ notesRouter.put('/:id', async (request: Request, response: Response, next: NextF
                 },
                 {new: true}
             ).populate('tags', { title: 1 })
+
+            console.log(updatedNote)
                 
             if(newTagsID) {
                 const oldTagsID = note.tags.map(tag => tag.toString())

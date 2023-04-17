@@ -29,6 +29,12 @@ const HomePage = () => {
         setLoading(false)
 
     }, [user.token])
+
+    const pinNoteHandler = (updatedNote: note) => {
+        setNotes(notes
+            .map(note => note.id === updatedNote.id ? updatedNote : note)
+        )
+    }
     
     // const importantUrl = 'http://localhost:8000/api/notes/important'
 
@@ -64,18 +70,16 @@ const HomePage = () => {
     } else {
         return (
             <>
-                <section>
-
+                <section className={styles.pin}>
+                    {notes.map(note => 
+                        <SingleNote
+                            onPin={pinNoteHandler} 
+                            key={note.id} 
+                            note={note} 
+                            id={note.id} 
+                        />)}
                 </section>
             </>
-            // <section className={styles.container}>
-            //     {notes.map(note => 
-            //         <SingleNote 
-            //             key={note.id} 
-            //             note={note} 
-            //             id={note.id} 
-            //         />)}
-            // </section>
         )
     }
 }

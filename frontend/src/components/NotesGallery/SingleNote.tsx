@@ -4,35 +4,27 @@ import { note } from '../../shared/interfaces/notes';
 import axios from 'axios';
 import { useState, useEffect } from 'react';
 import Loading from '../UI/Loading';
+import noteService from '../../services/noteService';
+import { useAppSelector } from '../../store/storeHooks';
 
-const SingleNote: React.FC<{id: string, note: note}> = ({id, note}) => {
+const SingleNote: React.FC<{id: string, note: note, onPin?: (updatedNote: note) => void}> = ({id, note, onPin}) => {
     const [loading, setLoading] = useState(false)
 
-    const pinNoteHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
-        // improve this function
+    const user = useAppSelector(state => state.user)
 
-
-        console.log(`Original Status ${note.pinned}`)
-        console.log(`Original Status reversed ${!note.pinned}`)
-        setLoading(true)
+    const pinNoteHandler = async (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault()
         e.stopPropagation()
 
-        const pinStatus = !note.pinned
+        const update = {
+            id: note.id,
+            pinned: !note.pinned
+        } 
 
-        axios
-            .put(`http://localhost:8000/api/notes/${note.id}`, {
-                pinned: pinStatus,
-                dateModified: new Date()
-            })
-            .then(response => {
-                // console.log(response.data.pinned)
-                console.log(response.data)
-                console.log(`new Status ${response.data.pinned}`)
-                setLoading(false)
-                // setNote(response.data)
-            })
-            .catch(error => console.log(error))
+        setLoading(true)
+        const updatedNote = await noteService.editOne(update, user.token)
+        setLoading(false)
+        if(onPin) onPin(updatedNote)
     }
 
     const loadingView = () => {

@@ -36,26 +36,66 @@ notesRouter.get('/search/:keyword', async (request: Request, response: Response,
     }
 })
 
-notesRouter.get('/important', async (request: Request, response: Response, next: NextFunction) => {
+notesRouter.get('/pinned', async (request: Request, response: Response, next: NextFunction) => {
     try {
-        const notes = await Note
-            .find({pinned : true})
-            .sort({dateModified: -1})
-    
-        // later add code for infinite scrolling
+        const user = request.user
+        if(!user) return response.status(401).json('Authorization Error')
 
-        if(notes.length < 11) {
-            const newNotes = await Note
-                .find({pinned : false})
-                .sort({dateModified: -1})
+        const { skip, limit } = request.query
 
-            notes.push(...(newNotes.slice(0, 10-notes.length)))
-        }    
-        response.json(notes)
+        if(!limit && !skip) {
+            const notes = await Note
+                .find({user: user._id, pinned : true})
+                .skip(0)
+                .limit(3)
+
+            response.json(notes)
+        } else if(limit && !skip) {
+            const notes = await Note
+                .find({user: user._id, pinned : true})
+                .skip(0)
+                .limit(parseInt(limit as string))
+            response.json(notes)
+
+        } else if(!limit && skip) {
+            const notes = await Note
+                .find({user: user._id, pinned : true})
+                .skip(parseInt(skip as string))
+                .limit(3)
+            response.json(notes)
+
+        } else if(limit && skip) {
+            const notes = await Note
+                .find({user: user._id, pinned : true})
+                .skip(parseInt(skip as string))
+                .limit(parseInt(limit as string))
+            response.json(notes)
+        }
     } catch(error) {
         next(error)
     }
 })
+
+// notesRouter.get('/important', async (request: Request, response: Response, next: NextFunction) => {
+//     try {
+//         const notes = await Note
+//             .find({pinned : true})
+//             .sort({dateModified: -1})
+    
+//         // later add code for infinite scrolling
+
+//         if(notes.length < 11) {
+//             const newNotes = await Note
+//                 .find({pinned : false})
+//                 .sort({dateModified: -1})
+
+//             notes.push(...(newNotes.slice(0, 10-notes.length)))
+//         }    
+//         response.json(notes)
+//     } catch(error) {
+//         next(error)
+//     }
+// })
 
 notesRouter.get('/:id', async (request: Request, response: Response, next: NextFunction) => {
     try {

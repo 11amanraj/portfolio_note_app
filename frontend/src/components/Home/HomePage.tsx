@@ -13,17 +13,21 @@ import { addOneNotification } from '../../reducers/notificationReducer';
 const HomePage = () => {
     const [loading, setLoading] = useState(true)
     const [notes, setNotes] = useState<note[]>([])
-
+    const [pinnedNotes, setPinnedNotes] = useState<note[]>([])
+ 
     const user = useAppSelector(state => state.user)
 
     useEffect(() => {
         setLoading(true)
         const fetchAllNotes = async (token: string) => {
             const fetchedNotes = await noteService.getAll(token)
+            const pinned = await noteService.getPinned(token)
+            console.log(pinned)
             setNotes(fetchedNotes)
         }
         fetchAllNotes(user.token)
         setLoading(false)
+
     }, [user.token])
     
     // const importantUrl = 'http://localhost:8000/api/notes/important'
@@ -59,14 +63,19 @@ const HomePage = () => {
         )
     } else {
         return (
-            <section className={styles.container}>
-                {notes.map(note => 
-                    <SingleNote 
-                        key={note.id} 
-                        note={note} 
-                        id={note.id} 
-                    />)}
-            </section>
+            <>
+                <section>
+
+                </section>
+            </>
+            // <section className={styles.container}>
+            //     {notes.map(note => 
+            //         <SingleNote 
+            //             key={note.id} 
+            //             note={note} 
+            //             id={note.id} 
+            //         />)}
+            // </section>
         )
     }
 }

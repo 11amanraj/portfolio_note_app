@@ -16,13 +16,14 @@ const HomePage = () => {
     const [pinnedNotes, setPinnedNotes] = useState<note[]>([])
  
     const user = useAppSelector(state => state.user)
+    const dispatch = useAppDispatch()
 
     useEffect(() => {
         setLoading(true)
         const fetchAllNotes = async (token: string) => {
             const fetchedNotes = await noteService.getAll(token)
             const pinned = await noteService.getPinned(token)
-            console.log(pinned)
+            setPinnedNotes(pinned)
             setNotes(fetchedNotes)
         }
         fetchAllNotes(user.token)
@@ -31,37 +32,27 @@ const HomePage = () => {
     }, [user.token])
 
     const pinNoteHandler = (updatedNote: note) => {
+        const changePinnedNotes = (changedNote: note) => {
+            if(updatedNote.pinned) {
+                setPinnedNotes(prev => [...prev, updatedNote])
+                dispatch(addOneNotification({
+                    message: `${updatedNote.title} pinned`,
+                    error: false
+                }))
+            } else {
+                setPinnedNotes(prev => prev.filter(note => note.id !== updatedNote.id))
+                dispatch(addOneNotification({
+                    message: `${updatedNote.title} unpinned`,
+                    error: false
+                }))
+            }
+        }
+
+        changePinnedNotes(updatedNote)
         setNotes(notes
             .map(note => note.id === updatedNote.id ? updatedNote : note)
         )
     }
-    
-    // const importantUrl = 'http://localhost:8000/api/notes/important'
-
-    // const [renderItem, setRenderItem] = useState<number>(0)
-    // const { notebooks } =  useContext(NotebooksContext)
-
-    // const [ref, inView] = useInView({triggerOnce: true})
-
-    // useEffect(() => {
-    //     if(inView) {
-    //         setRenderItem(prev => prev + 1)
-    //     }
-    // }, [inView])
-
-    // const dispatch = useAppDispatch()
-
-    // const messageHandler = () => {
-    //     const id = Math.random().toString()
-    //     const notification = {
-    //         message: 'Working',
-    //         error: false,
-    //         id: id
-    //     }
-    //     dispatch(addOneNotification(notification))
-    // }
-
-    // console.log(notes)
 
     if(loading) {
         return (
@@ -71,9 +62,18 @@ const HomePage = () => {
         return (
             <>
                 <section className={styles.pin}>
-                    {notes.map(note => 
+                    {pinnedNotes.map(note => 
                         <SingleNote
                             onPin={pinNoteHandler} 
+                            key={note.id} 
+                            note={note} 
+                            id={note.id} 
+                        />)}
+                </section>
+                <section className={styles.pin}>
+                    {notes.map(note => 
+                        <SingleNote
+                            onPin={pinNoteHandler}
                             key={note.id} 
                             note={note} 
                             id={note.id} 

@@ -9,11 +9,13 @@ import { useAppDispatch, useAppSelector } from '../../store/storeHooks';
 import Loading from '../UI/Loading';
 import SingleNote from '../NotesGallery/SingleNote';
 import { addOneNotification } from '../../reducers/notificationReducer';
+import ReactQuill from 'react-quill'
 
 const HomePage = () => {
     const [loading, setLoading] = useState(true)
     const [notes, setNotes] = useState<note[]>([])
     const [pinnedNotes, setPinnedNotes] = useState<note[]>([])
+    const [skip, setSkip] = useState<number>(0)
  
     const user = useAppSelector(state => state.user)
     const dispatch = useAppDispatch()
@@ -34,7 +36,7 @@ const HomePage = () => {
     const pinNoteHandler = (updatedNote: note) => {
         const changePinnedNotes = (changedNote: note) => {
             if(updatedNote.pinned) {
-                setPinnedNotes(prev => [...prev, updatedNote])
+                setPinnedNotes(prev => [updatedNote, ...prev])
                 dispatch(addOneNotification({
                     message: `${updatedNote.title} pinned`,
                     error: false
@@ -54,6 +56,17 @@ const HomePage = () => {
         )
     }
 
+    const nextPinnedNoteHandler = () => {
+        console.log('next')
+        setSkip(prev => prev+1)
+    }
+    
+    const previousPinnedNoteHandler = () => {
+        if(skip > 0) {
+            setSkip(prev => prev-1)
+        }
+    }
+
     if(loading) {
         return (
             <Loading />
@@ -62,15 +75,31 @@ const HomePage = () => {
         return (
             <>
                 <section className={styles.pin}>
-                    {pinnedNotes.map(note => 
-                        <SingleNote
-                            onPin={pinNoteHandler} 
-                            key={note.id} 
-                            note={note} 
-                            id={note.id} 
-                        />)}
+                    <div>
+                        <h3>Pinned Note</h3>
+                        <button onClick={previousPinnedNoteHandler}>P</button>
+                        <button onClick={nextPinnedNoteHandler}>N</button>
+                    </div>
+                    {/* <div className={styles['pinned-notes']}>
+                        {pinnedNotes.map(note => 
+                            <div key={note.id}>
+                                <h2>{note.title}</h2>
+                                <span>{note.notebook}</span>
+                                <ReactQuill theme='bubble' readOnly={true} value={note.content}/>
+                            </div>
+                        )}
+                    </div> */}
+                    <div className={styles['pinned-notes']}>
+                        {pinnedNotes.slice(skip + 0, skip + 3).map(note => 
+                            <div key={note.id}>
+                                <h2>{note.title}</h2>
+                                <span>{note.notebook}</span>
+                                <ReactQuill theme='bubble' readOnly={true} value={note.content}/>
+                            </div>
+                        )}
+                    </div>
                 </section>
-                <section className={styles.pin}>
+                <section className={styles['all-notes']}>
                     {notes.map(note => 
                         <SingleNote
                             onPin={pinNoteHandler}

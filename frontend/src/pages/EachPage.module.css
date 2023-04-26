@@ -1,3 +1,12 @@
-.mobile {
+.desktop {
     display: flex;
+    background-color: green;
+}
+
+.desktop > div {
+    width: 100%;
+}
+
+.mobile {
+    width: 100%;
 }

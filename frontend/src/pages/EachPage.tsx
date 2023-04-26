@@ -9,14 +9,14 @@ const EachPage: React.FC<{children: React.ReactNode}> = ({children}) => {
 
     if(matches) {
         return (
-            <main className={styles.desktop}>
+            <main className={styles.mobile}>
                 <Navbar />
                 {children}
             </main>
         )
     } else {
         return (
-            <main className={styles.mobile}>
+            <main className={styles.desktop}>
                 <SideBar />
                 <div>
                     <Search />

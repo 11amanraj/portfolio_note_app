@@ -4,9 +4,35 @@
     color: white;
     margin: 16px;
     padding: 24px;
+}
+
+.pin > div:first-child {
     display: flex;
 }
 
-.pin > div {
-    width: 180px;
+.pin > div:first-child > h3 {
+    margin-right: auto;
+}
+
+.pinned-notes {
+    display: flex;
+    gap: 8px
+}
+
+.pinned-notes > div {
+    border-radius: 8px;
+    padding: 16px;
+    background-color: white;
+    color: black;
+    /* background-color: red; */
+    height: 400px;
+    flex: 1;
+}
+
+/* .pin > div > div {
+    width: 600px;
+} */
+
+.all-notes {
+    display: flex;
 }

@@ -10,7 +10,7 @@
     display: flex;
 }
 
-.pin > div:first-child > h3 {
+.pin > div:first-child > h2 {
     margin-right: auto;
 }
 

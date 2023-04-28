@@ -39,10 +39,20 @@ const getAll = async (token: string) => {
     return response.data
 }
 
+const getOne = async (id: string, token: string) => {
+    const response = await axios.get(`${url}/${id}`, {
+        headers: {
+            Authorization: token
+        }
+    })
+    return response.data
+}
+
 const notebookService = {
     getAll,
     createNew,
-    deleteOne
+    deleteOne,
+    getOne
 }
 
 export default notebookService

@@ -10,6 +10,8 @@ import Loading from '../UI/Loading';
 import SingleNote from '../NotesGallery/SingleNote';
 import { addOneNotification } from '../../reducers/notificationReducer';
 import ReactQuill from 'react-quill'
+import SectionCard from '../UI/SectionCard';
+import Notebook from '../NotesGallery/Notebook';
 
 const HomePage = () => {
     const [loading, setLoading] = useState(true)
@@ -18,6 +20,7 @@ const HomePage = () => {
     const [skip, setSkip] = useState<number>(0)
  
     const user = useAppSelector(state => state.user)
+    const notebooks = useAppSelector(state => state.notebooks)
     const dispatch = useAppDispatch()
 
     useEffect(() => {
@@ -67,6 +70,8 @@ const HomePage = () => {
         }
     }
 
+    console.log(notebooks)
+
     if(loading) {
         return (
             <Loading />
@@ -74,9 +79,9 @@ const HomePage = () => {
     } else {
         return (
             <>
-                <section className={styles.pin}>
+                <SectionCard classes={styles.pin}>
                     <div>
-                        <h3>Pinned Note</h3>
+                        <h2>Pinned Note</h2>
                         <button onClick={previousPinnedNoteHandler}>P</button>
                         <button onClick={nextPinnedNoteHandler}>N</button>
                     </div>
@@ -98,7 +103,24 @@ const HomePage = () => {
                             </div>
                         )}
                     </div>
-                </section>
+                </SectionCard>
+                {notebooks.map(notebook => <Notebook notebook={notebook} />)}
+                {/* <section className={styles.pin}>
+                    <div>
+                        <h3>Pinned Note</h3>
+                        <button onClick={previousPinnedNoteHandler}>P</button>
+                        <button onClick={nextPinnedNoteHandler}>N</button>
+                    </div>
+                    <div className={styles['pinned-notes']}>
+                        {pinnedNotes.slice(skip + 0, skip + 3).map(note => 
+                            <div key={note.id}>
+                                <h2>{note.title}</h2>
+                                <span>{note.notebook}</span>
+                                <ReactQuill theme='bubble' readOnly={true} value={note.content}/>
+                            </div>
+                        )}
+                    </div>
+                </section> */}
                 <section className={styles['all-notes']}>
                     {notes.map(note => 
                         <SingleNote

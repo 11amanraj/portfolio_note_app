@@ -41,36 +41,41 @@ notesRouter.get('/pinned', async (request: Request, response: Response, next: Ne
         const user = request.user
         if(!user) return response.status(401).json('Authorization Error')
 
-        const { skip, limit } = request.query
+        const notes = await Note
+            .find({user: user._id, pinned : true})
 
-        if(!limit && !skip) {
-            const notes = await Note
-                .find({user: user._id, pinned : true})
-                .skip(0)
-                .limit(3)
+        response.json(notes)
 
-            response.json(notes)
-        } else if(limit && !skip) {
-            const notes = await Note
-                .find({user: user._id, pinned : true})
-                .skip(0)
-                .limit(parseInt(limit as string))
-            response.json(notes)
+        // const { skip, limit } = request.query
 
-        } else if(!limit && skip) {
-            const notes = await Note
-                .find({user: user._id, pinned : true})
-                .skip(parseInt(skip as string))
-                .limit(3)
-            response.json(notes)
+        // if(!limit && !skip) {
+        //     const notes = await Note
+        //         .find({user: user._id, pinned : true})
+        //         .skip(0)
+        //         .limit(3)
 
-        } else if(limit && skip) {
-            const notes = await Note
-                .find({user: user._id, pinned : true})
-                .skip(parseInt(skip as string))
-                .limit(parseInt(limit as string))
-            response.json(notes)
-        }
+        //     response.json(notes)
+        // } else if(limit && !skip) {
+        //     const notes = await Note
+        //         .find({user: user._id, pinned : true})
+        //         .skip(0)
+        //         .limit(parseInt(limit as string))
+        //     response.json(notes)
+
+        // } else if(!limit && skip) {
+        //     const notes = await Note
+        //         .find({user: user._id, pinned : true})
+        //         .skip(parseInt(skip as string))
+        //         .limit(3)
+        //     response.json(notes)
+
+        // } else if(limit && skip) {
+        //     const notes = await Note
+        //         .find({user: user._id, pinned : true})
+        //         .skip(parseInt(skip as string))
+        //         .limit(parseInt(limit as string))
+        //     response.json(notes)
+        // }
     } catch(error) {
         next(error)
     }

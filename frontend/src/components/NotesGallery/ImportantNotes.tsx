@@ -5,40 +5,57 @@ import { note } from "../../shared/interfaces/notes";
 import styles from './ImportantNotes.module.css'
 import { useAppSelector } from "../../store/storeHooks";
 import ReactQuill from "react-quill";
-import ElementCard from "../UI/ElementCard";
+import notebookService from "../../services/notebookService";
 
-const ImportantNotes = () => {
+const ImportantNotes: React.FC<{ notebookID ?: string }> = (notebookID) => {
     const [skip, setSkip] = useState<number>(0)
     const [pinnedNotes, setPinnedNotes] = useState<note[]>([])
     const { token } = useAppSelector(state => state.user)
 
     useEffect(() => {
-        // setLoading(true)
-        const fetchAllNotes = async (token: string) => {
-            const pinned = await noteService.getPinned(token)
-            setPinnedNotes(pinned)
+        const fetchAllPinnedNotes = async (token: string) => {
+            const notes = await noteService.getPinned(token)
+            setPinnedNotes(notes)
         }
-        fetchAllNotes(token)
-        // setLoading(false)
-    }, [token])
+
+        const fetchNotebookPinnedNotes = async (id: string, token: string) => {
+            const notes = await notebookService.getPinned(id, token)
+            setPinnedNotes(notes) 
+        }
+
+        if(typeof notebookID === 'string') {
+            fetchNotebookPinnedNotes(notebookID, token)
+        } else {
+            fetchAllPinnedNotes(token)
+        }
+    }, [token, notebookID])
 
     const nextPinnedNoteHandler = () => {
-        console.log('next')
         setSkip(prev => prev+1)
+        // if(pinnedNotes.length - skip > 3) {
+        //     setSkip(prev => prev+1)
+        // }
     }
     
     const previousPinnedNoteHandler = () => {
-        if(skip > 0) {
-            setSkip(prev => prev-1)
-        }
+        setSkip(prev => prev-1)
+        // if(skip > 0) {
+        //     setSkip(prev => prev-1)
+        // }
     }
 
     return ( 
         <SectionCard classes={styles.pin}>
             <div className={styles.header}>
                 <h2>Pinned Note</h2>
-                <button onClick={previousPinnedNoteHandler}>P</button>
-                <button onClick={nextPinnedNoteHandler}>N</button>
+                {(skip > 0) 
+                    ? <button onClick={previousPinnedNoteHandler}>P</button> 
+                    : <button>Q</button>
+                }
+                {(pinnedNotes.length - skip > 3) 
+                    ? <button onClick={nextPinnedNoteHandler}>N</button> 
+                    : <button>O</button>
+                }
             </div>
             <div className={styles['pinned-notes']}>
                 {pinnedNotes.slice(skip + 0, skip + 3).map(note => 

@@ -70,7 +70,7 @@ const HomePage = () => {
         }
     }
 
-    console.log(notebooks)
+    // console.log(notebooks)
 
     if(loading) {
         return (

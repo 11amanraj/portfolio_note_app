@@ -20,7 +20,7 @@ const Notebook: React.FC<{notebook: notebook}> = ({notebook}) => {
         const fetchNotebook = async () => {
             const fetchedNB = await notebookService.getOne(notebook.id, user.token)
             setNotebookDetail(fetchedNB)
-            console.log(fetchedNB)
+            // console.log(fetchedNB)
         }
 
         fetchNotebook()

@@ -81,26 +81,21 @@ notesRouter.get('/pinned', async (request: Request, response: Response, next: Ne
     }
 })
 
-// notesRouter.get('/important', async (request: Request, response: Response, next: NextFunction) => {
-//     try {
-//         const notes = await Note
-//             .find({pinned : true})
-//             .sort({dateModified: -1})
-    
-//         // later add code for infinite scrolling
+notesRouter.get('/recent', async (request: Request, response: Response, next: NextFunction) => {
+    try {
+        const user = request.user
+        if(!user) return response.status(401).json('Authorization Error')
 
-//         if(notes.length < 11) {
-//             const newNotes = await Note
-//                 .find({pinned : false})
-//                 .sort({dateModified: -1})
+        const notes = await Note
+            .find({user: user._id})
+            .sort({ dateCreated: -1 }) 
+            .limit(10)
 
-//             notes.push(...(newNotes.slice(0, 10-notes.length)))
-//         }    
-//         response.json(notes)
-//     } catch(error) {
-//         next(error)
-//     }
-// })
+        response.json(notes)
+    } catch(error) {
+        next(error)
+    }
+})
 
 notesRouter.get('/:id', async (request: Request, response: Response, next: NextFunction) => {
     try {

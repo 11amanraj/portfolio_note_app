@@ -106,6 +106,27 @@ notebooksRouter.get('/:id/pinned', async (request: Request, response: Response, 
     }
 })
 
+notebooksRouter.get('/:id/recent', async (request: Request, response: Response, next: NextFunction) => {  
+    try {
+        const user = request.user
+
+        if(!user) return response.status(404).json('User not found')
+
+        const notes = await Note
+            .find({ user: user._id, notebook: request.params.id })
+            .sort({ dateCreated: -1 })
+            .limit(10)
+
+        response.json(notes)
+    } catch(error: any) {
+        if (error.name === 'CastError') {
+            return response.status(400).json({message:'Notebook does not exist'})
+        } else {
+            next(error)
+        }
+    }
+})
+
 notebooksRouter.get('/:id/search/:keyword', async (request: Request, response: Response, next: NextFunction) => {
     const include = {
         path: 'notes',

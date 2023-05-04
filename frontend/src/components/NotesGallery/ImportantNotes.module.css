@@ -6,6 +6,41 @@
     margin-right: auto;
 }
 
+.header h2 {
+    display: flex;
+    gap: 32px;
+}
+
+.header button {
+    background-color: transparent;
+    font-size: 24px;
+    border: none;
+    cursor: pointer;
+}
+
+.inactive-btn {
+    color: #00000060;
+}
+
+.active-btn {
+    background-color: green;
+    position: relative;
+    color: #000000;
+}
+
+.active-btn:after {
+    position: absolute;
+    content: '';
+    height: 2px;
+    bottom: -4px; 
+    margin: 0 auto;
+    left: 0;
+    right: 0;
+    width: 10%;
+    background: green;
+    animation: underline 0.2s ease forwards;
+}
+
 .pinned-notes {
     display: flex;
     height: 400px;
@@ -19,32 +54,10 @@
     padding: 8px;
 }
 
-/* .pin {
-    background-color: #2e2e2e;
-    border-radius: 8px;
-    color: white;
-    margin: 16px;
-    padding: 24px;
+@keyframes underline {
+    from {
+        width: 10%;
+    } to {
+        width: 80%;
+    }
 }
-
-.pin > div:first-child {
-    display: flex;
-}
-
-.pin > div:first-child > h2 {
-    margin-right: auto;
-}
-
-.pinned-notes {
-    display: flex;
-    gap: 8px
-}
-
-.pinned-notes > div {
-    border-radius: 8px;
-    padding: 16px;
-    background-color: white;
-    color: black;
-    height: 400px;
-    flex: 1;
-} */

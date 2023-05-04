@@ -9,35 +9,51 @@ import notebookService from "../../services/notebookService";
 
 const ImportantNotes: React.FC<{ notebookID ?: string }> = (notebookID) => {
     const [skip, setSkip] = useState<number>(0)
-    const [pinnedNotes, setPinnedNotes] = useState<note[]>([])
+    const [importantNotes, setImportantNotes] = useState<note[]>([])
+    const [showPinned, setShowPinned] = useState(true)
     const { token } = useAppSelector(state => state.user)
 
     useEffect(() => {
         const fetchAllPinnedNotes = async (token: string) => {
             const notes = await noteService.getPinned(token)
-            setPinnedNotes(notes)
+            setImportantNotes(notes)
         }
 
         const fetchNotebookPinnedNotes = async (id: string, token: string) => {
             const notes = await notebookService.getPinned(id, token)
-            setPinnedNotes(notes) 
+            setImportantNotes(notes) 
+        }
+
+        const fetchAllRecentNotes = async (token: string) => {
+            const notes = await noteService.getRecent(token)
+            setImportantNotes(notes)
+        }
+
+        const fetchNotebookRecentNotes = async (id: string, token: string) => {
+            const notes = await notebookService.getRecent(id, token)
+            setImportantNotes(notes) 
         }
 
         if(typeof notebookID === 'string') {
-            fetchNotebookPinnedNotes(notebookID, token)
+            showPinned 
+                ? fetchNotebookPinnedNotes(notebookID, token)
+                : fetchNotebookRecentNotes(notebookID, token)
         } else {
-            fetchAllPinnedNotes(token)
+            showPinned 
+                ? fetchAllPinnedNotes(token)
+                : fetchAllRecentNotes(token)
+            // fetchAllPinnedNotes(token)
         }
-    }, [token, notebookID])
+    }, [token, notebookID, showPinned])
 
-    const nextPinnedNoteHandler = () => {
+    const nextImportantNoteHandler = () => {
         setSkip(prev => prev+1)
         // if(pinnedNotes.length - skip > 3) {
         //     setSkip(prev => prev+1)
         // }
     }
     
-    const previousPinnedNoteHandler = () => {
+    const previousImportantNoteHandler = () => {
         setSkip(prev => prev-1)
         // if(skip > 0) {
         //     setSkip(prev => prev-1)
@@ -47,18 +63,27 @@ const ImportantNotes: React.FC<{ notebookID ?: string }> = (notebookID) => {
     return ( 
         <SectionCard classes={styles.pin}>
             <div className={styles.header}>
-                <h2>Pinned Note</h2>
+                <h2>
+                    <button 
+                        className={`${showPinned ? styles['active-btn'] : styles['inactive-btn']}`} 
+                        onClick={() => setShowPinned(true)}
+                    >Pinned Note</button>
+                    <button 
+                        className={`${!showPinned ? styles['active-btn'] : styles['inactive-btn']}`} 
+                        onClick={() => setShowPinned(false)}
+                    >Recently Added</button>
+                </h2>
                 {(skip > 0) 
-                    ? <button onClick={previousPinnedNoteHandler}>P</button> 
+                    ? <button onClick={previousImportantNoteHandler}>P</button> 
                     : <button>Q</button>
                 }
-                {(pinnedNotes.length - skip > 3) 
-                    ? <button onClick={nextPinnedNoteHandler}>N</button> 
+                {(importantNotes.length - skip > 3) 
+                    ? <button onClick={nextImportantNoteHandler}>N</button> 
                     : <button>O</button>
                 }
             </div>
             <div className={styles['pinned-notes']}>
-                {pinnedNotes.slice(skip + 0, skip + 3).map(note => 
+                {importantNotes.slice(skip + 0, skip + 3).map(note => 
                     <div key={note.id}>
                         <h2>{note.title}</h2>
                         <span>{note.notebook}</span>

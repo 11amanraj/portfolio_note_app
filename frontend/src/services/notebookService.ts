@@ -57,12 +57,22 @@ const getPinned = async (id: string, token: string) => {
     return response.data
 }
 
+const getRecent = async (id: string, token: string) => {
+    const response = await axios.get(`${url}/${id}/recent`, {
+        headers: {
+            Authorization: token
+        }
+    })
+    return response.data
+}
+
 const notebookService = {
     getAll,
     createNew,
     deleteOne,
     getOne,
-    getPinned
+    getPinned,
+    getRecent
 }
 
 export default notebookService

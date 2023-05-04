@@ -66,6 +66,15 @@ const getPinned = async (token: string) => {
     return response.data
 }
 
+const getRecent = async (token: string) => {
+    const response = await axios.get(`${url}/recent`, {
+        headers: {
+            Authorization: token
+        }
+    })
+    return response.data
+}
+
 const editOne = async (note: updateNote, token: string) => {
     try {
         const response = await axios.put(`${url}/${note.id}`, note , {
@@ -85,7 +94,8 @@ const noteService = {
     deleteOne,
     getOne,
     editOne,
-    getPinned
+    getPinned,
+    getRecent
 }
 
 export default noteService

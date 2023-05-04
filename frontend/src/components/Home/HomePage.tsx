@@ -12,6 +12,7 @@ import { addOneNotification } from '../../reducers/notificationReducer';
 import ReactQuill from 'react-quill'
 import SectionCard from '../UI/SectionCard';
 import Notebook from '../NotesGallery/Notebook';
+import ImportantNotes from '../NotesGallery/ImportantNotes';
 
 const HomePage = () => {
     const [loading, setLoading] = useState(true)
@@ -33,7 +34,6 @@ const HomePage = () => {
         }
         fetchAllNotes(user.token)
         setLoading(false)
-
     }, [user.token])
 
     const pinNoteHandler = (updatedNote: note) => {
@@ -79,6 +79,7 @@ const HomePage = () => {
     } else {
         return (
             <>
+                <ImportantNotes />
                 <SectionCard classes={styles.pin}>
                     <div>
                         <h2>Pinned Note</h2>

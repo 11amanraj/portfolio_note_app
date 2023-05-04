@@ -1,0 +1,50 @@
+.header {
+    display: flex;
+}
+
+.header:first-child > h2 {
+    margin-right: auto;
+}
+
+.pinned-notes {
+    display: flex;
+    height: 400px;
+    gap: 16px;
+}
+
+.pinned-notes > div {
+    border-radius: 8px;
+    background-color: white;
+    flex: 1;
+    padding: 8px;
+}
+
+/* .pin {
+    background-color: #2e2e2e;
+    border-radius: 8px;
+    color: white;
+    margin: 16px;
+    padding: 24px;
+}
+
+.pin > div:first-child {
+    display: flex;
+}
+
+.pin > div:first-child > h2 {
+    margin-right: auto;
+}
+
+.pinned-notes {
+    display: flex;
+    gap: 8px
+}
+
+.pinned-notes > div {
+    border-radius: 8px;
+    padding: 16px;
+    background-color: white;
+    color: black;
+    height: 400px;
+    flex: 1;
+} */

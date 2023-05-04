@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react'
 import SingleNote from './SingleNote';
 import notebookService from '../../services/notebookService';
 import { useAppSelector } from '../../store/storeHooks';
+import ElementCard from '../UI/ElementCard';
 
 const Notebook: React.FC<{notebook: notebook}> = ({notebook}) => {
     const [notebookDetail, setNotebookDetail] = useState<notebook>({
@@ -32,6 +33,10 @@ const Notebook: React.FC<{notebook: notebook}> = ({notebook}) => {
                 <h2>{notebook.title}</h2>
                 <div className={styles.tags}></div>
             </div>
+            <ElementCard to='#' className={styles.add}>
+                <input></input>
+                <h3>Add Note</h3>
+            </ElementCard>
             {notebookDetail.notes.map(note => (
                 <SingleNote id={note.id} note={note}/>
             ))}

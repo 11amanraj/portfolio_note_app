@@ -8,3 +8,12 @@
     color: white;
     grid-column: span 2;
 }
+
+.add {
+    display: flex;
+    flex-direction: column;
+}
+
+.add > input {
+    flex: 1;
+}

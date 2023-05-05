@@ -36,6 +36,48 @@ notesRouter.get('/search/:keyword', async (request: Request, response: Response,
     }
 })
 
+notesRouter.get('/search-title/:searchString', async (request: Request, response: Response, next: NextFunction) => {
+    try {
+        const user = request.user
+        if(!user) return response.status(401).json('Authorization Error')
+
+        const { searchString } = request.params
+
+        if(searchString) {
+            const notes = await Note
+                .find({user: user._id, title: new RegExp(searchString, 'i')})
+    
+            response.json(notes)
+        } else {
+            response.json({})
+        }
+
+    } catch(error) {
+        next(error)
+    }
+})
+
+notesRouter.get('/search-content/:searchString', async (request: Request, response: Response, next: NextFunction) => {
+    try {
+        const user = request.user
+        if(!user) return response.status(401).json('Authorization Error')
+
+        const { searchString } = request.params
+
+        if(searchString) {
+            const notes = await Note
+                .find({user: user._id, content: new RegExp(searchString, 'i')})
+    
+            response.json(notes)
+        } else {
+            response.json({})
+        }
+
+    } catch(error) {
+        next(error)
+    }
+})
+
 notesRouter.get('/pinned', async (request: Request, response: Response, next: NextFunction) => {
     try {
         const user = request.user

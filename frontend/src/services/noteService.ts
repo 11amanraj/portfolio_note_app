@@ -88,6 +88,32 @@ const editOne = async (note: updateNote, token: string) => {
     }
 }
 
+const searchTitle = async (text: string, token: string) => {
+    try {
+        const response = await axios.get(`${url}/search-title/${text}`, {
+            headers: {
+                Authorization: token
+            }
+        })
+        return response.data
+    } catch(error: any) {
+        return Promise.reject(error.response)
+    }
+}
+
+const searchContent = async (text: string, token: string) => {
+    try {
+        const response = await axios.get(`${url}/search-content/${text}`, {
+            headers: {
+                Authorization: token
+            }
+        })
+        return response.data
+    } catch(error: any) {
+        return Promise.reject(error.response)
+    }
+}
+
 const noteService = {
     getAll,
     createNew,
@@ -95,7 +121,9 @@ const noteService = {
     getOne,
     editOne,
     getPinned,
-    getRecent
+    getRecent,
+    searchTitle,
+    searchContent
 }
 
 export default noteService

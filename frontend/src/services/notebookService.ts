@@ -66,13 +66,27 @@ const getRecent = async (id: string, token: string) => {
     return response.data
 }
 
+const searchTitle = async (text: string, token: string) => {
+    try {
+        const response = await axios.get(`${url}/search/${text}`, {
+            headers: {
+                Authorization: token
+            }
+        })
+        return response.data
+    } catch(error: any) {
+        return Promise.reject(error.response)
+    }
+}
+
 const notebookService = {
     getAll,
     createNew,
     deleteOne,
     getOne,
     getPinned,
-    getRecent
+    getRecent,
+    searchTitle
 }
 
 export default notebookService

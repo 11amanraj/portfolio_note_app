@@ -62,12 +62,26 @@ const deleteOne = async (id: string, token: string) => {
     }
 }
 
+const searchTitle = async (text: string, token: string) => {
+    try {
+        const response = await axios.get(`${url}/search/${text}`, {
+            headers: {
+                Authorization: token
+            }
+        })
+        return response.data
+    } catch(error: any) {
+        return Promise.reject(error.response)
+    }
+}
+
 const tagService = {
     getAll,
     createNew,
     getOne,
     updateOne,
-    deleteOne
+    deleteOne,
+    searchTitle
 }
 
 export default tagService

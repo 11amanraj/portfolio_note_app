@@ -3,6 +3,8 @@ import { useState, useEffect } from 'react'
 import { note, notebook, tag } from '../../shared/interfaces/notes'
 import { useAppSelector } from '../../store/storeHooks'
 import styles from './Search.module.css'
+import notebookService from '../../services/notebookService'
+import tagService from '../../services/tagService'
 
 const Search = () => {
     const [notes, setNotes] = useState<note[]>([])
@@ -16,8 +18,14 @@ const Search = () => {
         if(e.target.value.length > 0) {
             setShowResults(true)
             const notesTitle = await noteService.searchTitle(e.target.value, token)
+            const notebooksTitle = await notebookService.searchTitle(e.target.value, token)
+            const tagsTitle = await tagService.searchTitle(e.target.value, token)
             setNotes(notesTitle)
-            console.log(notesTitle) 
+            setNotebooks(notebooksTitle)
+            setTags(tagsTitle)
+            // console.log(notesTitle) 
+            // console.log(notebooksTitle)
+            // console.log(tagsTitle)
 
             // const notesContent = await noteService.searchContent(e.target.value, token)
         } else {
@@ -74,6 +82,12 @@ const Search = () => {
                 <div className={styles.results}>
                     {notes.length > 0 && notes.map(note => (
                         <div key={note.id}>{note.title}</div>
+                    ))}
+                    {notebooks.length > 0 && notebooks.map(notebook => (
+                        <div key={notebook.id}>{notebook.title}</div>
+                    ))}
+                    {tags.length > 0 && tags.map(tag => (
+                        <div key={tag.id}>{tag.title}</div>
                     ))}
                 </div>
             }

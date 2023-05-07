@@ -56,6 +56,22 @@ tagsRouter.get('/:id', async (request: Request, response: Response, next: NextFu
     } 
 })
 
+tagsRouter.get('/search/:keyword', async (request: Request, response: Response, next: NextFunction) => {
+    try {
+        const user = request.user
+        if(!user) return response.status(401).json('Authorization Error')
+
+        const tags = await Tag
+            .find({user: user._id, title: new RegExp(request.params.keyword, 'i')})
+            // .sort({ dateCreated: -1 }) 
+            // .populate<{notes: notes}>('notes', {title: 1, id: 1, dateCreated: 1, pinned: 1, dateModified: 1})
+
+        response.json(tags)
+    } catch(error) {
+        next(error)
+    }
+})
+
 tagsRouter.post('/', async (request: Request, response: Response, next: NextFunction) => {
     try {
         const { title } = request.body

@@ -155,10 +155,13 @@ notebooksRouter.get('/:id/search/:keyword', async (request: Request, response: R
 
 notebooksRouter.get('/search/:keyword', async (request: Request, response: Response, next: NextFunction) => {
     try {
+        const user = request.user
+        if(!user) return response.status(401).json('Authorization Error')
+
         const notebooks = await Notebook
-            .find({title: new RegExp(request.params.keyword, 'i')})
+            .find({user: user._id, title: new RegExp(request.params.keyword, 'i')})
             // .sort({ dateCreated: -1 }) 
-            .populate<{notes: notes}>('notes', {title: 1, id: 1, dateCreated: 1, pinned: 1, dateModified: 1})
+            // .populate<{notes: notes}>('notes', {title: 1, id: 1, dateCreated: 1, pinned: 1, dateModified: 1})
 
         response.json(notebooks)
     } catch(error) {

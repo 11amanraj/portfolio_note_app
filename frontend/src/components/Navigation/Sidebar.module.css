@@ -9,8 +9,13 @@
     display: flex;
     flex-direction: column;
     gap: 16px;
+    overflow-y: scroll;
     /* position: fixed; */
 }
+
+/* position: fixed;
+left: 0;
+overflow: scroll; */
 
 .container > a {
     text-decoration: none;

@@ -1,7 +1,7 @@
 import Search from '../Operations/Search';
 import styles from './SearchBar.module.css'
 
-const SearchBar: React.FC<{fullsize: boolean}> = ({fullsize}) => {
+const SearchBar: React.FC<{fullsize: boolean, sidebarHandler?: () => void}> = ({fullsize, sidebarHandler}) => {
     if(!fullsize) {
         return (
             <Search />

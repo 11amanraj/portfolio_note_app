@@ -86,5 +86,12 @@
 @media only screen and (max-width: 768px) {
     .results {
         width: 70vw;
+        /* left: 36px; */
+    }
+} 
+
+@media (max-width: 400px) {
+    .results {
+        left: 36px;
     }
 }

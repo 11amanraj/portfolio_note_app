@@ -26,7 +26,7 @@ const EachPage: React.FC<{children: React.ReactNode}> = ({children}) => {
         )
     }
 
-    const {matches, matchesAny, matchesAll} = useMediaQueries({
+    const {matches} = useMediaQueries({
         screen: 'screen',
         mobile: '(max-width: 500px)',
         tablet: '(max-width: 1080px)'
@@ -35,10 +35,9 @@ const EachPage: React.FC<{children: React.ReactNode}> = ({children}) => {
     if(matches.mobile) {
         return (
             <main className={styles.mobile}>
-                {/* <Navbar /> */}
-                <Modal>
+                {/* <Modal>
                     <SideBar />
-                </Modal>
+                </Modal> */}
                 <SearchBar fullsize={false}/>
                 {children}
             </main>
@@ -51,7 +50,6 @@ const EachPage: React.FC<{children: React.ReactNode}> = ({children}) => {
                 </Modal> */}
                 <div>
                     <SearchBar fullsize={true}/>
-                    {/* <Search /> */}
                     {children}
                 </div>
             </main>

@@ -37,10 +37,54 @@
 }
 
 .results {
-    background-color: black;
+    background-color: rgb(135, 66, 66);
     color: white;
     padding: 16px;
+    width: 600px;
     /* width: 100%; */
     margin-top: 64px;
+    left: -36px;
     position: absolute;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding-left: 36px;
+}
+
+.results > div {
+    box-sizing: border-box;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    background-color: green;
+    padding: 16px;
+}
+
+.notes, .notebooks {
+    height: 56px;
+    font-size: 24px;
+}
+
+.notebooks > span:last-child {
+    margin-left: 16px;
+    background-color: #191a1a40;
+    border-radius: 2px;
+    box-sizing: border-box;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.tags {
+    height: auto;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+@media only screen and (max-width: 768px) {
+    .results {
+        width: 70vw;
+    }
 }

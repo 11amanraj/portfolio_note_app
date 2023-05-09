@@ -5,6 +5,7 @@ import { useAppSelector } from '../../store/storeHooks'
 import styles from './Search.module.css'
 import notebookService from '../../services/notebookService'
 import tagService from '../../services/tagService'
+import Tags from '../Tags/Tags'
 
 const Search = () => {
     const [notes, setNotes] = useState<note[]>([])
@@ -24,11 +25,6 @@ const Search = () => {
             setNotes(notesTitle)
             setNotebooks(notebooksTitle)
             setTags(tagsTitle)
-            // console.log(notesTitle) 
-            // console.log(notebooksTitle)
-            // console.log(tagsTitle)
-
-            // const notesContent = await noteService.searchContent(e.target.value, token)
         } else {
             setShowResults(false)
         }
@@ -78,21 +74,26 @@ const Search = () => {
 
     return ( 
         <div className={`${styles.search} ${isInputFocused ? styles.focus : ''}`}>
-            {/* <div className={styles.searching}> */}
-                <input onChange={inputHandler} onFocus={() => setIsInputFocused(true)} onBlur={() => setIsInputFocused(false)} type='text' placeholder='Search Notebook'/>
-                <button>Clear</button>
-            {/* </div> */}
+            <input onChange={inputHandler} onFocus={() => setIsInputFocused(true)} onBlur={() => setIsInputFocused(false)} type='text' placeholder='Search Notebook'/>
+            <button>Clear</button>
             {showResults && 
                 <div className={styles.results}>
                     {notes.length > 0 && notes.map(note => (
-                        <div key={note.id}>{note.title}</div>
+                        <div className={styles.notes} key={note.id}>{note.title}</div>
                     ))}
                     {notebooks.length > 0 && notebooks.map(notebook => (
-                        <div key={notebook.id}>{notebook.title}</div>
+                        <div key={notebook.id} className={styles.notebooks}>
+                            <span>{notebook.title}</span>
+                            <span>{notebook.notes.length}</span>
+                        </div>
                     ))}
-                    {tags.length > 0 && tags.map(tag => (
-                        <div key={tag.id}>{tag.title}</div>
-                    ))}
+                    {tags.length > 0 && 
+                        <div className={styles.tags}>
+                            {tags.map(tag => (
+                                <Tags tag={tag} active={false} />
+                            ))}
+                        </div>
+                    }
                 </div>
             }
         </div>

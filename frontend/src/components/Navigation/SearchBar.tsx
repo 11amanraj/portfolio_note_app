@@ -12,7 +12,7 @@ const SearchBar: React.FC<{fullsize: boolean}> = ({fullsize}) => {
                 <h1>S</h1>
                 <Search />
                 <div className={styles['profile-picture']}>JD</div>
-                <div>Welcome, John Doe</div>
+                <div className={styles.text}>Welcome, John Doe</div>
             </section>
          );
     }

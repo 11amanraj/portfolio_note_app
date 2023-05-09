@@ -24,3 +24,9 @@
     color: white;
     margin-left: auto;
 }
+
+@media only screen and (max-width: 768px) {
+    .profile-picture, .text {
+        display: none;
+    }
+  }

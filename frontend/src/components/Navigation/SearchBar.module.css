@@ -1,0 +1,26 @@
+.container {
+    background-color: #f5deb350;
+    /* background-color: transparent; */
+    position: sticky;
+    top: 0px;
+    z-index: 4;
+    /* backdrop-filter: blur(4px); */
+    height: 64px;
+    display: flex;
+    box-sizing: border-box;
+    padding: 0 32px;
+    gap: 32px;
+    align-items: center;
+}
+
+.profile-picture {
+    min-width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: black;
+    color: white;
+    margin-left: auto;
+}

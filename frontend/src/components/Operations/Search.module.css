@@ -1,24 +1,46 @@
 .search {
-    padding: 16px 64px;
-    background-color: #f5deb350;
-    position: sticky;
-    top: 0px;
-    z-index: 4;
-    backdrop-filter: blur(4px);
+    flex: 1;
+    padding: 8px;
+    display: flex;
+    gap: 16px;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    position: relative;
+}
+
+.focus {
+    border: 1px solid black;
+    border-radius: 8px;
 }
 
 .search input {
-    width: 100%;
+    background-color: transparent;
     font-size: 24px;
     font-weight: 700;
+    width: 100%;
     top: 0;
+    border: none;
+    color: #00000070;
+}
+
+.search input:focus {
+    border: none;
+    outline: none;
+}
+
+.search input:focus .search {
+    border-color: yellow;
+}
+
+.search button {
+    padding: 8px 16px;
 }
 
 .results {
     background-color: black;
     color: white;
     padding: 16px;
-    width: 100%;
-    margin-top: 16px;
+    /* width: 100%; */
+    margin-top: 64px;
     position: absolute;
 }

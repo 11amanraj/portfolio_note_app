@@ -11,6 +11,7 @@ const Search = () => {
     const [notebooks, setNotebooks] = useState<notebook[]>([])
     const [tags, setTags] = useState<tag[]>([])
     const [showResults, setShowResults] = useState(false)
+    const [isInputFocused, setIsInputFocused] = useState(false)
     const [searchText, setSearchText] = useState('')
     const { token } = useAppSelector(state => state.user)
 
@@ -76,8 +77,11 @@ const Search = () => {
     // }
 
     return ( 
-        <section className={styles.search}>
-            <input onChange={inputHandler} type='text' placeholder='Search Notebook'/>
+        <div className={`${styles.search} ${isInputFocused ? styles.focus : ''}`}>
+            {/* <div className={styles.searching}> */}
+                <input onChange={inputHandler} onFocus={() => setIsInputFocused(true)} onBlur={() => setIsInputFocused(false)} type='text' placeholder='Search Notebook'/>
+                <button>Clear</button>
+            {/* </div> */}
             {showResults && 
                 <div className={styles.results}>
                     {notes.length > 0 && notes.map(note => (
@@ -91,7 +95,7 @@ const Search = () => {
                     ))}
                 </div>
             }
-        </section>
+        </div>
      );
 }
  

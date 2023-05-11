@@ -1,5 +1,6 @@
 import Search from '../Operations/Search';
 import styles from './SearchBar.module.css'
+import { ReactComponent as SearchIcon } from '@material-symbols/svg-400/outlined/search.svg';
 
 const SearchBar: React.FC<{fullsize: boolean, sidebarHandler?: () => void}> = ({fullsize, sidebarHandler}) => {
     if(!fullsize) {
@@ -9,7 +10,7 @@ const SearchBar: React.FC<{fullsize: boolean, sidebarHandler?: () => void}> = ({
     } else {
         return ( 
             <section className={styles.container}>
-                <h1>S</h1>
+                <SearchIcon />
                 <Search />
                 <div className={styles['profile-picture']}>JD</div>
                 <div className={styles.text}>Welcome, John Doe</div>

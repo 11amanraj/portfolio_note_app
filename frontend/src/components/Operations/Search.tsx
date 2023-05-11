@@ -1,5 +1,6 @@
 import noteService from '../../services/noteService'
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
+import { ReactComponent as Hamburger } from '@material-symbols/svg-400/outlined/menu.svg';
 import { note, notebook, tag } from '../../shared/interfaces/notes'
 import { useAppSelector } from '../../store/storeHooks'
 import styles from './Search.module.css'
@@ -7,7 +8,14 @@ import notebookService from '../../services/notebookService'
 import tagService from '../../services/tagService'
 import Tags from '../Tags/Tags'
 
-const Search = () => {
+interface SearchInterface {
+    sidebarController?: {
+        isToggleVisible: boolean,
+        handler: () => void
+    }
+}
+
+const Search: React.FC<SearchInterface> = ({sidebarController}) => {
     const [notes, setNotes] = useState<note[]>([])
     const [notebooks, setNotebooks] = useState<notebook[]>([])
     const [tags, setTags] = useState<tag[]>([])
@@ -74,6 +82,7 @@ const Search = () => {
 
     return ( 
         <div className={`${styles.search} ${isInputFocused ? styles.focus : ''}`}>
+            {sidebarController && sidebarController.isToggleVisible && <Hamburger onClick={sidebarController.handler}/>}
             <input onChange={inputHandler} onFocus={() => setIsInputFocused(true)} onBlur={() => setIsInputFocused(false)} type='text' placeholder='Search Notebook'/>
             <button>Clear</button>
             {showResults && 

@@ -10,3 +10,9 @@
 .mobile {
     width: 100%;
 }
+
+.workspace {
+    overflow-y: scroll;
+    height: 100vh;
+    overflow-x: hidden;
+}

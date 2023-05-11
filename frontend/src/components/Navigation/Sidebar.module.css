@@ -13,6 +13,17 @@
     /* position: fixed; */
 }
 
+.tablet {
+    position: fixed;
+    left: 0;
+}
+
+.mobile {
+    position: fixed;
+    left: 0;
+    right: 0;
+}
+
 /* position: fixed;
 left: 0;
 overflow: scroll; */

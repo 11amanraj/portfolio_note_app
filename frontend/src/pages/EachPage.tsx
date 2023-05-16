@@ -22,7 +22,7 @@ const EachPage: React.FC<{children: React.ReactNode}> = ({children}) => {
         return (
             <main className={styles.mobile}>
                 {showSidebar ? 
-                    <Modal>
+                    <Modal closeModal={() => setShowSidebar(false)}>
                         <SideBar breakpoint="mobile" onClose={() => setShowSidebar(false)} />
                     </Modal>
                     : <>
@@ -36,7 +36,7 @@ const EachPage: React.FC<{children: React.ReactNode}> = ({children}) => {
         return (
             <main className={styles.tablet}>
                 {showSidebar && 
-                    <Modal>
+                    <Modal closeModal={() => setShowSidebar(false)}>
                         <SideBar breakpoint="tablet" onClose={() => setShowSidebar(false)} />
                     </Modal>
                 }
